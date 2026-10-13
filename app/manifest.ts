@@ -13,7 +13,8 @@ export default function manifest(): MetadataRoute.Manifest {
     background_color: "#f7f2e8",
     theme_color: "#09251b",
     icons: [
-      { src: "/RUDRAKSHALOGO.jpeg", sizes: "2482x2482", type: "image/jpeg", purpose: "any" },
+      { src: "/icon-192.png", sizes: "192x192", type: "image/png", purpose: "any" },
+      { src: "/icon-512.png", sizes: "512x512", type: "image/png", purpose: "any" },
     ],
   };
 }

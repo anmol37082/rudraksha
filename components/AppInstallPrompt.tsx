@@ -11,7 +11,7 @@ type InstallPromptEvent = Event & {
 export function AppInstallPrompt() {
   const [visible, setVisible] = useState(false);
   const [deferred, setDeferred] = useState<InstallPromptEvent | null>(null);
-  const [help, setHelp] = useState(false);
+  const [installError, setInstallError] = useState("");
   const [ios, setIos] = useState(false);
 
   useEffect(() => {
@@ -20,13 +20,13 @@ export function AppInstallPrompt() {
     setIos(isIos);
     const standalone = window.matchMedia("(display-mode: standalone)").matches || (navigator as Navigator & { standalone?: boolean }).standalone === true;
     const mobile = window.matchMedia("(max-width: 767px)").matches || navigator.maxTouchPoints > 0;
-    if (mobile && !standalone && !sessionStorage.getItem("rudraksha-install-dismissed")) {
-      window.setTimeout(() => setVisible(true), 900);
-    }
+    const shouldPrompt = mobile && !standalone && !sessionStorage.getItem("rudraksha-install-dismissed");
+    if (shouldPrompt && isIos) window.setTimeout(() => setVisible(true), 900);
 
     const capturePrompt = (event: Event) => {
       event.preventDefault();
       setDeferred(event as InstallPromptEvent);
+      if (shouldPrompt) setVisible(true);
     };
     const installed = () => { setVisible(false); setDeferred(null); };
     window.addEventListener("beforeinstallprompt", capturePrompt);
@@ -43,12 +43,16 @@ export function AppInstallPrompt() {
   }
 
   async function install() {
-    if (!deferred) { setHelp(true); return; }
+    if (!deferred) {
+      setInstallError("One-tap install is not available in this browser yet.");
+      return;
+    }
+    setInstallError("");
     await deferred.prompt();
     const choice = await deferred.userChoice;
     if (choice.outcome === "accepted") setVisible(false);
     setDeferred(null);
-    if (choice.outcome === "dismissed") setHelp(true);
+    if (choice.outcome === "dismissed") close();
   }
 
   if (!visible) return null;
@@ -61,14 +65,14 @@ export function AppInstallPrompt() {
           <div><p className="text-xs font-semibold uppercase tracking-[.18em] text-gold-700">Rudraksha Events</p><h2 id="install-title" className="mt-1 text-2xl">Install our app</h2></div>
         </div>
         <p className="mt-4 text-sm leading-6 text-stone-700">Add the recruitment portal to your home screen for quick access to positions, applications and your profile.</p>
-        {help && <div className="mt-4 rounded-xl border border-forest-200 bg-white p-3 text-sm text-stone-700">
-          {ios
-            ? <p>In Safari, tap <strong>Share</strong>, then choose <strong>Add to Home Screen</strong> and tap <strong>Add</strong>.</p>
-            : <p>Open your browser menu (⋮ or Share) and choose <strong>Install app</strong> or <strong>Add to Home screen</strong>.</p>}
-        </div>}
+        {ios && <div className="mt-4 rounded-xl border border-forest-200 bg-white p-3 text-sm text-stone-700"><p>On iPhone, use Safari’s <strong>Share</strong> menu and choose <strong>Add to Home Screen</strong>.</p></div>}
+        {installError && <p role="status" className="mt-3 text-sm text-stone-600">{installError}</p>}
         <div className="mt-5 flex gap-3">
           <button type="button" onClick={close} className="btn-outline flex-1">Maybe later</button>
-          <button type="button" onClick={() => help ? close() : void install()} className="btn-gold flex-1">{deferred ? "Install app" : help ? "Got it" : "Add to home screen"}</button>
+          <div className="grid flex-1 gap-2">
+            <button type="button" onClick={() => void install()} disabled={!deferred} className="btn-outline w-full disabled:cursor-not-allowed disabled:opacity-50">Add to Home Screen</button>
+            <button type="button" onClick={() => void install()} disabled={!deferred} className="btn-gold w-full disabled:cursor-not-allowed disabled:opacity-50">Install App</button>
+          </div>
         </div>
       </section>
     </div>
