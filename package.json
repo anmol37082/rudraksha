@@ -8,7 +8,7 @@
     "start": "next start",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "seed:admin": "node --env-file=.env.local scripts/seed-admin.mjs"
+    "seed:admin": "node --env-file=.env --env-file-if-exists=.env.local scripts/seed-admin.mjs"
   },
   "dependencies": {
     "bcryptjs": "^3.0.2",

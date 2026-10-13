@@ -10,8 +10,8 @@ Next.js 15, React 19, TypeScript, MongoDB + Mongoose, Tailwind CSS 4, Cloudinary
 ## Setup
 ```bash
 npm install
-cp .env.example .env.local     # then fill in the values
-npm run seed:admin -- admin@yourcompany.com 'A-Strong-Password-1' 'Admin Name'
+cp .env.example .env           # then fill in the values
+npm run seed:admin -- admin@yourcompany.com --generate 'Admin Name'  # or provide a password (10+ characters)
 npm run dev                    # http://localhost:3000
 ```
 Admin login: `/admin/login`. Candidates register at `/register`.

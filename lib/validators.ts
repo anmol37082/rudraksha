@@ -23,6 +23,15 @@ export const loginSchema = z.object({
   adminOnly: z.boolean().optional(),
 });
 
+export const adminAccountSchema = z.object({
+  currentPassword: z.string().min(1, "Enter your current password").max(72),
+  email: z.string().trim().toLowerCase().email("Enter a valid email address").optional(),
+  newPassword: z.string().min(8, "Password must be at least 8 characters").max(72).regex(/[A-Za-z]/, "Password needs a letter").regex(/\d/, "Password needs a number").optional(),
+  confirmPassword: z.string().optional(),
+}).refine((d) => !!d.email || !!d.newPassword, { message: "Enter a new email or password" })
+  .refine((d) => !d.newPassword || d.newPassword === d.confirmPassword, { path: ["confirmPassword"], message: "Passwords do not match" })
+  .refine((d) => !d.confirmPassword || !!d.newPassword, { path: ["newPassword"], message: "Enter a new password" });
+
 export const profileSchema = z.object({
   name: z.string().trim().min(2).max(80).optional(),
   phone: phone.optional(),
