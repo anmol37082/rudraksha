@@ -1,11 +1,13 @@
 "use client";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { api } from "@/lib/client";
 import { DOCUMENT_LABEL, DOCUMENT_TYPES, SINGLE_DOCUMENT_TYPES } from "@/lib/constants";
-import { Card, Loader } from "@/components/ui";
+import { Button, Card, Loader } from "@/components/ui";
 import { FileLink, fileUrl } from "@/components/FileLink";
 
 export function DocumentsManager({ profile }: { profile: any }) {
+  const router = useRouter();
   const [photo, setPhoto] = useState(profile.profilePhoto ?? profile.documents?.find((d: any) => d.documentType === "PASSPORT_PHOTO") ?? null);
   const [docs, setDocs] = useState<any[]>(profile.documents ?? []);
   const [busy, setBusy] = useState("");
@@ -52,5 +54,11 @@ export function DocumentsManager({ profile }: { profile: any }) {
       })}
     </div>
     <p className="text-xs text-stone-500">Files are stored privately. Only you and the hiring team can open them. Documents may be PDF, JPG, PNG or WEBP up to 5 MB.</p>
+    <div className="border-t border-forest-200 pt-5">
+      <p className="mb-3 text-sm text-stone-600">Uploads are saved automatically. Return to your profile to see the updated completion percentage.</p>
+      <Button type="button" disabled={!!busy} onClick={() => router.push("/candidate/profile")}>
+        {busy ? <Loader /> : null}Save &amp; return to profile
+      </Button>
+    </div>
   </div>;
 }

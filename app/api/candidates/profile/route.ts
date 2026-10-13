@@ -19,7 +19,7 @@ export const PUT = handle(async (req: NextRequest) => {
   const user = await requireAuth("CANDIDATE");
   const { name, phone, dateOfBirth, ...rest } = await parseBody(req, profileSchema);
   if (name || phone) await User.updateOne({ _id: user._id }, { ...(name && { name }), ...(phone && { phone }) });
-  const set: Record<string, unknown> = { ...rest };
+  const set: Record<string, unknown> = { ...rest, profileSaved: true };
   if (dateOfBirth !== undefined) set.dateOfBirth = dateOfBirth || null;
   const profile = await CandidateProfile.findOneAndUpdate({ userId: user._id }, { $set: set }, { upsert: true, new: true }).lean();
   const fresh = await User.findById(user._id);

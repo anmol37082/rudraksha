@@ -63,6 +63,7 @@ export interface FileMeta {
 
 export interface CandidateProfileFields {
   userId: mongoose.Types.ObjectId;
+  profileSaved?: boolean;
   profilePhoto?: FileMeta | null;
   dateOfBirth?: Date;
   gender?: string;
@@ -85,6 +86,7 @@ export type CandidateProfileDoc = mongoose.HydratedDocument<CandidateProfileFiel
 const profileSchema = new Schema(
   {
     userId: { type: ObjectId, ref: "User", required: true, unique: true },
+    profileSaved: { type: Boolean, default: false },
     profilePhoto: fileSchema,
     dateOfBirth: Date,
     gender: { type: String, enum: ["MALE", "FEMALE", "OTHER", ""], default: "" },

@@ -6,7 +6,10 @@ import { Button, Card, Field, Input, LinkButton, Loader, Select, Textarea } from
 import { FileLink, fileUrl } from "./FileLink";
 
 export function ProfileForm({ user, profile, completion }: { user: any; profile: any; completion: { percent: number; missing: string[] } }) {
+  const profileWasSaved = !!profile.profileSaved || !!(profile.dateOfBirth || profile.address || profile.city || profile.state || profile.country || profile.postalCode || profile.skills?.length || profile.languages?.length || profile.experience || profile.availability || profile.emergencyContact?.name || profile.emergencyContact?.phone);
   const [percent, setPercent] = useState(completion.percent);
+  const [saved, setSaved] = useState(profileWasSaved);
+  const [editing, setEditing] = useState(!profileWasSaved);
   const legacyPassportPhoto = (profile.documents ?? []).find((d: any) => d.documentType === "PASSPORT_PHOTO");
   const [photo, setPhoto] = useState(profile.profilePhoto ?? legacyPassportPhoto ?? null);
   const [docs, setDocs] = useState<any[]>(profile.documents ?? []);
@@ -27,7 +30,11 @@ export function ProfileForm({ user, profile, completion }: { user: any; profile:
     setBusy("");
     setMsg({ ok: res.success, text: res.message });
     setErrors(res.errors ?? {});
-    if (res.success) setPercent(res.data.completion.percent);
+    if (res.success) {
+      setPercent(res.data.completion.percent);
+      setSaved(true);
+      setEditing(false);
+    }
   }
 
   async function upload(type: string, file?: File | null) {
@@ -51,6 +58,33 @@ export function ProfileForm({ user, profile, completion }: { user: any; profile:
   const p = profile;
   const dob = p.dateOfBirth ? String(p.dateOfBirth).slice(0, 10) : "";
   const steps = ["Personal details", "Address", "Work", "Emergency contact"];
+  const details = [
+    ["Full name", user.name], ["Email", user.email], ["Phone", user.phone],
+    ["Date of birth", dob || "Not provided"], ["Gender", p.gender || "Not provided"],
+    ["Address", [p.address, p.city, p.state, p.country, p.postalCode].filter(Boolean).join(", ") || "Not provided"],
+    ["Skills", p.skills?.join(", ") || "Not provided"], ["Languages", p.languages?.join(", ") || "Not provided"],
+    ["Experience", p.experience || `${p.yearsOfExperience ?? 0} years`], ["Availability", p.availability || "Not provided"],
+    ["Emergency contact", p.emergencyContact?.name ? `${p.emergencyContact.name} · ${p.emergencyContact.phone ?? ""} · ${p.emergencyContact.relation ?? ""}` : "Not provided"],
+  ];
+
+  if (saved && !editing) return (
+    <div className="space-y-6">
+      <Card>
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div><h2 className="text-xl">Profile details</h2><p className="mt-1 text-sm text-stone-600">Your profile is saved. You can edit these details anytime.</p></div>
+          <Button type="button" onClick={() => setEditing(true)}>Edit profile</Button>
+        </div>
+        <dl className="mt-6 grid gap-x-8 gap-y-4 sm:grid-cols-2">
+          {details.map(([label, value]) => <div key={label}><dt className="text-xs font-medium uppercase tracking-wide text-stone-500">{label}</dt><dd className="mt-1 break-words text-sm text-forest-900">{value}</dd></div>)}
+        </dl>
+      </Card>
+      <Card>
+        <div className="flex flex-wrap items-center justify-between gap-3"><div><h2 className="text-lg">Profile completion</h2><p className="mt-1 text-sm text-stone-600">{percent}% complete</p></div><LinkButton variant="outline" href="/candidate/documents">Manage documents</LinkButton></div>
+        <div className="mt-3 h-2.5 overflow-hidden rounded-full bg-forest-100"><div className="h-full bg-forest-600" style={{ width: `${percent}%` }} /></div>
+      </Card>
+      {msg && <p role="status" className={`rounded-md px-3 py-2 text-sm ${msg.ok ? "bg-emerald-50 text-emerald-800" : "bg-rose-50 text-rose-800"}`}>{msg.text}</p>}
+    </div>
+  );
 
   function nextStep() {
     const section = document.querySelector<HTMLElement>(`[data-profile-step="${step}"]`);
@@ -61,6 +95,7 @@ export function ProfileForm({ user, profile, completion }: { user: any; profile:
 
   return (
     <div className="profile-flow space-y-6">
+      {saved && editing && <Button type="button" variant="outline" onClick={() => setEditing(false)}>Cancel editing</Button>}
       <Card>
         <div className="flex items-center justify-between"><h2 className="text-xl">Profile completion</h2><span className="font-serif text-2xl">{percent}%</span></div>
         <div className="mt-3 h-2.5 overflow-hidden rounded-full bg-forest-100"><div className="h-full bg-forest-600 transition-all" style={{ width: `${percent}%` }} /></div>
@@ -151,9 +186,9 @@ export function ProfileForm({ user, profile, completion }: { user: any; profile:
         <Card className={`space-y-4 ${step === 3 ? "" : "hidden sm:block"}`} data-profile-step="3">
           <h2 className="text-xl">Emergency contact</h2>
           <div className="grid gap-4 sm:grid-cols-3">
-            <Field label="Name"><Input name="ecName" defaultValue={p.emergencyContact?.name} /></Field>
-            <Field label="Phone"><Input name="ecPhone" type="tel" defaultValue={p.emergencyContact?.phone} /></Field>
-            <Field label="Relationship"><Input name="ecRelation" defaultValue={p.emergencyContact?.relation} /></Field>
+            <Field label="Name"><Input name="ecName" defaultValue={p.emergencyContact?.name} required /></Field>
+            <Field label="Phone"><Input name="ecPhone" type="tel" defaultValue={p.emergencyContact?.phone} required pattern="\\+?[0-9\\s-]{7,18}" /></Field>
+            <Field label="Relationship"><Input name="ecRelation" defaultValue={p.emergencyContact?.relation} required /></Field>
           </div>
         </Card>
         <div className="hidden sm:block">

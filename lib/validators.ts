@@ -57,9 +57,11 @@ export const profileSchema = z.object({
   languages: list.optional(),
   availability: z.string().trim().max(200).optional(),
   emergencyContact: z
-    .object({ name: z.string().trim().max(80), phone: z.string().trim().max(20), relation: z.string().trim().max(40) })
-    .partial()
-    .optional(),
+    .object({
+      name: z.string().trim().min(1, "Enter emergency contact name").max(80),
+      phone: phone,
+      relation: z.string().trim().min(1, "Enter your relationship").max(40),
+    }),
 });
 
 export const positionSchema = z.object({
