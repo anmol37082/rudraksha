@@ -11,9 +11,9 @@ export default async function AdminCandidates({ searchParams }: { searchParams: 
   return (
     <>
       <PageTitle title="Candidates" />
-      <form className="mb-5 flex gap-3" role="search">
-        <Input name="q" defaultValue={sp.q} placeholder="Search name, phone or email" aria-label="Search candidates" className="!w-72" />
-        <Button type="submit" variant="outline">Search</Button>
+      <form className="mb-5 flex flex-col gap-3 sm:flex-row" role="search">
+        <Input name="q" defaultValue={sp.q} placeholder="Search name, phone or email" aria-label="Search candidates" className="!w-full sm:!w-72" />
+        <Button type="submit" variant="outline" className="w-full sm:w-auto">Search</Button>
       </form>
       {items.length ? (
         <Table head={["Name", "Contact", "City", "Joined", "Account", ""]}>

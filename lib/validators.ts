@@ -23,6 +23,15 @@ export const loginSchema = z.object({
   adminOnly: z.boolean().optional(),
 });
 
+export const verifyRegistrationOtpSchema = z.object({
+  email: z.string().trim().toLowerCase().email("Enter a valid email"),
+  otp: z.string().trim().regex(/^\d{6}$/, "Enter the 6-digit code"),
+});
+
+export const resendRegistrationOtpSchema = z.object({
+  email: z.string().trim().toLowerCase().email("Enter a valid email"),
+});
+
 export const adminAccountSchema = z.object({
   currentPassword: z.string().min(1, "Enter your current password").max(72),
   email: z.string().trim().toLowerCase().email("Enter a valid email address").optional(),

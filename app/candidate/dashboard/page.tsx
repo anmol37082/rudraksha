@@ -1,59 +1,38 @@
 import Link from "next/link";
 import { requirePage } from "@/lib/guard";
-import { Application, CandidateProfile, Interview } from "@/models";
-import { plain } from "@/lib/api";
-import { profileCompletion } from "@/lib/profile";
-import { fmtDate } from "@/lib/client";
-import { Badge, Card, EmptyState, LinkButton, PageTitle, Table } from "@/components/ui";
+import { PageTitle } from "@/components/ui";
+
+const actions = [
+  { href: "/jobs", label: "Positions", icon: "briefcase", color: "text-[#164332]" },
+  { href: "/candidate/applications", label: "Applications", icon: "application", color: "text-[#90713B]" },
+  { href: "/candidate/profile", label: "My profile", icon: "profile", color: "text-[#164332]" },
+  { href: "/candidate/documents", label: "Documents", icon: "document", color: "text-[#09251B]" },
+  { href: "/candidate/interviews", label: "Interviews", icon: "calendar", color: "text-[#164332]" },
+  { href: "/contact", label: "Help & support", icon: "support", color: "text-[#90713B]" },
+];
+
+function AppIcon({ name }: { name: string }) {
+  const common = { fill: "none", stroke: "currentColor", strokeWidth: 1.8, strokeLinecap: "round" as const, strokeLinejoin: "round" as const };
+  switch (name) {
+    case "briefcase": return <svg viewBox="0 0 24 24" aria-hidden="true" {...common}><rect x="3.5" y="7.5" width="17" height="13" rx="2.5" /><path d="M8.5 7.5V5.8A1.8 1.8 0 0 1 10.3 4h3.4a1.8 1.8 0 0 1 1.8 1.8v1.7M3.5 12h17M10 12v2h4v-2" /></svg>;
+    case "application": return <svg viewBox="0 0 24 24" aria-hidden="true" {...common}><path d="M8 4.5h8a2 2 0 0 1 2 2v13H6v-13a2 2 0 0 1 2-2Z" /><path d="M9 4.5V3h6v1.5M9 10h6M9 14h6M9 17h3" /></svg>;
+    case "profile": return <svg viewBox="0 0 24 24" aria-hidden="true" {...common}><circle cx="12" cy="8" r="3.5" /><path d="M5 20a7 7 0 0 1 14 0" /></svg>;
+    case "document": return <svg viewBox="0 0 24 24" aria-hidden="true" {...common}><path d="M7 3.5h7l5 5V20a1 1 0 0 1-1 1H7a2 2 0 0 1-2-2V5.5a2 2 0 0 1 2-2Z" /><path d="M14 3.5v5h5M9 13h6M9 17h6" /></svg>;
+    case "calendar": return <svg viewBox="0 0 24 24" aria-hidden="true" {...common}><rect x="3.5" y="5.5" width="17" height="15" rx="2.5" /><path d="M8 3.5v4M16 3.5v4M3.5 10h17M8 14h2M14 14h2M8 17h2" /></svg>;
+    default: return <svg viewBox="0 0 24 24" aria-hidden="true" {...common}><path d="M4 13v-1a8 8 0 0 1 16 0v1M4 13h3v6H6a2 2 0 0 1-2-2v-4ZM20 13h-3v6h1a2 2 0 0 0 2-2v-4ZM17 19a5 5 0 0 1-5 2" /></svg>;
+  }
+}
 
 export default async function Dashboard() {
   const user = await requirePage("CANDIDATE");
-  const [apps, profile, interview] = await Promise.all([
-    Application.find({ candidateId: user._id }).sort({ createdAt: -1 }).select("status appliedAt positionId").populate("positionId", "title").lean(),
-    CandidateProfile.findOne({ userId: user._id }).lean(),
-    Interview.findOne({ candidateId: user._id, status: "SCHEDULED", date: { $gte: new Date(Date.now() - 86_400_000) } }).sort({ date: 1 }).populate("positionId", "title").lean(),
-  ]);
-  const n = (...s: string[]) => apps.filter((a) => s.includes(a.status)).length;
-  const { percent, missing } = profileCompletion(user, profile);
-  const cards: [string, number][] = [["Applications", apps.length], ["Under review", n("NEW", "UNDER_REVIEW")], ["Shortlisted", n("SHORTLISTED")], ["Interviews", n("INTERVIEW_SCHEDULED", "INTERVIEWED")], ["Selected", n("SELECTED")]];
-  const list = plain(apps) as any[];
-  const iv = plain(interview) as any;
-
-  return (
-    <>
-      <PageTitle title={`Welcome, ${user.name.split(" ")[0]}`} />
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-5">
-        {cards.map(([l, v]) => <Card key={l}><p className="font-serif text-3xl text-forest-900">{v}</p><p className="text-sm text-stone-600">{l}</p></Card>)}
-      </div>
-      <div className="mt-6 grid gap-6 lg:grid-cols-2">
-        <Card>
-          <h2 className="text-xl">Profile completion</h2>
-          <div className="mt-3 h-2.5 overflow-hidden rounded-full bg-forest-100" role="progressbar" aria-valuenow={percent} aria-valuemin={0} aria-valuemax={100}>
-            <div className="h-full bg-forest-600" style={{ width: `${percent}%` }} />
-          </div>
-          <p className="mt-2 text-sm text-stone-700">{percent}% complete{missing.length ? `. Still missing: ${missing.slice(0, 4).join(", ")}${missing.length > 4 ? "…" : ""}` : "."}</p>
-          {percent < 100 && <LinkButton small variant="outline" className="mt-3" href="/candidate/profile">Complete profile</LinkButton>}
-        </Card>
-        <Card>
-          <h2 className="text-xl">Upcoming interview</h2>
-          {iv ? (
-            <dl className="mt-3 space-y-1 text-sm">
-              <div><dt className="inline text-stone-500">Position: </dt><dd className="inline font-medium">{iv.positionId?.title}</dd></div>
-              <div><dt className="inline text-stone-500">When: </dt><dd className="inline font-medium">{fmtDate(iv.date)} at {iv.time}</dd></div>
-              <div><dt className="inline text-stone-500">Where: </dt><dd className="inline font-medium">{iv.type === "IN_PERSON" ? iv.location : iv.type === "VIDEO" ? "Video call" : "Phone call"}</dd></div>
-            </dl>
-          ) : <p className="mt-3 text-sm text-stone-600">No interview scheduled yet.</p>}
-        </Card>
-      </div>
-      <h2 className="mb-3 mt-8 text-xl">My applications</h2>
-      {list.length ? (
-        <Table head={["Position", "Applied", "Status", ""]}>
-          {list.slice(0, 5).map((a) => (
-            <tr key={a._id}><td className="td font-medium">{a.positionId?.title}</td><td className="td">{fmtDate(a.appliedAt)}</td><td className="td"><Badge status={a.status} /></td>
-              <td className="td text-right"><Link className="text-forest-700 underline" href={`/candidate/applications/${a._id}`}>View</Link></td></tr>
-          ))}
-        </Table>
-      ) : <EmptyState title="You have not applied yet" text="Browse the open positions and apply to the one that suits you." action={<LinkButton href="/jobs">View positions</LinkButton>} />}
-    </>
-  );
+  return <>
+    <PageTitle title={`Hello, ${user.name.split(" ")[0]}`} />
+    <section aria-label="Candidate services" className="grid grid-cols-3 gap-x-2 gap-y-5 sm:gap-x-5 sm:gap-y-7">
+      {actions.map((action) => <Link key={action.href} href={action.href} aria-label={action.label} className="group flex min-h-28 flex-col items-center justify-center gap-2 rounded-2xl py-2 text-center focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-500 active:scale-95">
+        <span className={`grid h-14 w-14 place-items-center ${action.color} transition-transform group-hover:scale-105 sm:h-16 sm:w-16`}><AppIcon name={action.icon} /></span>
+        <span className="max-w-24 text-xs font-semibold leading-tight text-forest-900 sm:text-sm">{action.label}</span>
+      </Link>)}
+    </section>
+    <p className="mt-6 hidden text-center text-xs text-stone-500 sm:block">Your applications and documents are visible only to you and the hiring team.</p>
+  </>;
 }

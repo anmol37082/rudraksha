@@ -1,6 +1,6 @@
 // Edit these to match the company. Used across the public site and metadata.
 export const SITE = {
-  name: "Evermore Events",
+  name: "Rudraksha",
   tagline: "Wedding & event staffing",
   email: "careers@evermore.example",
   phone: "+91 00000 00000",

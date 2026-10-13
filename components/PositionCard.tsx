@@ -5,7 +5,7 @@ import { Badge, LinkButton } from "./ui";
 
 export function PositionCard({ p }: { p: any }) {
   return (
-    <article className="card flex flex-col">
+    <article className="card position-card flex flex-col">
       <div className="flex items-start justify-between gap-3">
         <h3 className="text-xl"><Link href={`/jobs/${p._id}`} className="hover:text-gold-700">{p.title}</Link></h3>
         <Badge status="ACTIVE" label={EMPLOYMENT_LABEL[p.employmentType]} />

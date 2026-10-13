@@ -6,7 +6,7 @@ export const metadata: Metadata = { title: "Admin login", robots: { index: false
 
 export default function AdminLogin() {
   return (
-    <main className="mx-auto max-w-md px-4 py-20">
+    <main className="admin-login-page mx-auto flex min-h-[100svh] max-w-md flex-col justify-center px-4 py-8">
       <h1 className="mb-1 text-3xl">Admin login</h1>
       <p className="mb-6 text-stone-600">{SITE.name} hiring team</p>
       <AuthForm mode="admin" />

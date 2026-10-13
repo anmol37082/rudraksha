@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { api, csv } from "@/lib/client";
 import { DOCUMENT_LABEL, DOCUMENT_TYPES, SINGLE_DOCUMENT_TYPES } from "@/lib/constants";
-import { Button, Card, Field, Input, Loader, Select, Textarea } from "./ui";
+import { Button, Card, Field, Input, LinkButton, Loader, Select, Textarea } from "./ui";
 import { FileLink, fileUrl } from "./FileLink";
 
 export function ProfileForm({ user, profile, completion }: { user: any; profile: any; completion: { percent: number; missing: string[] } }) {
@@ -11,6 +11,7 @@ export function ProfileForm({ user, profile, completion }: { user: any; profile:
   const [photo, setPhoto] = useState(profile.profilePhoto ?? legacyPassportPhoto ?? null);
   const [docs, setDocs] = useState<any[]>(profile.documents ?? []);
   const [busy, setBusy] = useState("");
+  const [step, setStep] = useState(0);
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -49,8 +50,17 @@ export function ProfileForm({ user, profile, completion }: { user: any; profile:
 
   const p = profile;
   const dob = p.dateOfBirth ? String(p.dateOfBirth).slice(0, 10) : "";
+  const steps = ["Personal details", "Address", "Work", "Emergency contact"];
+
+  function nextStep() {
+    const section = document.querySelector<HTMLElement>(`[data-profile-step="${step}"]`);
+    const invalid = section?.querySelector<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>("input:invalid, select:invalid, textarea:invalid");
+    if (invalid) { invalid.reportValidity(); return; }
+    setStep((current) => Math.min(current + 1, steps.length - 1));
+  }
+
   return (
-    <div className="space-y-6">
+    <div className="profile-flow space-y-6">
       <Card>
         <div className="flex items-center justify-between"><h2 className="text-xl">Profile completion</h2><span className="font-serif text-2xl">{percent}%</span></div>
         <div className="mt-3 h-2.5 overflow-hidden rounded-full bg-forest-100"><div className="h-full bg-forest-600 transition-all" style={{ width: `${percent}%` }} /></div>
@@ -58,7 +68,7 @@ export function ProfileForm({ user, profile, completion }: { user: any; profile:
 
       {msg && <p role="status" className={`rounded-md px-3 py-2 text-sm ${msg.ok ? "bg-emerald-50 text-emerald-800" : "bg-rose-50 text-rose-800"}`}>{msg.text}</p>}
 
-      <Card>
+      <Card className="hidden sm:block">
         <h2 className="mb-4 text-xl">Photo and documents</h2>
         <p className="mb-3 text-sm font-medium text-forest-900">Passport-size photo <span className="text-rose-700">(required to apply)</span></p>
         <div className="flex flex-wrap items-center gap-4">
@@ -94,8 +104,21 @@ export function ProfileForm({ user, profile, completion }: { user: any; profile:
         <p className="mt-3 text-xs text-stone-500">PDF, JPG, PNG or WEBP, up to 5 MB each. Only you and our hiring team can open your files.</p>
       </Card>
 
-      <form onSubmit={save} className="space-y-6">
-        <Card className="space-y-4">
+      <div className="sm:hidden">
+        <LinkButton href="/candidate/documents" className="w-full">Manage my documents</LinkButton>
+      </div>
+
+      <form onSubmit={save} className="profile-wizard space-y-4 sm:space-y-6">
+        <Card className="sm:hidden">
+          <div className="flex items-center justify-between gap-3">
+            <p className="text-sm font-semibold text-forest-900">Step {step + 1} of {steps.length}</p>
+            <p className="text-xs text-stone-600">{steps[step]}</p>
+          </div>
+          <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-forest-100" role="progressbar" aria-valuenow={step + 1} aria-valuemin={1} aria-valuemax={steps.length}>
+            <div className="h-full rounded-full bg-forest-700 transition-all" style={{ width: `${((step + 1) / steps.length) * 100}%` }} />
+          </div>
+        </Card>
+        <Card className={`space-y-4 ${step === 0 ? "" : "hidden sm:block"}`} data-profile-step="0">
           <h2 className="text-xl">Personal details</h2>
           <div className="grid gap-4 sm:grid-cols-2">
             <Field label="Full name" error={errors.name}><Input name="name" defaultValue={user.name} required /></Field>
@@ -105,7 +128,7 @@ export function ProfileForm({ user, profile, completion }: { user: any; profile:
             <Field label="Gender"><Select name="gender" defaultValue={p.gender ?? ""}><option value="">Prefer not to say</option><option value="MALE">Male</option><option value="FEMALE">Female</option><option value="OTHER">Other</option></Select></Field>
           </div>
         </Card>
-        <Card className="space-y-4">
+        <Card className={`space-y-4 ${step === 1 ? "" : "hidden sm:block"}`} data-profile-step="1">
           <h2 className="text-xl">Address</h2>
           <Field label="Street address"><Input name="address" defaultValue={p.address} /></Field>
           <div className="grid gap-4 sm:grid-cols-2">
@@ -115,7 +138,7 @@ export function ProfileForm({ user, profile, completion }: { user: any; profile:
             <Field label="Postal code"><Input name="postalCode" defaultValue={p.postalCode} /></Field>
           </div>
         </Card>
-        <Card className="space-y-4">
+        <Card className={`space-y-4 ${step === 2 ? "" : "hidden sm:block"}`} data-profile-step="2">
           <h2 className="text-xl">Work</h2>
           <div className="grid gap-4 sm:grid-cols-2">
             <Field label="Skills" hint="Separate with commas"><Input name="skills" defaultValue={(p.skills ?? []).join(", ")} /></Field>
@@ -125,7 +148,7 @@ export function ProfileForm({ user, profile, completion }: { user: any; profile:
           </div>
           <Field label="Experience"><Textarea name="experience" defaultValue={p.experience} placeholder="Where you have worked and what you did" /></Field>
         </Card>
-        <Card className="space-y-4">
+        <Card className={`space-y-4 ${step === 3 ? "" : "hidden sm:block"}`} data-profile-step="3">
           <h2 className="text-xl">Emergency contact</h2>
           <div className="grid gap-4 sm:grid-cols-3">
             <Field label="Name"><Input name="ecName" defaultValue={p.emergencyContact?.name} /></Field>
@@ -133,7 +156,15 @@ export function ProfileForm({ user, profile, completion }: { user: any; profile:
             <Field label="Relationship"><Input name="ecRelation" defaultValue={p.emergencyContact?.relation} /></Field>
           </div>
         </Card>
-        <Button type="submit" disabled={busy === "save"}>{busy === "save" && <Loader />}Save profile</Button>
+        <div className="hidden sm:block">
+          <Button type="submit" disabled={busy === "save"}>{busy === "save" && <Loader />}Save profile</Button>
+        </div>
+        <div className="flex gap-3 sm:hidden">
+          {step > 0 && <Button type="button" variant="outline" className="flex-1" onClick={() => setStep((current) => Math.max(current - 1, 0))}>Back</Button>}
+          {step < steps.length - 1
+            ? <Button type="button" className="flex-1" onClick={nextStep}>Next step</Button>
+            : <Button type="submit" className="flex-1" disabled={busy === "save"}>{busy === "save" && <Loader />}Save profile</Button>}
+        </div>
       </form>
     </div>
   );

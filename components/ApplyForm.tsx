@@ -58,9 +58,9 @@ export function ApplyForm({ positionId, title, summary }: { positionId: string; 
         I confirm that the information provided by me is correct.
       </label>
       {error && <p role="alert" className="rounded-md bg-rose-50 px-3 py-2 text-sm text-rose-800">{error}</p>}
-      <div className="flex gap-3">
-        <Button variant="outline" onClick={() => setStep("details")} disabled={busy}>Back</Button>
-        <Button onClick={submit} disabled={!confirm || !agreementAccepted || busy}>{busy && <Loader />}Submit application</Button>
+      <div className="flex flex-col-reverse gap-3 sm:flex-row">
+        <Button variant="outline" className="w-full sm:w-auto" onClick={() => setStep("details")} disabled={busy}>Back</Button>
+        <Button className="w-full sm:w-auto" onClick={submit} disabled={!confirm || !agreementAccepted || busy}>{busy && <Loader />}Submit application</Button>
       </div>
     </Card>
   );

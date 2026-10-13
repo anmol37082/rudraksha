@@ -29,16 +29,16 @@ export default async function JobDetail({ params }: { params: Promise<{ id: stri
     ["Compensation", p.compensation || "Discussed at interview"], ["Openings", String(p.openings)], ["Apply by", p.applicationDeadline ? fmtDate(p.applicationDeadline) : "Open until filled"],
   ];
   return (
-    <main className="mx-auto grid max-w-6xl gap-10 px-4 py-10 lg:grid-cols-[1fr_20rem]">
+    <main className="position-detail mx-auto grid max-w-6xl gap-6 px-4 py-6 sm:gap-10 sm:py-10 lg:grid-cols-[1fr_20rem]">
       <article>
-        <h1 className="text-4xl">{p.title}</h1>
+        <h1 className="text-3xl sm:text-4xl">{p.title}</h1>
         <p className="mt-4 whitespace-pre-line text-stone-700 leading-relaxed">{p.description}</p>
         <List title="Responsibilities" items={p.responsibilities} />
         <List title="Requirements" items={p.requirements} />
         <List title="Skills" items={p.skills} />
         {p.requiredDocuments?.length > 0 && <List title="Documents you will need" items={p.requiredDocuments.map((d: string) => DOCUMENT_LABEL[d])} />}
       </article>
-      <aside className="card h-fit lg:sticky lg:top-20">
+      <aside className="card position-facts h-fit lg:sticky lg:top-20">
         <dl className="space-y-3 text-sm">
           {facts.map(([k, v]) => <div key={k}><dt className="text-stone-500">{k}</dt><dd className="font-medium text-forest-900">{v}</dd></div>)}
         </dl>

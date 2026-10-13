@@ -311,3 +311,20 @@ export const Staff = model<StaffDoc>("Staff", staffSchema);
 export const Notification = model<NotificationDoc>("Notification", notificationSchema);
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const AuditLog = model<any>("AuditLog", auditSchema);
+
+// Unverified candidate registrations are stored separately and expire automatically.
+const pendingRegistrationSchema = new Schema(
+  {
+    name: { type: String, required: true },
+    email: { type: String, required: true, unique: true, lowercase: true, trim: true },
+    phone: { type: String, required: true },
+    passwordHash: { type: String, required: true, select: false },
+    otpHash: { type: String, required: true, select: false },
+    expiresAt: { type: Date, required: true },
+    resendAvailableAt: { type: Date, required: true },
+    attempts: { type: Number, required: true, default: 0 },
+  },
+  opts
+);
+pendingRegistrationSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
+export const PendingRegistration = model<any>("PendingRegistration", pendingRegistrationSchema);

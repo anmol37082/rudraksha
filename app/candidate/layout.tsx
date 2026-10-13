@@ -11,13 +11,15 @@ export default async function CandidateLayout({ children }: { children: React.Re
   const unread = await Notification.countDocuments({ userId: user._id, isRead: false });
   return (
     <Shell area="Candidate" who={user.name.split(" ")[0]} items={[
-      { href: "/candidate/dashboard", label: "Dashboard" },
-      { href: "/jobs", label: "Available positions" },
-      { href: "/candidate/applications", label: "My applications" },
-      { href: "/candidate/staff", label: "My joining letter" },
-      { href: "/candidate/profile", label: "My profile" },
+      { href: "/candidate/dashboard", label: "Home" },
+      { href: "/jobs", label: "Positions" },
+      { href: "/candidate/applications", label: "Applications" },
+      { href: "/candidate/profile", label: "Profile" },
+      { href: "/candidate/documents", label: "Documents" },
       { href: "/candidate/interviews", label: "Interviews" },
+      { href: "/contact", label: "Help & support" },
       { href: "/candidate/notifications", label: "Notifications", badge: unread },
+      { href: "/candidate/staff", label: "My joining letter" },
     ]}>{children}</Shell>
   );
 }

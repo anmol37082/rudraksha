@@ -16,14 +16,18 @@ export default async function AdminApplications({ searchParams }: { searchParams
   return (
     <>
       <PageTitle title="Applications" />
-      <form className="mb-5 flex flex-wrap items-end gap-3" role="search">
-        <Input name="q" defaultValue={sp.q} placeholder="Name, email or phone" aria-label="Search" className="!w-56" />
-        <Select name="status" defaultValue={sp.status ?? ""} aria-label="Status" className="!w-48"><option value="">All statuses</option>{APPLICATION_STATUSES.map((s) => <option key={s} value={s}>{STATUS_LABEL[s]}</option>)}</Select>
-        <Select name="position" defaultValue={sp.position ?? ""} aria-label="Position" className="!w-52"><option value="">All positions</option>{positions.map((p) => <option key={p._id} value={p._id}>{p.title}</option>)}</Select>
-        <label className="text-xs text-stone-600">From<Input name="from" type="date" defaultValue={sp.from} className="!w-40" /></label>
-        <label className="text-xs text-stone-600">To<Input name="to" type="date" defaultValue={sp.to} className="!w-40" /></label>
-        <Button type="submit" variant="outline">Filter</Button>
-        <Link href="/admin/applications" className="py-2.5 text-sm text-stone-600 underline">Clear</Link>
+      <form className="admin-filter-form mb-5 grid grid-cols-1 gap-3 sm:flex sm:flex-wrap sm:items-end" role="search">
+        <Input name="q" defaultValue={sp.q} placeholder="Name, email or phone" aria-label="Search" className="sm:!w-56" />
+        <Select name="status" defaultValue={sp.status ?? ""} aria-label="Status" className="sm:!w-48"><option value="">All statuses</option>{APPLICATION_STATUSES.map((s) => <option key={s} value={s}>{STATUS_LABEL[s]}</option>)}</Select>
+        <Select name="position" defaultValue={sp.position ?? ""} aria-label="Position" className="sm:!w-52"><option value="">All positions</option>{positions.map((p) => <option key={p._id} value={p._id}>{p.title}</option>)}</Select>
+        <div className="grid grid-cols-2 gap-3 sm:contents">
+          <label className="block min-w-0 text-xs text-stone-600">From<Input name="from" type="date" defaultValue={sp.from} className="mt-1 sm:!w-40" /></label>
+          <label className="block min-w-0 text-xs text-stone-600">To<Input name="to" type="date" defaultValue={sp.to} className="mt-1 sm:!w-40" /></label>
+        </div>
+        <div className="flex gap-3 sm:contents">
+          <Button type="submit" variant="outline" className="flex-1 sm:flex-none">Filter</Button>
+          <Link href="/admin/applications" className="flex min-h-11 flex-1 items-center justify-center text-sm text-stone-600 underline sm:flex-none">Clear</Link>
+        </div>
       </form>
       {items.length ? (
         <Table head={["Candidate", "Position", "Applied", "Status", ""]}>
@@ -35,7 +39,7 @@ export default async function AdminApplications({ searchParams }: { searchParams
             </tr>
           ))}
         </Table>
-      ) : <EmptyState title="No applications match these filters" />}
+      ) : <div className="admin-applications-empty"><EmptyState title="No applications match these filters" /></div>}
       <Pagination page={page} total={total} limit={limit} path="/admin/applications" params={{ q: sp.q, status: sp.status, position: sp.position, from: sp.from, to: sp.to }} />
     </>
   );

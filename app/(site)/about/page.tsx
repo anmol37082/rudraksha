@@ -6,9 +6,9 @@ export const metadata: Metadata = { title: "About us", description: `Learn about
 
 export default function About() {
   return (
-    <main className="mx-auto max-w-3xl px-4 py-12">
-      <h1 className="text-4xl">About {SITE.name}</h1>
-      <div className="mt-6 space-y-4 text-lg leading-relaxed text-stone-700">
+    <main className="mx-auto max-w-3xl px-4 py-6 sm:py-12">
+      <h1 className="text-3xl sm:text-4xl">About {SITE.name}</h1>
+      <div className="mt-5 space-y-4 text-base leading-relaxed text-stone-700 sm:mt-6 sm:text-lg">
         <p>{SITE.name} provides trained attendants and hosts for weddings and events. Our crew greets guests, manages seating and flow, supports the family and keeps everything running quietly in the background.</p>
         <p>Every person on our team is a permanent member of staff. We invest in training and a steady roster because good service comes from people who know each other and know the work.</p>
         <p>We hire through this website so that every candidate gets the same fair process: apply, be reviewed, interview, and hear back from us.</p>
