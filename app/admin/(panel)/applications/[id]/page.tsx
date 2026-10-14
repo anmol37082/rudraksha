@@ -24,9 +24,9 @@ export default async function AdminApplication({ params }: { params: Promise<{ i
   const ivs = plain(interviews) as any[];
 
   return (
-    <>
-      <PageTitle title={app.candidateId.name}><Badge status={app.status} /></PageTitle>
-      <div className="grid gap-6 xl:grid-cols-[1.2fr_1fr]">
+    <section className="admin-application-detail">
+      <PageTitle title={app.candidateId.name}><div className="admin-detail-title-tools"><Link className="admin-detail-back" href="/admin/applications"><span aria-hidden="true">←</span>Applications</Link><Badge status={app.status} /></div></PageTitle>
+      <div className="admin-application-grid grid gap-6 xl:grid-cols-[1.2fr_1fr]">
         <div className="space-y-6">
           <Card>
             <div className="flex gap-4">
@@ -84,6 +84,6 @@ export default async function AdminApplication({ params }: { params: Promise<{ i
           </Card>
         </div>
       </div>
-    </>
+    </section>
   );
 }

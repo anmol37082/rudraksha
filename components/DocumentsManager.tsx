@@ -6,6 +6,12 @@ import { DOCUMENT_LABEL, DOCUMENT_TYPES, SINGLE_DOCUMENT_TYPES } from "@/lib/con
 import { Button, Card, Loader } from "@/components/ui";
 import { FileLink, fileUrl } from "@/components/FileLink";
 
+function DocumentIcon({ person = false }: { person?: boolean }) {
+  return person
+    ? <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0"/></svg>
+    : <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M7 3h7l5 5v13H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z"/><path d="M14 3v6h5M9 13h6m-6 4h6"/></svg>;
+}
+
 export function DocumentsManager({ profile }: { profile: any }) {
   const router = useRouter();
   const [photo, setPhoto] = useState(profile.profilePhoto ?? profile.documents?.find((d: any) => d.documentType === "PASSPORT_PHOTO") ?? null);
@@ -29,36 +35,32 @@ export function DocumentsManager({ profile }: { profile: any }) {
     if (res.success) setDocs(res.data.documents);
   }
 
-  return <div className="documents-flow space-y-4">
-    {notice && <p role="status" className={`rounded-xl px-3 py-2 text-sm ${notice.ok ? "bg-emerald-50 text-emerald-800" : "bg-rose-50 text-rose-800"}`}>{notice.text}</p>}
-    <Card>
-      <h2 className="text-lg">Passport size photo <span className="text-xs font-normal text-stone-500">Required to apply</span></h2>
-      <div className="mt-3 flex flex-wrap items-center gap-4">
-        {photo ? <img src={fileUrl(photo)} alt="Your passport size photo" className="h-20 w-20 rounded-full object-cover ring-2 ring-forest-100" /> : <div className="grid h-20 w-20 place-items-center rounded-full bg-forest-50 text-xs text-stone-600">No photo</div>}
-        <label className="btn-outline min-h-11 cursor-pointer">{busy === "PROFILE_PHOTO" && <Loader />}{photo ? "Replace photo" : "Upload photo"}<input type="file" accept="image/jpeg,image/png,image/webp" hidden onChange={(e) => { void upload("PROFILE_PHOTO", e.target.files?.[0]); e.currentTarget.value = ""; }} /></label>
-        <span className="text-xs text-stone-500">JPG, PNG or WEBP · up to 3 MB</span>
+  return <div className="documents-flow">
+    {notice && <p role="status" className={`documents-notice ${notice.ok ? "is-success" : "is-error"}`}>{notice.text}</p>}
+    <Card className="documents-photo-card">
+      <div className="documents-card-heading"><span className="documents-icon"><DocumentIcon person /></span><div><h2>Passport size photo <b>*</b></h2><p>Required to apply</p></div></div>
+      <div className="documents-photo-row">
+        {photo ? <img src={fileUrl(photo)} alt="Your passport size photo" className="documents-photo-preview" /> : <div className="documents-photo-placeholder">No photo</div>}
+        <div className="documents-photo-actions"><label className="documents-upload-button is-outline">{busy === "PROFILE_PHOTO" && <Loader />}{photo ? "Replace photo" : "Upload photo"}<input type="file" accept="image/jpeg,image/png,image/webp" hidden onChange={(e) => { void upload("PROFILE_PHOTO", e.target.files?.[0]); e.currentTarget.value = ""; }} /></label><small>JPG, PNG or WEBP · up to 3 MB</small></div>
       </div>
     </Card>
-    <div className="grid gap-3 sm:grid-cols-2">
+
+    <div className="documents-grid">
       {DOCUMENT_TYPES.filter((type) => type !== "PASSPORT_PHOTO").map((type) => {
         const mine = docs.filter((d) => d.documentType === type);
-        return <Card key={type} className="p-4">
-          <h2 className="font-semibold">{DOCUMENT_LABEL[type]}</h2>
-          {type === "SIGNATURE" && <p className="mt-1 text-xs text-stone-500">PDF or image, up to 5 MB.</p>}
-          <ul className="mt-3 space-y-2 text-sm">
-            {mine.map((doc) => <li key={doc.publicId} className="flex items-center justify-between gap-2"><FileLink f={doc} /><button type="button" className="min-h-10 px-2 text-xs text-rose-700 underline disabled:opacity-50" disabled={busy === doc.publicId} onClick={() => void remove(doc.publicId)}>Delete</button></li>)}
-            {!mine.length && <li className="text-sm text-stone-500">Not uploaded</li>}
+        return <Card key={type} className="documents-item-card">
+          <div className="documents-card-heading"><span className="documents-icon"><DocumentIcon /></span><h2>{DOCUMENT_LABEL[type]}</h2></div>
+          {type === "SIGNATURE" && <p className="documents-helper">PDF or image, up to 5 MB.</p>}
+          <ul className="documents-file-list">
+            {mine.map((doc) => <li key={doc.publicId}><FileLink f={doc} /><span className="documents-file-actions"><label className="documents-upload-button is-outline">{busy === type && <Loader />}Replace file<input type="file" accept="application/pdf,image/jpeg,image/png,image/webp" hidden onChange={(e) => { void upload(type, e.target.files?.[0]); e.currentTarget.value = ""; }} /></label><button type="button" className="documents-delete" disabled={busy === doc.publicId} onClick={() => void remove(doc.publicId)}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M4 7h16M10 11v6m4-6v6M6 7l1 14h10l1-14M9 7V4h6v3"/></svg>Delete</button></span></li>)}
+            {!mine.length && <li className="documents-not-uploaded">Not uploaded</li>}
           </ul>
-          <label className="btn-outline btn-sm mt-3 min-h-10 cursor-pointer">{busy === type && <Loader />}{SINGLE_DOCUMENT_TYPES.includes(type) && mine.length ? "Replace file" : "Upload file"}<input type="file" accept="application/pdf,image/jpeg,image/png,image/webp" hidden onChange={(e) => { void upload(type, e.target.files?.[0]); e.currentTarget.value = ""; }} /></label>
+          {(!mine.length || !SINGLE_DOCUMENT_TYPES.includes(type)) && <label className="documents-upload-button is-primary">{busy === type && <Loader />}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M12 16V4m-4 4 4-4 4 4"/><path d="M5 14v5h14v-5"/></svg>Upload file<input type="file" accept="application/pdf,image/jpeg,image/png,image/webp" hidden onChange={(e) => { void upload(type, e.currentTarget.files?.[0]); e.currentTarget.value = ""; }} /></label>}
         </Card>;
       })}
     </div>
-    <p className="text-xs text-stone-500">Files are stored privately. Only you and the hiring team can open them. Documents may be PDF, JPG, PNG or WEBP up to 5 MB.</p>
-    <div className="border-t border-forest-200 pt-5">
-      <p className="mb-3 text-sm text-stone-600">Uploads are saved automatically. Return to your profile to see the updated completion percentage.</p>
-      <Button type="button" disabled={!!busy} onClick={() => router.push("/candidate/profile")}>
-        {busy ? <Loader /> : null}Save &amp; return to profile
-      </Button>
-    </div>
+
+    <p className="documents-privacy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3 4.5 6v5c0 5 3.2 8 7.5 10 4.3-2 7.5-5 7.5-10V6L12 3Z"/><path d="m9 12 2 2 4-4"/></svg><span>Files are stored privately. Only you and the hiring team can view them. Documents may be PDF, JPG, PNG or WEBP up to 5 MB.</span></p>
+    <div className="documents-return"><Button type="button" disabled={!!busy} onClick={() => router.push("/candidate/profile")}>{busy ? <Loader /> : <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M5 4h12l3 3v13H4V4h1Z"/><path d="M8 4v6h8V4m-8 16v-6h8v6"/></svg>}Save &amp; Return to Profile <span aria-hidden="true">→</span></Button></div>
   </div>;
 }

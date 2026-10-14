@@ -14,12 +14,12 @@ export async function findPosition(idOrSlug: string) {
   return p ? plain(p) : null;
 }
 
-export async function listPublicPositions({ q = "", type = "", limit = 50 }: { q?: string; type?: string; limit?: number } = {}) {
+export async function listPublicPositions({ q = "", type = "", sort = "latest", limit = 50 }: { q?: string; type?: string; sort?: string; limit?: number } = {}) {
   await connectDB();
   const filter: Record<string, unknown> = { status: "ACTIVE" };
   if (type) filter.employmentType = type;
   if (q) filter.$or = [{ title: new RegExp(escapeRegex(q), "i") }, { location: new RegExp(escapeRegex(q), "i") }];
-  const items = await Position.find(filter).sort({ createdAt: -1 }).limit(limit).lean();
+  const items = await Position.find(filter).sort({ createdAt: sort === "oldest" ? 1 : -1 }).limit(limit).lean();
   return plain(items).filter(isOpen);
 }
 

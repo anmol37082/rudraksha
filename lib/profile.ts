@@ -23,6 +23,16 @@ export function profileCompletion(user: P, profile: P) {
   return { percent: Math.round(((checks.length - missing.length) / checks.length) * 100), missing };
 }
 
+/** Required details across the four onboarding steps before opening candidate Home. */
+export function isProfileSetupComplete(user: P, profile: P) {
+  return !!(
+    user?.name && user?.phone && profile?.dateOfBirth &&
+    profile?.address && profile?.city && profile?.state && profile?.country && profile?.postalCode &&
+    profile?.skills?.length && profile?.languages?.length && profile?.experience && profile?.availability &&
+    profile?.emergencyContact?.name && profile?.emergencyContact?.phone && profile?.emergencyContact?.relation
+  );
+}
+
 /** Minimum details needed before a candidate may apply. */
 export function missingForApply(user: P, profile: P) {
   const req: [string, boolean][] = [

@@ -1,15 +1,27 @@
 "use client";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { api, csv } from "@/lib/client";
 import { DOCUMENT_LABEL, DOCUMENT_TYPES, SINGLE_DOCUMENT_TYPES } from "@/lib/constants";
 import { Button, Card, Field, Input, LinkButton, Loader, Select, Textarea } from "./ui";
 import { FileLink, fileUrl } from "./FileLink";
 
-export function ProfileForm({ user, profile, completion }: { user: any; profile: any; completion: { percent: number; missing: string[] } }) {
-  const profileWasSaved = !!profile.profileSaved || !!(profile.dateOfBirth || profile.address || profile.city || profile.state || profile.country || profile.postalCode || profile.skills?.length || profile.languages?.length || profile.experience || profile.availability || profile.emergencyContact?.name || profile.emergencyContact?.phone);
+function ProfileSectionIcon({ name }: { name: string }) {
+  const common = { fill: "none", stroke: "currentColor", strokeWidth: 1.7, strokeLinecap: "round" as const, strokeLinejoin: "round" as const };
+  if (name === "contact") return <svg viewBox="0 0 24 24" aria-hidden="true" {...common}><path d="M7 3.5h3l1.5 4-2 1.5a14 14 0 0 0 5.5 5.5l1.5-2 4 1.5v3a2 2 0 0 1-2.2 2C10.5 18.2 5.8 13.5 5 5.7A2 2 0 0 1 7 3.5Z" /></svg>;
+  if (name === "address") return <svg viewBox="0 0 24 24" aria-hidden="true" {...common}><path d="M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 1 1 14 0Z" /><circle cx="12" cy="10" r="2.2" /></svg>;
+  if (name === "work") return <svg viewBox="0 0 24 24" aria-hidden="true" {...common}><rect x="4" y="7" width="16" height="13" rx="2" /><path d="M9 7V5h6v2M4 12h16m-10 0v2h4v-2" /></svg>;
+  if (name === "availability") return <svg viewBox="0 0 24 24" aria-hidden="true" {...common}><rect x="3.5" y="5" width="17" height="16" rx="2" /><path d="M8 3v4m8-4v4M3.5 9.5h17M8 13h2m4 0h2M8 17h2" /></svg>;
+  if (name === "emergency") return <svg viewBox="0 0 24 24" aria-hidden="true" {...common}><circle cx="12" cy="8" r="3.4" /><path d="M5 20a7 7 0 0 1 14 0M18 5l2 2m0-2-2 2" /></svg>;
+  if (name === "skills") return <svg viewBox="0 0 24 24" aria-hidden="true" {...common}><path d="m12 3 1.5 2.2 2.7-.2.7 2.6 2.4 1.3-.8 2.6.8 2.6-2.4 1.3-.7 2.6-2.7-.2L12 20l-1.5-2.2-2.7.2-.7-2.6-2.4-1.3.8-2.6-.8-2.6 2.4-1.3.7-2.6 2.7.2L12 3Z" /><circle cx="12" cy="11.5" r="2.5" /></svg>;
+  return <svg viewBox="0 0 24 24" aria-hidden="true" {...common}><circle cx="12" cy="8" r="3.5" /><path d="M5 20a7 7 0 0 1 14 0" /></svg>;
+}
+
+export function ProfileForm({ user, profile, setupComplete, completion }: { user: any; profile: any; setupComplete: boolean; completion: { percent: number; missing: string[] } }) {
+  const router = useRouter();
   const [percent, setPercent] = useState(completion.percent);
-  const [saved, setSaved] = useState(profileWasSaved);
-  const [editing, setEditing] = useState(!profileWasSaved);
+  const [saved, setSaved] = useState(setupComplete);
+  const [editing, setEditing] = useState(!setupComplete);
   const legacyPassportPhoto = (profile.documents ?? []).find((d: any) => d.documentType === "PASSPORT_PHOTO");
   const [photo, setPhoto] = useState(profile.profilePhoto ?? legacyPassportPhoto ?? null);
   const [docs, setDocs] = useState<any[]>(profile.documents ?? []);
@@ -20,8 +32,16 @@ export function ProfileForm({ user, profile, completion }: { user: any; profile:
 
   async function save(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    const form = e.currentTarget;
+    const invalid = form.querySelector<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>("input:invalid, select:invalid, textarea:invalid");
+    if (invalid) {
+      const section = invalid.closest<HTMLElement>("[data-profile-step]");
+      if (section) setStep(Number(section.dataset.profileStep));
+      requestAnimationFrame(() => invalid.reportValidity());
+      return;
+    }
     setBusy("save"); setMsg(null); setErrors({});
-    const f = Object.fromEntries(new FormData(e.currentTarget)) as Record<string, string>;
+    const f = Object.fromEntries(new FormData(form)) as Record<string, string>;
     const res = await api("/api/candidates/profile", "PUT", {
       name: f.name, phone: f.phone, dateOfBirth: f.dateOfBirth, gender: f.gender, address: f.address, city: f.city, state: f.state, country: f.country,
       postalCode: f.postalCode, skills: csv(f.skills), languages: csv(f.languages), experience: f.experience, yearsOfExperience: f.yearsOfExperience || 0,
@@ -34,6 +54,8 @@ export function ProfileForm({ user, profile, completion }: { user: any; profile:
       setPercent(res.data.completion.percent);
       setSaved(true);
       setEditing(false);
+      router.replace("/candidate/dashboard");
+      router.refresh();
     }
   }
 
@@ -60,15 +82,21 @@ export function ProfileForm({ user, profile, completion }: { user: any; profile:
   const steps = ["Personal details", "Address", "Work", "Emergency contact"];
   const details = [
     ["Full name", user.name], ["Email", user.email], ["Phone", user.phone],
-    ["Date of birth", dob || "Not provided"], ["Gender", p.gender || "Not provided"],
+    ["Date of birth", dob || "Not provided"], ["Gender", p.gender || "Prefer not to say"],
     ["Address", [p.address, p.city, p.state, p.country, p.postalCode].filter(Boolean).join(", ") || "Not provided"],
     ["Skills", p.skills?.join(", ") || "Not provided"], ["Languages", p.languages?.join(", ") || "Not provided"],
     ["Experience", p.experience || `${p.yearsOfExperience ?? 0} years`], ["Availability", p.availability || "Not provided"],
     ["Emergency contact", p.emergencyContact?.name ? `${p.emergencyContact.name} · ${p.emergencyContact.phone ?? ""} · ${p.emergencyContact.relation ?? ""}` : "Not provided"],
   ];
 
+  function editAt(targetStep: number) {
+    setStep(targetStep);
+    setEditing(true);
+  }
+
   if (saved && !editing) return (
-    <div className="space-y-6">
+    <>
+    <div className="profile-saved-desktop space-y-6">
       <Card>
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div><h2 className="text-xl">Profile details</h2><p className="mt-1 text-sm text-stone-600">Your profile is saved. You can edit these details anytime.</p></div>
@@ -84,6 +112,48 @@ export function ProfileForm({ user, profile, completion }: { user: any; profile:
       </Card>
       {msg && <p role="status" className={`rounded-md px-3 py-2 text-sm ${msg.ok ? "bg-emerald-50 text-emerald-800" : "bg-rose-50 text-rose-800"}`}>{msg.text}</p>}
     </div>
+    <div className="profile-saved-mobile sm:hidden">
+      <header className="profile-mobile-heading"><h1>My Profile</h1><p>Your profile is saved. You can edit<br />these details anytime.</p></header>
+      <section className="profile-mobile-summary">
+        <label className="profile-mobile-photo" aria-label="Upload profile photo">
+          {photo ? <img src={fileUrl(photo)} alt="Your profile" /> : <span className="profile-mobile-avatar"><ProfileSectionIcon name="profile" /></span>}
+          <span className="profile-photo-camera" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.4"><path d="M3 6h3l1.2-1.5h5.6L14 6h3v9H3z"/><circle cx="10" cy="10.5" r="2.5" /></svg></span>
+          <input type="file" accept="image/jpeg,image/png,image/webp" onChange={(event) => { upload("PROFILE_PHOTO", event.target.files?.[0]); event.target.value = ""; }} />
+        </label>
+        <div className="profile-mobile-summary-details">
+          <strong>{user.name}</strong><small>CANDIDATE</small>
+          <div className="profile-mobile-progress"><span><i style={{ width: `${percent}%` }} /></span><b>{percent}%</b></div>
+          <p>Complete your profile to get better opportunities</p>
+        </div>
+        <button type="button" className="profile-mobile-edit-main" onClick={() => editAt(0)}>✎ Edit Profile</button>
+      </section>
+
+      {[
+        { title: "Personal Information", icon: "profile", step: 0, rows: [["FULL NAME", user.name], ["GENDER", p.gender ? `${p.gender[0]}${p.gender.slice(1).toLowerCase()}` : "Not provided"], ["DATE OF BIRTH", dob || "Not provided"]] },
+        { title: "Contact Details", icon: "contact", step: 0, rows: [["EMAIL", user.email], ["PHONE", user.phone]] },
+        { title: "Address", icon: "address", step: 1, rows: [["ADDRESS", [p.address, p.city, p.state, p.country, p.postalCode].filter(Boolean).join(", ") || "Not provided"]] },
+        { title: "Skills & Languages", icon: "skills", step: 2, rows: [["SKILLS", p.skills?.join(", ") || "Not provided"], ["LANGUAGES", p.languages?.join(", ") || "Not provided"]] },
+        { title: "Experience", icon: "work", step: 2, rows: [["EXPERIENCE", p.experience || `${p.yearsOfExperience ?? 0} years`]] },
+        { title: "Availability", icon: "availability", step: 2, rows: [["AVAILABILITY", p.availability || "Not provided"]] },
+        { title: "Emergency Contact", icon: "emergency", step: 3, rows: [["NAME", p.emergencyContact?.name || "Not provided"], ["PHONE", p.emergencyContact?.phone || "Not provided"], ["RELATIONSHIP", p.emergencyContact?.relation || "Not provided"]] },
+      ].map((group) => <section key={group.title} className="profile-mobile-group">
+        <span className="profile-mobile-group-icon"><ProfileSectionIcon name={group.icon} /></span>
+        <div className="profile-mobile-group-content">
+          <div className="profile-mobile-group-heading"><h2>{group.title}</h2><button type="button" onClick={() => editAt(group.step)}>✎ Edit</button></div>
+          <dl className={`profile-mobile-group-rows ${group.rows.length === 1 ? "profile-mobile-one-column" : ""}`}>
+            {group.rows.map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}
+          </dl>
+        </div>
+      </section>)}
+
+      <section className="profile-mobile-update">
+        <span aria-hidden="true">▤</span>
+        <div><strong>Keep your profile updated</strong><p>A complete profile helps you get more opportunities.</p></div>
+        <button type="button" onClick={() => editAt(0)}>Update Now <span aria-hidden="true">→</span></button>
+      </section>
+      {msg && <p role="status" className={`rounded-md px-3 py-2 text-sm ${msg.ok ? "bg-emerald-50 text-emerald-800" : "bg-rose-50 text-rose-800"}`}>{msg.text}</p>}
+    </div>
+    </>
   );
 
   function nextStep() {
@@ -143,7 +213,7 @@ export function ProfileForm({ user, profile, completion }: { user: any; profile:
         <LinkButton href="/candidate/documents" className="w-full">Manage my documents</LinkButton>
       </div>
 
-      <form onSubmit={save} className="profile-wizard space-y-4 sm:space-y-6">
+      <form onSubmit={save} noValidate className="profile-wizard space-y-4 sm:space-y-6">
         <Card className="sm:hidden">
           <div className="flex items-center justify-between gap-3">
             <p className="text-sm font-semibold text-forest-900">Step {step + 1} of {steps.length}</p>
@@ -159,29 +229,29 @@ export function ProfileForm({ user, profile, completion }: { user: any; profile:
             <Field label="Full name" error={errors.name}><Input name="name" defaultValue={user.name} required /></Field>
             <Field label="Email" hint="Email cannot be changed"><Input value={user.email} disabled readOnly /></Field>
             <Field label="Phone" error={errors.phone}><Input name="phone" type="tel" defaultValue={user.phone} required /></Field>
-            <Field label="Date of birth"><Input name="dateOfBirth" type="date" defaultValue={dob} /></Field>
+          <Field label="Date of birth" error={errors.dateOfBirth}><Input name="dateOfBirth" type="date" defaultValue={dob} required /></Field>
             <Field label="Gender"><Select name="gender" defaultValue={p.gender ?? ""}><option value="">Prefer not to say</option><option value="MALE">Male</option><option value="FEMALE">Female</option><option value="OTHER">Other</option></Select></Field>
           </div>
         </Card>
         <Card className={`space-y-4 ${step === 1 ? "" : "hidden sm:block"}`} data-profile-step="1">
           <h2 className="text-xl">Address</h2>
-          <Field label="Street address"><Input name="address" defaultValue={p.address} /></Field>
+          <Field label="Street address" error={errors.address}><Input name="address" defaultValue={p.address} required /></Field>
           <div className="grid gap-4 sm:grid-cols-2">
-            <Field label="City"><Input name="city" defaultValue={p.city} /></Field>
-            <Field label="State"><Input name="state" defaultValue={p.state} /></Field>
-            <Field label="Country"><Input name="country" defaultValue={p.country} /></Field>
-            <Field label="Postal code"><Input name="postalCode" defaultValue={p.postalCode} /></Field>
+            <Field label="City" error={errors.city}><Input name="city" defaultValue={p.city} required /></Field>
+            <Field label="State" error={errors.state}><Input name="state" defaultValue={p.state} required /></Field>
+            <Field label="Country" error={errors.country}><Input name="country" defaultValue={p.country} required /></Field>
+            <Field label="Postal code" error={errors.postalCode}><Input name="postalCode" defaultValue={p.postalCode} required /></Field>
           </div>
         </Card>
         <Card className={`space-y-4 ${step === 2 ? "" : "hidden sm:block"}`} data-profile-step="2">
           <h2 className="text-xl">Work</h2>
           <div className="grid gap-4 sm:grid-cols-2">
-            <Field label="Skills" hint="Separate with commas"><Input name="skills" defaultValue={(p.skills ?? []).join(", ")} /></Field>
-            <Field label="Languages" hint="Separate with commas"><Input name="languages" defaultValue={(p.languages ?? []).join(", ")} /></Field>
+            <Field label="Skills" error={errors.skills} hint="Separate with commas"><Input name="skills" defaultValue={(p.skills ?? []).join(", ")} required /></Field>
+            <Field label="Languages" error={errors.languages} hint="Separate with commas"><Input name="languages" defaultValue={(p.languages ?? []).join(", ")} required /></Field>
             <Field label="Years of experience"><Input name="yearsOfExperience" type="number" min={0} max={60} defaultValue={p.yearsOfExperience ?? 0} /></Field>
-            <Field label="Availability" hint="For example: weekends and evenings"><Input name="availability" defaultValue={p.availability} /></Field>
+            <Field label="Availability" error={errors.availability} hint="For example: weekends and evenings"><Input name="availability" defaultValue={p.availability} required /></Field>
           </div>
-          <Field label="Experience"><Textarea name="experience" defaultValue={p.experience} placeholder="Where you have worked and what you did" /></Field>
+          <Field label="Experience" error={errors.experience} hint="If you are new, enter “No prior experience”."><Textarea name="experience" defaultValue={p.experience} placeholder="Where you have worked and what you did" required /></Field>
         </Card>
         <Card className={`space-y-4 ${step === 3 ? "" : "hidden sm:block"}`} data-profile-step="3">
           <h2 className="text-xl">Emergency contact</h2>

@@ -3,7 +3,8 @@ import { ApiError, handle, ok, parseBody } from "@/lib/api";
 import { loginSchema } from "@/lib/validators";
 import { connectDB } from "@/lib/mongodb";
 import { setSessionCookie, signToken } from "@/lib/auth";
-import { User } from "@/models";
+import { CandidateProfile, User } from "@/models";
+import { isProfileSetupComplete } from "@/lib/profile";
 
 // Generated once per process (lazily, on first login attempt) so a cold start pays no bcrypt cost.
 let dummyHash: string | null = null;
@@ -21,5 +22,6 @@ export const POST = handle(async (req) => {
   if (!user.isActive) throw new ApiError(403, "This account has been deactivated. Please contact us.");
   if (d.adminOnly && user.role !== "ADMIN") throw new ApiError(403, "This login is for administrators only");
   await setSessionCookie(signToken({ id: String(user._id), role: user.role, name: user.name }));
-  return ok({ role: user.role }, "Logged in");
+  const profileComplete = user.role === "ADMIN" ? true : isProfileSetupComplete(user, await CandidateProfile.findOne({ userId: user._id }).lean());
+  return ok({ role: user.role, profileComplete }, "Logged in");
 });

@@ -19,6 +19,8 @@ const symbols: Record<string, string> = {
 export function Shell({ items, who, area, children }: { items: NavItem[]; who: string; area: string; children: ReactNode }) {
   const pathname = usePathname();
   const candidate = area === "Candidate";
+  const candidateCompactHeader = candidate;
+  const unreadCount = items.find((item) => item.href === "/candidate/notifications")?.badge ?? 0;
   const [adminMenuOpen, setAdminMenuOpen] = useState(false);
   useEffect(() => {
     if (!adminMenuOpen) return;
@@ -41,13 +43,20 @@ export function Shell({ items, who, area, children }: { items: NavItem[]; who: s
       <div className="p-3"><LogoutButton to={candidate ? "/login" : "/admin/login"} className="w-full rounded-xl px-3 py-2.5 text-left text-sm text-pearl/85 hover:bg-forest-700" /></div>
     </aside>
     <div className="min-w-0 flex-1">
-      <header className="flex items-center justify-between border-b border-gold-500/35 bg-forest-900 px-4 py-1 text-pearl lg:hidden">
-        <Link href={candidate ? "/candidate/dashboard" : "/admin/dashboard"} aria-label={SITE.name} className="inline-flex items-center gap-2"><Image src="/RUDRAKSHA.png" alt="" width={64} height={64} className="h-12 w-12 object-contain" /><span className="font-serif text-2xl font-semibold text-pearl">{SITE.name}</span></Link>
-        <div className="flex items-center">
-          {!candidate && <button type="button" className="grid h-11 w-11 place-items-center text-pearl" aria-label={adminMenuOpen ? "Close navigation menu" : "Open navigation menu"} aria-expanded={adminMenuOpen} onClick={() => setAdminMenuOpen((open) => !open)}>
+      <header className={`app-mobile-header flex items-center justify-between border-b border-gold-500/35 bg-forest-900 px-4 py-1 text-pearl lg:hidden ${candidateCompactHeader ? "candidate-dashboard-header" : ""}`}>
+        <Link href={candidate ? "/candidate/dashboard" : "/admin/dashboard"} aria-label={SITE.name} className="inline-flex items-center gap-2">
+          <Image src="/RUDRAKSHA.png" alt="" width={64} height={64} className={candidateCompactHeader ? "h-10 w-12 object-contain" : "h-12 w-12 object-contain"} />
+          {!candidateCompactHeader && <span className="app-mobile-brand-name font-serif text-2xl font-semibold text-pearl">{SITE.name}</span>}
+        </Link>
+        <div className="flex items-center gap-3">
+          {candidate && <Link href="/candidate/notifications" className="candidate-header-notifications" aria-label={`Notifications${unreadCount ? `, ${unreadCount} unread` : ""}`}>
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4" /></svg>
+            {unreadCount > 0 && <span>{unreadCount}</span>}
+          </Link>}
+          {!candidate && <button type="button" className="admin-mobile-menu-button grid h-11 w-11 place-items-center text-pearl" aria-label={adminMenuOpen ? "Close navigation menu" : "Open navigation menu"} aria-expanded={adminMenuOpen} onClick={() => setAdminMenuOpen((open) => !open)}>
             {adminMenuOpen ? <span aria-hidden="true" className="text-3xl leading-none">×</span> : <span aria-hidden="true" className="grid gap-1"><span className="h-0.5 w-6 rounded bg-current" /><span className="h-0.5 w-6 rounded bg-current" /><span className="h-0.5 w-6 rounded bg-current" /></span>}
           </button>}
-          {candidate && <LogoutButton to="/login" className="text-sm font-medium text-gold-300 hover:text-white" />}
+          {candidate && <LogoutButton to="/login" className="candidate-dashboard-logout" />}
         </div>
       </header>
       {!candidate && adminMenuOpen && <div className="fixed inset-0 z-50 lg:hidden">

@@ -1,14 +1,16 @@
 import Link from "next/link";
 import { requirePage } from "@/lib/guard";
-import { PageTitle } from "@/components/ui";
+import { Application, CandidateProfile, Interview, Notification, Position } from "@/models";
+import { isProfileSetupComplete } from "@/lib/profile";
+import { redirect } from "next/navigation";
 
 const actions = [
-  { href: "/jobs", label: "Positions", icon: "briefcase", color: "text-[#164332]" },
-  { href: "/candidate/applications", label: "Applications", icon: "application", color: "text-[#90713B]" },
-  { href: "/candidate/profile", label: "My profile", icon: "profile", color: "text-[#164332]" },
-  { href: "/candidate/documents", label: "Documents", icon: "document", color: "text-[#09251B]" },
-  { href: "/candidate/interviews", label: "Interviews", icon: "calendar", color: "text-[#164332]" },
-  { href: "/contact", label: "Help & support", icon: "support", color: "text-[#90713B]" },
+  { href: "/jobs", label: "Positions", description: "Browse and apply for new roles", icon: "briefcase", color: "text-[#164332]" },
+  { href: "/candidate/applications", label: "Applications", description: "Track your submissions", icon: "application", color: "text-[#90713B]" },
+  { href: "/candidate/profile", label: "My Profile", description: "View and update your profile", icon: "profile", color: "text-[#164332]" },
+  { href: "/candidate/documents", label: "Documents", description: "Manage your documents", icon: "document", color: "text-[#09251B]" },
+  { href: "/candidate/interviews", label: "Interviews", description: "View upcoming interviews", icon: "calendar", color: "text-[#164332]" },
+  { href: "/contact", label: "Help & Support", description: "Get assistance anytime", icon: "support", color: "text-[#90713B]" },
 ];
 
 function AppIcon({ name }: { name: string }) {
@@ -25,14 +27,108 @@ function AppIcon({ name }: { name: string }) {
 
 export default async function Dashboard() {
   const user = await requirePage("CANDIDATE");
-  return <>
-    <PageTitle title={`Hello, ${user.name.split(" ")[0]}`} />
-    <section aria-label="Candidate services" className="grid grid-cols-3 gap-x-2 gap-y-5 sm:gap-x-5 sm:gap-y-7">
-      {actions.map((action) => <Link key={action.href} href={action.href} aria-label={action.label} className="group flex min-h-28 flex-col items-center justify-center gap-2 rounded-2xl py-2 text-center focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-500 active:scale-95">
-        <span className={`grid h-14 w-14 place-items-center ${action.color} transition-transform group-hover:scale-105 sm:h-16 sm:w-16`}><AppIcon name={action.icon} /></span>
-        <span className="max-w-24 text-xs font-semibold leading-tight text-forest-900 sm:text-sm">{action.label}</span>
+  const profile = await CandidateProfile.findOne({ userId: user._id }).lean();
+  if (!isProfileSetupComplete(user, profile)) redirect("/candidate/profile");
+  const [applications, interviews, notifications, activePositions, applicationCount, shortlistedCount, interviewCount, hiredCount] = await Promise.all([
+    Application.find({ candidateId: user._id }).sort({ appliedAt: -1 }).limit(10).select("status appliedAt positionId").populate("positionId", "title").lean(),
+    Interview.find({ candidateId: user._id }).sort({ date: -1 }).limit(10).select("status date positionId").populate("positionId", "title").lean(),
+    Notification.find({ userId: user._id }).sort({ createdAt: -1 }).limit(5).select("title message createdAt isRead").lean(),
+    Position.countDocuments({ status: "ACTIVE" }),
+    Application.countDocuments({ candidateId: user._id }),
+    Application.countDocuments({ candidateId: user._id, status: "SHORTLISTED" }),
+    Interview.countDocuments({ candidateId: user._id }),
+    Application.countDocuments({ candidateId: user._id, status: "SELECTED" }),
+  ]) as [any[], any[], any[], number, number, number, number, number];
+
+  const firstName = user.name.split(" ")[0];
+  const profilePhoto = profile?.profilePhoto ?? profile?.documents?.find((document: any) => document.documentType === "PASSPORT_PHOTO");
+  const profilePhotoUrl = profilePhoto
+    ? `/api/files?publicId=${encodeURIComponent(profilePhoto.publicId)}&type=${profilePhoto.resourceType}`
+    : null;
+  const recentActivity = [
+    ...applications.map((item: any) => ({
+      title: item.positionId?.title ?? "Position application",
+      detail: `Application ${String(item.status).toLowerCase().replaceAll("_", " ")}`,
+      date: item.appliedAt ?? item.createdAt,
+      href: `/candidate/applications`,
+      icon: "application",
+    })),
+    ...interviews.map((item: any) => ({
+      title: item.positionId?.title ?? "Interview",
+      detail: item.status === "SCHEDULED" ? "Interview scheduled" : `Interview ${String(item.status).toLowerCase()}`,
+      date: item.date,
+      href: "/candidate/interviews",
+      icon: "calendar",
+    })),
+    ...notifications.map((item: any) => ({
+      title: item.title,
+      detail: item.message,
+      date: item.createdAt,
+      href: "/candidate/notifications",
+      icon: "document",
+    })),
+  ].sort((a, b) => new Date(b.date ?? 0).getTime() - new Date(a.date ?? 0).getTime()).slice(0, 3);
+  const stats = [
+    { label: "Applied", value: applicationCount, icon: "briefcase" },
+    { label: "Shortlisted", value: shortlistedCount, icon: "application" },
+    { label: "Interviews", value: interviewCount, icon: "calendar" },
+    { label: "Hired", value: hiredCount, icon: "profile" },
+  ];
+  const documentCount = profile?.documents?.length ?? 0;
+
+  return <div className="candidate-dashboard">
+    <section className="candidate-welcome" aria-label="Welcome">
+      <div>
+        <span className="candidate-welcome-kicker">WELCOME BACK</span>
+        <h1>Hello,<br /><strong>{firstName} 👋</strong></h1>
+        <p>Manage your profile, applications<br className="hidden sm:block" /> and more from here.</p>
+      </div>
+      <Link href="/candidate/profile" className="candidate-avatar" aria-label="Edit profile">{profilePhotoUrl ? <img src={profilePhotoUrl} alt="" /> : <span>{firstName.slice(0, 1).toUpperCase()}</span>}<small>✎ Edit Profile</small></Link>
+    </section>
+
+    <section className="candidate-promo" aria-label="Explore opportunities">
+      <div className="candidate-promo-copy">
+        <span>BE A PART OF</span>
+        <h2>Memorable<br />Celebrations</h2>
+        <p>Get hired for premium weddings<br />and special events.</p>
+        <Link href="/jobs">Explore Opportunities <span aria-hidden="true">→</span></Link>
+      </div>
+    </section>
+
+    <section aria-label="Candidate services" className="candidate-service-grid">
+      {actions.map((action) => <Link key={action.href} href={action.href} aria-label={`${action.label}: ${action.description}`} className="candidate-service-card">
+        <span className={`candidate-service-icon ${action.color}`}><AppIcon name={action.icon} /></span>
+        <strong>{action.label}</strong>
+        <span className="candidate-service-description">{action.description}</span>
+        {action.href === "/jobs" && <small>{activePositions} open roles</small>}
+        {action.href === "/candidate/documents" && <small>{documentCount} uploaded</small>}
+        <span className="candidate-card-arrow" aria-hidden="true">›</span>
       </Link>)}
     </section>
-    <p className="mt-6 hidden text-center text-xs text-stone-500 sm:block">Your applications and documents are visible only to you and the hiring team.</p>
-  </>;
+
+    <section className="candidate-stats-section" aria-label="Quick stats">
+      <div className="candidate-section-heading"><h2>Quick Stats</h2><Link href="/candidate/applications">View all <span aria-hidden="true">→</span></Link></div>
+      <div className="candidate-stats-grid">
+        {stats.map((stat) => <div key={stat.label} className="candidate-stat-card"><span className="candidate-stat-icon"><AppIcon name={stat.icon} /></span><strong>{stat.value}</strong><span>{stat.label}</span></div>)}
+      </div>
+    </section>
+
+    <section className="candidate-activity-section" aria-label="Recent activity">
+      <div className="candidate-section-heading"><h2>Recent Activity</h2><Link href="/candidate/notifications">View all <span aria-hidden="true">→</span></Link></div>
+      <div className="candidate-activity-list">
+        {recentActivity.length ? recentActivity.map((item, index) => <Link key={`${item.href}-${index}`} href={item.href} className="candidate-activity-item">
+          <span className="candidate-activity-icon"><AppIcon name={item.icon} /></span>
+          <span className="candidate-activity-copy"><strong>{item.title}</strong><small>{item.detail}</small></span>
+          <span className="candidate-activity-date">{item.date ? new Date(item.date).toLocaleDateString("en-IN", { day: "numeric", month: "short" }) : ""}</span>
+          <span className="candidate-activity-arrow" aria-hidden="true">›</span>
+        </Link>) : <p className="candidate-activity-empty">Your recent applications and updates will appear here.</p>}
+      </div>
+    </section>
+
+    <section className="candidate-help-card" aria-label="Support">
+      <span className="candidate-help-icon"><AppIcon name="support" /></span>
+      <span><strong>Need Help?</strong><small>Our team is here to support you.</small></span>
+      <Link href="/contact">Contact Support <span aria-hidden="true">→</span></Link>
+    </section>
+  </div>;
 }
