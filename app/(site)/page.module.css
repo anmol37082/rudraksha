@@ -13,7 +13,7 @@
   justify-content: space-between;
   overflow: hidden;
   padding: 18px clamp(20px, 6vw, 84px) 54px;
-  background: url("/landingbg.webp") center / cover no-repeat;
+  background: url("/landingbg2.webp") center / cover no-repeat;
 }
 
 .heroHeader {
