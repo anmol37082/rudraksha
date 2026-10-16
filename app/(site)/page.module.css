@@ -52,7 +52,7 @@
   max-width: 390px;
   margin-top: 12px;
   color: #526258;
-  font-size: 1rem;
+  font-size: clamp(.9rem, 1.1vw, 1rem);
 }
 
 .heroActions {
@@ -72,7 +72,7 @@
   background: #09251b;
   padding: 0 7px 0 20px;
   color: white;
-  font-size: .9rem;
+  font-size: clamp(.85rem, .95vw, .9rem);
   font-weight: 600;
   box-shadow: 0 6px 16px rgba(9, 37, 27, .18);
 }
@@ -135,7 +135,7 @@
   .heroCopy p {
     max-width: 300px;
     margin-top: 8px;
-    font-size: .83rem;
+    font-size: clamp(.8rem, 3.5vw, .95rem);
     line-height: 1.35;
   }
 
@@ -149,6 +149,7 @@
     min-height: 52px;
     align-self: flex-end;
     margin-right: -8px;
+    font-size: clamp(.85rem, 3.4vw, .95rem);
   }
 
   .primaryAction span {
