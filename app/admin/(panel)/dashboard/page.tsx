@@ -3,6 +3,7 @@ import { adminStats } from "@/lib/data";
 import { fmtDate } from "@/lib/client";
 import { STATUS_LABEL } from "@/lib/constants";
 import { Badge, EmptyState } from "@/components/ui";
+import styles from "./page.module.css";
 
 type StatIconName = "people" | "file" | "hourglass" | "shortlist" | "calendar" | "selected" | "rejected" | "briefcase" | "building";
 
@@ -35,35 +36,35 @@ export default async function AdminDashboard() {
     { label: "Permanent staff", value: s.staff, icon: "building", href: "/admin/staff" },
   ];
 
-  return <div className="admin-dashboard-page">
-    <header className="admin-dashboard-heading"><h1>Dashboard</h1><p>Welcome back! Here’s an overview of your hiring activity.</p><span aria-hidden="true"><i />✦</span></header>
+  return <div>
+    <header className={styles.heading}><h1>Dashboard</h1><p>Welcome back! Here’s an overview of your hiring activity.</p><span aria-hidden="true"><i />✦</span></header>
 
-    <section className="admin-dashboard-stats" aria-label="Hiring statistics">
-      {cards.map((card) => <Link className="admin-dashboard-stat" href={card.href} key={card.label}>
-        <span className="admin-dashboard-stat-icon"><StatIcon name={card.icon} /></span><span className="admin-dashboard-stat-copy"><strong>{card.value}</strong><small>{card.label}</small></span><span className="admin-dashboard-stat-arrow" aria-hidden="true">›</span>
+    <section className={styles.stats} aria-label="Hiring statistics">
+      {cards.map((card) => <Link className={styles.stat} href={card.href} key={card.label}>
+        <span className={styles.statIcon}><StatIcon name={card.icon} /></span><span className={styles.statCopy}><strong>{card.value}</strong><small>{card.label}</small></span><span className={styles.statArrow} aria-hidden="true">›</span>
       </Link>)}
     </section>
 
-    <div className="admin-dashboard-sections">
-      <section className="admin-dashboard-section">
+    <div className={styles.sections}>
+      <section className={styles.section}>
         <header><h2>Recent applications</h2><Link href="/admin/applications">View all <span aria-hidden="true">→</span></Link></header>
-        {recent.length ? <div className="admin-dashboard-list">
-          {recent.map((application: any) => <article className="admin-dashboard-list-card" key={application._id}>
-            <div className="admin-dashboard-row-top"><span className="admin-dashboard-initial">{application.candidateId?.name?.[0] ?? "C"}</span><strong>{application.candidateId?.name ?? "Candidate"}</strong><Badge status={application.status} label={STATUS_LABEL[application.status] ?? application.status} /></div>
-            <p className="admin-dashboard-row-meta"><span>{application.positionId?.title ?? "Position"}</span><i>·</i><span>Applied {fmtDate(application.appliedAt)}</span></p>
-            <Link className="admin-dashboard-row-action" href={`/admin/applications/${application._id}`}>Open application <span aria-hidden="true">→</span></Link>
+        {recent.length ? <div className={styles.list}>
+          {recent.map((application: any) => <article className={styles.listCard} key={application._id}>
+            <div className={styles.rowTop}><span className={styles.initial}>{application.candidateId?.name?.[0] ?? "C"}</span><strong>{application.candidateId?.name ?? "Candidate"}</strong><Badge status={application.status} label={STATUS_LABEL[application.status] ?? application.status} /></div>
+            <p className={styles.rowMeta}><span>{application.positionId?.title ?? "Position"}</span><i>·</i><span>Applied {fmtDate(application.appliedAt)}</span></p>
+            <Link className={styles.rowAction} href={`/admin/applications/${application._id}`}>Open application <span aria-hidden="true">→</span></Link>
           </article>)}
         </div> : <EmptyState title="No applications yet" />}
       </section>
 
-      <section className="admin-dashboard-section">
+      <section className={styles.section}>
         <header><h2>Upcoming interviews</h2><Link href="/admin/interviews">View all <span aria-hidden="true">→</span></Link></header>
-        {upcoming.length ? <div className="admin-dashboard-list">
-          {upcoming.map((interview: any) => <article className="admin-dashboard-list-card" key={interview._id}>
-            <div className="admin-dashboard-row-top"><span className="admin-dashboard-initial">{interview.candidateId?.name?.[0] ?? "C"}</span><strong>{interview.candidateId?.name ?? "Candidate"}</strong><Badge status={interview.status} label={STATUS_LABEL[interview.status] ?? interview.status} /></div>
-            <p className="admin-dashboard-row-meta"><span>{interview.positionId?.title ?? "Position"}</span><i>·</i><span>{fmtDate(interview.date)} {interview.time}</span></p>
-            <p className="admin-dashboard-row-mode">{interview.type === "IN_PERSON" ? `In person${interview.location ? ` (${interview.location})` : ""}` : interview.type === "VIDEO" ? "Video call" : "Phone call"}</p>
-            <Link className="admin-dashboard-row-action" href={`/admin/applications/${interview.applicationId}`}>Open application <span aria-hidden="true">→</span></Link>
+        {upcoming.length ? <div className={styles.list}>
+          {upcoming.map((interview: any) => <article className={styles.listCard} key={interview._id}>
+            <div className={styles.rowTop}><span className={styles.initial}>{interview.candidateId?.name?.[0] ?? "C"}</span><strong>{interview.candidateId?.name ?? "Candidate"}</strong><Badge status={interview.status} label={STATUS_LABEL[interview.status] ?? interview.status} /></div>
+            <p className={styles.rowMeta}><span>{interview.positionId?.title ?? "Position"}</span><i>·</i><span>{fmtDate(interview.date)} {interview.time}</span></p>
+            <p className={styles.rowMode}>{interview.type === "IN_PERSON" ? `In person${interview.location ? ` (${interview.location})` : ""}` : interview.type === "VIDEO" ? "Video call" : "Phone call"}</p>
+            <Link className={styles.rowAction} href={`/admin/applications/${interview.applicationId}`}>Open application <span aria-hidden="true">→</span></Link>
           </article>)}
         </div> : <EmptyState title="No upcoming interviews" />}
       </section>

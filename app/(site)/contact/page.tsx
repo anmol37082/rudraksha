@@ -5,6 +5,7 @@ import { getSession } from "@/lib/auth";
 import { SITE } from "@/lib/site";
 import { ContactCopyButton } from "@/components/ContactCopyButton";
 import { LogoutButton } from "@/components/LogoutButton";
+import styles from "./page.module.css";
 
 export const metadata: Metadata = { title: "Contact us" };
 
@@ -19,14 +20,14 @@ export default async function Contact() {
   const session = await getSession();
   const phoneHref = `tel:${SITE.phone.replace(/\s/g, "")}`;
   const mapHref = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(SITE.address)}`;
-  return <main className="contact-page">
-    <header className="contact-app-header"><Link href={session?.role === "ADMIN" ? "/admin/dashboard" : session ? "/candidate/dashboard" : "/"} aria-label="Rudraksha Events"><Image src="/RUDRAKSHA.png" alt="" width={54} height={48} priority /><span>Rudraksha<small>EVENTS</small></span></Link>{session ? <LogoutButton to={session.role === "ADMIN" ? "/admin/login" : "/login"} className="contact-header-action" /> : <Link className="contact-header-action" href="/login">Log in</Link>}</header>
-    <header className="contact-heading"><h1>Contact Us</h1><p>Questions about a position or your application? Reach our hiring team directly.</p><span aria-hidden="true"><i />✦</span></header>
-    <div className="contact-methods">
-      <section className="contact-method-card"><span className="contact-icon"><ContactIcon kind="email" /></span><div className="contact-method-copy"><h2>Email</h2><p>Drop us an email anytime</p><a href={`mailto:${SITE.email}`}>{SITE.email}</a></div><ContactCopyButton value={SITE.email} label="Copy email" /></section>
-      <section className="contact-method-card"><span className="contact-icon"><ContactIcon kind="phone" /></span><div className="contact-method-copy"><h2>Phone</h2><p>Speak with our hiring team</p><a href={phoneHref}>{SITE.phone}</a></div><ContactCopyButton value={SITE.phone} label="Copy phone" /></section>
-      <section className="contact-method-card"><span className="contact-icon"><ContactIcon kind="address" /></span><div className="contact-method-copy"><h2>Address</h2><p>Visit our office</p><span>{SITE.address}</span></div><a className="contact-action" href={mapHref} target="_blank" rel="noreferrer"><ContactIcon kind="address" />View on Map</a></section>
+  return <main className={styles.page}>
+    <header className={styles.appHeader}><Link href={session?.role === "ADMIN" ? "/admin/dashboard" : session ? "/candidate/dashboard" : "/"} aria-label="Rudraksha Events"><Image src="/RUDRAKSHA.png" alt="" width={54} height={48} priority /><span>Rudraksha<small>EVENTS</small></span></Link>{session ? <LogoutButton to={session.role === "ADMIN" ? "/admin/login" : "/login"} className={styles.headerAction} /> : <Link className={styles.headerAction} href="/login">Log in</Link>}</header>
+    <header className={styles.heading}><h1>Contact Us</h1><p>Questions about a position or your application? Reach our hiring team directly.</p><span aria-hidden="true"><i />✦</span></header>
+    <div className={styles.methods}>
+      <section className={styles.methodCard}><span className={styles.icon}><ContactIcon kind="email" /></span><div className={styles.methodCopy}><h2>Email</h2><p>Drop us an email anytime</p><a href={`mailto:${SITE.email}`}>{SITE.email}</a></div><ContactCopyButton value={SITE.email} label="Copy email" className={styles.action} /></section>
+      <section className={styles.methodCard}><span className={styles.icon}><ContactIcon kind="phone" /></span><div className={styles.methodCopy}><h2>Phone</h2><p>Speak with our hiring team</p><a href={phoneHref}>{SITE.phone}</a></div><ContactCopyButton value={SITE.phone} label="Copy phone" className={styles.action} /></section>
+      <section className={styles.methodCard}><span className={styles.icon}><ContactIcon kind="address" /></span><div className={styles.methodCopy}><h2>Address</h2><p>Visit our office</p><span>{SITE.address}</span></div><a className={styles.action} href={mapHref} target="_blank" rel="noreferrer"><ContactIcon kind="address" />View on Map</a></section>
     </div>
-    <aside className="contact-more"><span className="contact-more-icon"><ContactIcon kind="help" /></span><div><h2>Need more help?</h2><p>Our hiring team is here to assist you with any questions about job openings, applications or interview process.</p></div><span className="contact-more-ornament" aria-hidden="true">✧</span></aside>
+    <aside className={styles.more}><span className={styles.moreIcon}><ContactIcon kind="help" /></span><div><h2>Need more help?</h2><p>Our hiring team is here to assist you with any questions about job openings, applications or interview process.</p></div><span className={styles.moreOrnament} aria-hidden="true">✧</span></aside>
   </main>;
 }

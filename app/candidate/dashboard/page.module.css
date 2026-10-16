@@ -1,0 +1,156 @@
+.dashboard { display: grid; gap: 11px; }
+.welcome { display: flex; min-height: 102px; align-items: center; justify-content: space-between; padding: 2px 6px 4px; }
+.welcomeKicker { color: #90713b; font-size: .56rem; font-weight: 700; letter-spacing: .16em; }
+.welcome h1 { margin-top: 2px; font-size: 1.02rem; font-weight: 500; line-height: 1.05; }
+.welcome h1 strong { color: #a97936; font-size: 1.5rem; font-weight: 600; }
+.welcome p { margin-top: 3px; color: #68766d; font-size: .67rem; line-height: 1.25; }
+.avatar { display: flex; flex-direction: column; align-items: center; gap: 4px; color: #164332; }
+.avatar > span { display: grid; width: 54px; height: 54px; place-items: center; border: 3px solid white; border-radius: 50%; background: #e9dfca; color: #164332; font-family: var(--font-serif); font-size: 1.5rem; font-weight: 600; box-shadow: 0 2px 8px rgba(9,37,27,.12); }
+.avatar > img { display: block; width: 54px; height: 54px; border: 3px solid white; border-radius: 50%; object-fit: cover; box-shadow: 0 2px 8px rgba(9,37,27,.12); }
+.avatar small { border: 1px solid rgba(198,161,91,.45); border-radius: 999px; padding: 3px 7px; font-size: .55rem; }
+.promo { position: relative; min-height: 116px; overflow: hidden; border-radius: 14px; background: linear-gradient(90deg,rgba(3,32,23,.94) 0%,rgba(3,32,23,.7) 42%,rgba(3,32,23,.05) 100%),url("/landingbg.webp") center 42% / cover no-repeat; box-shadow: 0 4px 12px rgba(9,37,27,.12); }
+.promoCopy { position: relative; z-index: 1; padding: 11px 13px; color: #fff; }
+.promoCopy > span { color: #dabb77; font-size: .48rem; font-weight: 700; letter-spacing: .18em; }
+.promoCopy h2 { margin-top: 2px; color: #fff; font-size: 1.13rem; line-height: .98; }
+.promoCopy p { margin-top: 5px; color: rgba(255,255,255,.88); font-size: .57rem; line-height: 1.25; }
+.promoCopy a { display: inline-flex; min-height: 24px; align-items: center; gap: 5px; margin-top: 6px; border-radius: 999px; background: #eadcbd; padding: 0 9px; color: #164332; font-size: .57rem; font-weight: 600; }
+.serviceGrid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 8px; }
+.serviceCard { position: relative; display: flex; min-height: 111px; flex-direction: column; align-items: flex-start; overflow: hidden; border: 1px solid rgba(213,196,164,.28); border-radius: 13px; background: linear-gradient(145deg,#fcf9f1,#f4ecdc); padding: 8px 8px 15px; box-shadow: 0 2px 6px rgba(9,37,27,.035); }
+.serviceIcon { display: grid; width: 31px; height: 31px; place-items: center; border-radius: 50%; background: #f0e5d1; }
+.serviceIcon svg { width: 18px; height: 18px; }
+.serviceCard > strong { margin-top: 5px; color: #09251b; font-size: .66rem; line-height: 1.05; }
+.serviceDescription { margin-top: 3px; color: #68766d; font-size: .53rem; line-height: 1.2; }
+.serviceCard > small { margin-top: auto; color: #90713b; font-size: .5rem; }
+.cardArrow { position: absolute; right: 6px; bottom: 6px; display: grid; width: 18px; height: 18px; place-items: center; border-radius: 50%; background: #eee2cb; color: #90713b; font-size: 1rem; line-height: 1; }
+.sectionHeading { display: flex; align-items: center; justify-content: space-between; margin-bottom: 5px; }
+.sectionHeading h2 { font-family: var(--font-sans); font-size: .75rem; font-weight: 700; }
+.sectionHeading > a { color: #a1783d; font-size: .56rem; font-weight: 600; }
+.statsGrid { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 6px; }
+.statCard { display: flex; min-height: 44px; align-items: center; gap: 5px; border: 1px solid rgba(213,196,164,.25); border-radius: 10px; background: #fbf8f0; padding: 5px; }
+.statIcon { display: grid; width: 22px; height: 22px; flex: none; place-items: center; border-radius: 50%; background: #eee5d4; color: #164332; }
+.statIcon svg { width: 13px; height: 13px; }
+.statCard strong { color: #164332; font-size: .72rem; }
+.statCard > span:last-child { color: #68766d; font-size: .47rem; line-height: 1.05; }
+.activityList { overflow: hidden; border: 1px solid rgba(213,196,164,.28); border-radius: 12px; background: #fbf8f0; }
+.activityItem { display: flex; min-width: 0; min-height: 38px; align-items: center; gap: 7px; border-bottom: 1px solid rgba(213,196,164,.25); padding: 5px 8px; }
+.activityItem:last-child { border-bottom: 0; }
+.activityIcon { display: grid; width: 22px; height: 22px; flex: none; place-items: center; border-radius: 7px; background: #f0e5d1; color: #164332; }
+.activityIcon svg { width: 13px; height: 13px; }
+.activityCopy { display: flex; min-width: 0; flex: 1; flex-direction: column; }
+.activityCopy strong { overflow: hidden; color: #263b30; font-size: .57rem; text-overflow: ellipsis; white-space: nowrap; }
+.activityCopy small { overflow: hidden; color: #68766d; font-size: .5rem; text-overflow: ellipsis; white-space: nowrap; }
+.activityDate { flex: none; color: #8b928b; font-size: .47rem; }
+.activityArrow { color: #a1783d; font-size: .95rem; }
+.activityEmpty { padding: 12px; color: #68766d; font-size: .62rem; }
+.helpCard { display: flex; align-items: center; gap: 8px; border-radius: 13px; background: linear-gradient(100deg,#e5ecdf,#f4eddd); padding: 9px; }
+.helpIcon { display: grid; width: 29px; height: 29px; flex: none; place-items: center; border-radius: 50%; background: #164332; color: #fff; }
+.helpIcon svg { width: 17px; height: 17px; }
+.helpCard > span:nth-child(2) { display: flex; flex: 1; flex-direction: column; }
+.helpCard strong { color: #09251b; font-size: .65rem; }
+.helpCard small { color: #68766d; font-size: .5rem; }
+.helpCard > a { display: inline-flex; align-items: center; gap: 4px; border-radius: 999px; background: #09251b; padding: 7px 9px; color: white; font-size: .52rem; font-weight: 600; }
+
+@media (max-width: 639px) {
+  :global(main.candidate-content):has(.dashboard) { max-width: none; padding: .4rem .55rem 1rem; }
+  .dashboard { min-width: 0; gap: 16px; }
+  .welcome { min-width: 0; min-height: 112px; gap: 12px; padding: 8px 4px; }
+  .welcome > div { min-width: 0; }
+  .welcomeKicker { font-size: 12px !important; }
+  .welcome h1 { margin-top: 4px; font-size: 22px; line-height: 1.15; }
+  .welcome h1 strong { font-size: 30px; overflow-wrap: anywhere; }
+  .welcome p { max-width: 30ch; margin-top: 5px; font-size: 14px !important; line-height: 1.4; }
+  .avatar { flex: none; gap: 5px; }
+  .avatar > span, .avatar > img { width: 54px; height: 54px; }
+  .avatar small { padding: 5px 7px; font-size: 12px !important; }
+
+  .promo { min-height: 164px; border-radius: 15px; background-position: center; }
+  .promoCopy { padding: 15px; }
+  .promoCopy > span { font-size: 12px !important; }
+  .promoCopy h2 { margin-top: 4px; font-size: 26px; line-height: 1.05; }
+  .promoCopy p { margin-top: 7px; font-size: 14px !important; line-height: 1.4; }
+  .promoCopy a { min-height: 44px; margin-top: 10px; padding: 0 12px; font-size: 14px !important; }
+
+  .serviceGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .serviceCard { min-width: 0; min-height: 142px; border-radius: 14px; padding: 12px 11px 29px; }
+  .serviceIcon { width: 36px; height: 36px; }
+  .serviceIcon svg { width: 20px; height: 20px; }
+  .serviceCard > strong { margin-top: 7px; font-size: 14px !important; line-height: 1.2; overflow-wrap: anywhere; }
+  .serviceDescription { margin-top: 4px; font-size: 12px !important; line-height: 1.35; overflow-wrap: anywhere; }
+  .serviceCard > small { margin-top: auto; font-size: 12px !important; }
+  .cardArrow { right: 7px; bottom: 7px; width: 22px; height: 22px; }
+
+  .sectionHeading { min-width: 0; gap: 8px; margin-bottom: 8px; }
+  .sectionHeading h2 { font-size: 20px; }
+  .sectionHeading > a { display: inline-flex; min-height: 44px; flex: none; align-items: center; padding: 0 8px; font-size: 14px !important; }
+  .statsGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .statCard { min-width: 0; min-height: 66px; gap: 8px; padding: 9px; }
+  .statIcon { width: 32px; height: 32px; }
+  .statIcon svg { width: 17px; height: 17px; }
+  .statCard strong { font-size: 17px; }
+  .statCard > span:last-child { min-width: 0; font-size: 12px !important; line-height: 1.25; overflow-wrap: anywhere; }
+
+  .activityList { min-width: 0; }
+  .activityItem { min-width: 0; min-height: 48px; gap: 8px; padding: 8px; }
+  .activityIcon { width: 28px; height: 28px; }
+  .activityIcon svg { width: 16px; height: 16px; }
+  .activityCopy { min-width: 0; }
+  .activityCopy strong { font-size: 14px !important; line-height: 1.3; white-space: normal; overflow-wrap: anywhere; }
+  .activityCopy small { font-size: 12px !important; line-height: 1.35; white-space: normal; overflow-wrap: anywhere; }
+  .activityDate { max-width: 38px; font-size: 11px !important; line-height: 1.2; text-align: right; }
+  .activityArrow { flex: none; }
+  .activityEmpty { padding: 12px; font-size: 14px !important; line-height: 1.4; overflow-wrap: anywhere; }
+
+  .helpCard { display: grid; grid-template-columns: 36px minmax(0, 1fr); gap: 8px 10px; padding: 12px; }
+  .helpIcon { width: 36px; height: 36px; }
+  .helpIcon svg { width: 19px; height: 19px; }
+  .helpCard > span:nth-child(2) { min-width: 0; }
+  .helpCard strong { font-size: 15px; }
+  .helpCard small { font-size: 12px !important; line-height: 1.35; overflow-wrap: anywhere; }
+  .helpCard > a { grid-column: 1 / -1; min-height: 44px; justify-content: center; padding: 8px 12px; font-size: 14px !important; }
+}
+
+@media (min-width: 640px) {
+  .dashboard { max-width: 1040px; gap: 20px; margin-inline: auto; }
+  .welcome { min-height: 145px; padding: 12px 18px; }
+  .welcomeKicker { font-size: .68rem; }
+  .welcome h1 { font-size: 1.45rem; }
+  .welcome h1 strong { font-size: 2rem; }
+  .welcome p { font-size: .85rem; }
+  .avatar > span { width: 74px; height: 74px; font-size: 2rem; }
+  .avatar > img { width: 74px; height: 74px; }
+  .avatar small { padding: 5px 10px; font-size: .68rem; }
+  .promo { min-height: 210px; border-radius: 20px; }
+  .promoCopy { padding: 24px; }
+  .promoCopy > span { font-size: .65rem; }
+  .promoCopy h2 { font-size: 2rem; }
+  .promoCopy p { font-size: .8rem; }
+  .promoCopy a { min-height: 34px; padding-inline: 14px; font-size: .72rem; }
+  .serviceGrid { gap: 14px; }
+  .serviceCard { min-height: 150px; border-radius: 18px; padding: 14px; }
+  .serviceIcon { width: 42px; height: 42px; }
+  .serviceIcon svg { width: 23px; height: 23px; }
+  .serviceCard > strong { font-size: .9rem; }
+  .serviceDescription { font-size: .72rem; }
+  .serviceCard > small { font-size: .65rem; }
+  .cardArrow { width: 24px; height: 24px; font-size: 1.2rem; }
+  .sectionHeading h2 { font-size: 1rem; }
+  .sectionHeading > a { font-size: .75rem; }
+  .statsGrid { gap: 12px; }
+  .statCard { min-height: 62px; gap: 10px; border-radius: 14px; padding: 10px; }
+  .statIcon { width: 34px; height: 34px; }
+  .statIcon svg { width: 18px; height: 18px; }
+  .statCard strong { font-size: 1rem; }
+  .statCard > span:last-child { font-size: .65rem; }
+  .activityItem { min-height: 52px; gap: 10px; padding: 8px 12px; }
+  .activityIcon { width: 30px; height: 30px; }
+  .activityIcon svg { width: 17px; height: 17px; }
+  .activityCopy strong { font-size: .75rem; }
+  .activityCopy small { font-size: .65rem; }
+  .activityDate { font-size: .62rem; }
+  .helpCard { gap: 12px; border-radius: 16px; padding: 14px; }
+  .helpIcon { width: 42px; height: 42px; }
+  .helpIcon svg { width: 22px; height: 22px; }
+  .helpCard strong { font-size: .82rem; }
+  .helpCard small { font-size: .66rem; }
+  .helpCard > a { padding: 10px 14px; font-size: .68rem; }
+}

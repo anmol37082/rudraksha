@@ -1,0 +1,97 @@
+.page {
+  display: grid;
+  max-width: 72rem;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.5rem;
+  margin-inline: auto;
+  padding: 1.5rem 1rem;
+}
+
+.title {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+}
+
+.description {
+  margin-top: 1rem;
+  color: #44403c;
+  white-space: pre-line;
+  line-height: 1.625;
+}
+
+.section {
+  margin-top: 2rem;
+}
+
+.sectionTitle {
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
+
+.list {
+  margin-top: .75rem;
+  padding-left: 1.25rem;
+  list-style: disc;
+  color: #44403c;
+}
+
+.list > li + li {
+  margin-top: .375rem;
+}
+
+.factsPanel {
+  align-self: start;
+}
+
+.factsList {
+  font-size: .875rem;
+  line-height: 1.25rem;
+}
+
+.factsList > div + div {
+  margin-top: .75rem;
+}
+
+.factLabel {
+  color: #78716c;
+}
+
+.factValue {
+  color: #09251b;
+  font-weight: 500;
+}
+
+.actionArea {
+  margin-top: 1.5rem;
+}
+
+.applyButton {
+  width: 100%;
+}
+
+.closedState {
+  text-align: center;
+}
+
+@media (min-width: 640px) {
+  .page {
+    gap: 2.5rem;
+    padding-block: 2.5rem;
+  }
+
+  .title {
+    font-size: 2.25rem;
+    line-height: 2.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .page {
+    grid-template-columns: minmax(0, 1fr) 20rem;
+  }
+
+  .factsPanel {
+    position: sticky;
+    top: 5rem;
+  }
+}

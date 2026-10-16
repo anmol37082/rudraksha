@@ -1,0 +1,158 @@
+.landing {
+  min-height: 100svh;
+  overflow: hidden;
+  background: #f7f2e8;
+  color: #09251b;
+}
+
+.hero {
+  position: relative;
+  display: flex;
+  min-height: min(820px, 100svh);
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+  padding: 18px clamp(20px, 6vw, 84px) 54px;
+  background: url("/landingbg.webp") center / cover no-repeat;
+}
+
+.heroHeader {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  width: 146px;
+  height: 106px;
+  object-fit: contain;
+}
+
+.heroCopy {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 590px);
+  padding: 28px 30px 30px;
+  border: 1px solid rgba(198, 161, 91, .28);
+  border-radius: 30px;
+  background: rgba(250, 247, 239, .93);
+  box-shadow: 0 16px 48px rgba(9, 37, 27, .12);
+  backdrop-filter: blur(8px);
+}
+
+.heroCopy h1 {
+  margin-top: 12px;
+  font-size: clamp(2.6rem, 6vw, 4.8rem);
+  line-height: .96;
+}
+
+.heroCopy p {
+  max-width: 390px;
+  margin-top: 12px;
+  color: #526258;
+  font-size: 1rem;
+}
+
+.heroActions {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-top: 20px;
+}
+
+.primaryAction {
+  display: inline-flex;
+  min-height: 48px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 22px;
+  border-radius: 999px;
+  background: #09251b;
+  padding: 0 7px 0 20px;
+  color: white;
+  font-size: .9rem;
+  font-weight: 600;
+  box-shadow: 0 6px 16px rgba(9, 37, 27, .18);
+}
+
+.primaryAction span {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border-radius: 50%;
+  background: #c6a15b;
+  color: #09251b;
+  font-size: 1.2rem;
+}
+
+.primaryAction svg {
+  width: 19px;
+  height: 19px;
+}
+
+@media (max-width: 639px) {
+  .landing {
+    display: flex;
+    min-height: 100svh;
+    flex-direction: column;
+  }
+
+  .hero {
+    min-height: 100svh;
+    flex: 1;
+    padding: max(14px, env(safe-area-inset-top)) 16px max(58px, env(safe-area-inset-bottom));
+    background-size: 100% 100%;
+  }
+
+  .heroHeader {
+    justify-content: center;
+  }
+
+  .logo {
+    width: 126px;
+    height: 92px;
+  }
+
+  .heroCopy {
+    width: 100%;
+    margin-top: auto;
+    padding: 0 12px 8px;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    backdrop-filter: none;
+  }
+
+  .heroCopy h1 {
+    margin-top: 0;
+    font-size: clamp(2.25rem, 10vw, 3rem);
+  }
+
+  .heroCopy p {
+    max-width: 300px;
+    margin-top: 8px;
+    font-size: .83rem;
+    line-height: 1.35;
+  }
+
+  .heroActions {
+    justify-content: flex-end;
+    margin-top: 14px;
+  }
+
+  .primaryAction {
+    width: min(100%, 175px);
+    min-height: 52px;
+    align-self: flex-end;
+    margin-right: -8px;
+  }
+
+  .primaryAction span {
+    width: 38px;
+    height: 38px;
+  }
+}

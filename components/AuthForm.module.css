@@ -1,0 +1,227 @@
+.form {
+  position: relative;
+}
+
+.inputShell {
+  position: relative;
+  display: block;
+}
+
+.inputShell > svg {
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  left: 16px;
+  width: 19px;
+  height: 19px;
+  transform: translateY(-50%);
+  color: #1d2b23;
+  pointer-events: none;
+}
+
+.submitArrow {
+  position: absolute;
+  right: 6px;
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--accent-gold);
+  color: var(--brand-primary);
+  font-size: 1.55rem;
+  font-weight: 400;
+}
+
+@media (max-width: 640px) {
+  .adminForm {
+    border-color: transparent;
+    background: transparent;
+    box-shadow: none;
+  }
+}
+
+@media (max-width: 639px) {
+  .verifyIntro {
+  text-align: center;
+}
+
+  .verifyIntro h2 {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 600;
+  line-height: 1.08;
+}
+
+  .verifyIntro p {
+  margin: 6px auto 0;
+  color: #59645d;
+  font-size: .8rem;
+  line-height: 1.45;
+}
+
+  .verifyIntro strong {
+  color: #164332;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+  .otpCells {
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+  .otpInput {
+  width: min(14.5%, 44px);
+  height: 44px;
+  border: 1px solid rgba(198, 161, 91, .56);
+  border-radius: 10px;
+  background: rgba(247, 242, 232, .84);
+  color: #164332;
+  text-align: center;
+  font-size: 1.15rem;
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(9, 37, 27, .04);
+}
+
+  .otpInput:focus {
+  border-color: #a97825;
+  outline: 2px solid rgba(198, 161, 91, .22);
+  outline-offset: 1px;
+}
+
+  .resendBlock {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px;
+  color: #59645d;
+  font-size: .73rem;
+}
+
+  .resendBlock button {
+  min-height: 44px;
+  padding: 0;
+  padding-inline: 8px;
+  color: #164332;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+  .resendBlock button:disabled {
+  color: #68766d;
+  text-decoration: none;
+}
+
+  .securityNote {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  color: #68766d;
+  font-size: .7rem;
+}
+
+  .securityNote svg {
+  width: 14px;
+  height: 14px;
+  flex: none;
+}
+
+  .form.login:global(.auth-form) {
+    gap: 12px;
+  }
+
+  .form.login:global(.auth-form) :global(.label) {
+    margin-bottom: 5px;
+    font-size: .78rem;
+  }
+
+  .form.login .inputShell :global(.input) {
+    min-height: 46px;
+    border: 1px solid rgba(213, 196, 164, .72);
+    border-radius: 16px;
+    background: #f7f2e8;
+    padding-right: 14px;
+    box-shadow: 0 2px 8px rgba(9, 37, 27, .04);
+  }
+
+  .form.login .submit:global(.auth-submit) {
+    min-height: 50px;
+    margin-top: 2px;
+    font-size: .92rem;
+  }
+
+  .form.login .submitArrow {
+    width: 36px;
+    height: 36px;
+  }
+
+  .form.login:global(.auth-form) > p:last-child {
+    padding-top: 5px;
+    font-size: .78rem;
+  }
+
+  .form.login .inputShell :global(.input:focus),
+  .form.login .inputShell :global(.input:focus-visible) {
+    border-bottom-color: var(--accent-gold);
+    outline: none;
+    box-shadow: none;
+  }
+
+  .form.register:global(.auth-form) {
+    gap: 3px;
+  }
+
+  .form.register:global(.auth-form) :global(.label) {
+    margin-bottom: 2px;
+    font-size: .76rem;
+  }
+
+  .form.register .inputShell :global(.input) {
+    min-height: 46px;
+    border: 1px solid rgba(213, 196, 164, .72);
+    border-radius: 16px;
+    background: #f7f2e8;
+    padding-right: 14px;
+    box-shadow: 0 2px 8px rgba(9, 37, 27, .04);
+  }
+
+  .form.register .submit:global(.auth-submit) {
+    min-height: 48px;
+    margin-top: 1px;
+    font-size: .9rem;
+  }
+
+  .form.register .submitArrow {
+    width: 34px;
+    height: 34px;
+  }
+
+  .form.register:global(.auth-form) > p:last-child {
+    padding-top: 2px;
+    font-size: .76rem;
+  }
+
+  .form.verifyForm:global(.auth-verify-form) {
+    width: 100%;
+    gap: 13px;
+    margin-block: auto;
+  }
+
+  .form.verifyForm .submit:global(.auth-submit) {
+    width: 100%;
+    min-height: 50px;
+    border: 0;
+    background: #09251b;
+    color: #fff;
+    box-shadow: 0 6px 16px rgba(9, 37, 27, .15);
+  }
+
+  .form.verifyForm .submitArrow {
+    background: #c6a15b;
+    color: #09251b;
+  }
+}

@@ -4,6 +4,7 @@ import { plain } from "@/lib/api";
 import { isProfileSetupComplete, profileCompletion } from "@/lib/profile";
 import { PageTitle } from "@/components/ui";
 import { ProfileForm } from "@/components/ProfileForm";
+import styles from "./page.module.css";
 
 export default async function Profile() {
   const user = await requirePage("CANDIDATE");
@@ -12,7 +13,7 @@ export default async function Profile() {
   return (
     <>
       <PageTitle title="My profile" />
-      <div className="candidate-profile-page max-w-4xl"><ProfileForm user={plainUser} profile={profile} setupComplete={isProfileSetupComplete(user, profile)} completion={profileCompletion(user, profile)} /></div>
+      <div className={styles.page}><ProfileForm user={plainUser} profile={profile} setupComplete={isProfileSetupComplete(user, profile)} completion={profileCompletion(user, profile)} /></div>
     </>
   );
 }

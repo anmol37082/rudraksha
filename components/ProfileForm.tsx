@@ -5,6 +5,7 @@ import { api, csv } from "@/lib/client";
 import { DOCUMENT_LABEL, DOCUMENT_TYPES, SINGLE_DOCUMENT_TYPES } from "@/lib/constants";
 import { Button, Card, Field, Input, LinkButton, Loader, Select, Textarea } from "./ui";
 import { FileLink, fileUrl } from "./FileLink";
+import styles from "./ProfileForm.module.css";
 
 function ProfileSectionIcon({ name }: { name: string }) {
   const common = { fill: "none", stroke: "currentColor", strokeWidth: 1.7, strokeLinecap: "round" as const, strokeLinejoin: "round" as const };
@@ -96,7 +97,7 @@ export function ProfileForm({ user, profile, setupComplete, completion }: { user
 
   if (saved && !editing) return (
     <>
-    <div className="profile-saved-desktop space-y-6">
+    <div className={`${styles.savedDesktop} space-y-6`}>
       <Card>
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div><h2 className="text-xl">Profile details</h2><p className="mt-1 text-sm text-stone-600">Your profile is saved. You can edit these details anytime.</p></div>
@@ -112,20 +113,20 @@ export function ProfileForm({ user, profile, setupComplete, completion }: { user
       </Card>
       {msg && <p role="status" className={`rounded-md px-3 py-2 text-sm ${msg.ok ? "bg-emerald-50 text-emerald-800" : "bg-rose-50 text-rose-800"}`}>{msg.text}</p>}
     </div>
-    <div className="profile-saved-mobile sm:hidden">
-      <header className="profile-mobile-heading"><h1>My Profile</h1><p>Your profile is saved. You can edit<br />these details anytime.</p></header>
-      <section className="profile-mobile-summary">
-        <label className="profile-mobile-photo" aria-label="Upload profile photo">
-          {photo ? <img src={fileUrl(photo)} alt="Your profile" /> : <span className="profile-mobile-avatar"><ProfileSectionIcon name="profile" /></span>}
-          <span className="profile-photo-camera" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.4"><path d="M3 6h3l1.2-1.5h5.6L14 6h3v9H3z"/><circle cx="10" cy="10.5" r="2.5" /></svg></span>
+    <div className={styles.savedMobile}>
+      <header className={styles.mobileHeading}><h1>My Profile</h1><p>Your profile is saved. You can edit<br />these details anytime.</p></header>
+      <section className={styles.mobileSummary}>
+        <label className={styles.mobilePhoto} aria-label="Upload profile photo">
+          {photo ? <img src={fileUrl(photo)} alt="Your profile" /> : <span className={styles.mobileAvatar}><ProfileSectionIcon name="profile" /></span>}
+          <span className={styles.photoCamera} aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.4"><path d="M3 6h3l1.2-1.5h5.6L14 6h3v9H3z"/><circle cx="10" cy="10.5" r="2.5" /></svg></span>
           <input type="file" accept="image/jpeg,image/png,image/webp" onChange={(event) => { upload("PROFILE_PHOTO", event.target.files?.[0]); event.target.value = ""; }} />
         </label>
-        <div className="profile-mobile-summary-details">
+        <div className={styles.mobileSummaryDetails}>
           <strong>{user.name}</strong><small>CANDIDATE</small>
-          <div className="profile-mobile-progress"><span><i style={{ width: `${percent}%` }} /></span><b>{percent}%</b></div>
+          <div className={styles.mobileProgress}><span><i style={{ width: `${percent}%` }} /></span><b>{percent}%</b></div>
           <p>Complete your profile to get better opportunities</p>
         </div>
-        <button type="button" className="profile-mobile-edit-main" onClick={() => editAt(0)}>✎ Edit Profile</button>
+        <button type="button" className={styles.mobileEditMain} onClick={() => editAt(0)}>✎ Edit Profile</button>
       </section>
 
       {[
@@ -136,17 +137,17 @@ export function ProfileForm({ user, profile, setupComplete, completion }: { user
         { title: "Experience", icon: "work", step: 2, rows: [["EXPERIENCE", p.experience || `${p.yearsOfExperience ?? 0} years`]] },
         { title: "Availability", icon: "availability", step: 2, rows: [["AVAILABILITY", p.availability || "Not provided"]] },
         { title: "Emergency Contact", icon: "emergency", step: 3, rows: [["NAME", p.emergencyContact?.name || "Not provided"], ["PHONE", p.emergencyContact?.phone || "Not provided"], ["RELATIONSHIP", p.emergencyContact?.relation || "Not provided"]] },
-      ].map((group) => <section key={group.title} className="profile-mobile-group">
-        <span className="profile-mobile-group-icon"><ProfileSectionIcon name={group.icon} /></span>
-        <div className="profile-mobile-group-content">
-          <div className="profile-mobile-group-heading"><h2>{group.title}</h2><button type="button" onClick={() => editAt(group.step)}>✎ Edit</button></div>
-          <dl className={`profile-mobile-group-rows ${group.rows.length === 1 ? "profile-mobile-one-column" : ""}`}>
+      ].map((group) => <section key={group.title} className={styles.mobileGroup}>
+        <span className={styles.mobileGroupIcon}><ProfileSectionIcon name={group.icon} /></span>
+        <div className={styles.mobileGroupContent}>
+          <div className={styles.mobileGroupHeading}><h2>{group.title}</h2><button type="button" onClick={() => editAt(group.step)}>✎ Edit</button></div>
+          <dl className={`${styles.mobileGroupRows} ${group.rows.length === 1 ? styles.oneColumn : ""}`}>
             {group.rows.map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}
           </dl>
         </div>
       </section>)}
 
-      <section className="profile-mobile-update">
+      <section className={styles.mobileUpdate}>
         <span aria-hidden="true">▤</span>
         <div><strong>Keep your profile updated</strong><p>A complete profile helps you get more opportunities.</p></div>
         <button type="button" onClick={() => editAt(0)}>Update Now <span aria-hidden="true">→</span></button>
@@ -164,7 +165,7 @@ export function ProfileForm({ user, profile, setupComplete, completion }: { user
   }
 
   return (
-    <div className="profile-flow space-y-6">
+    <div className={`${styles.profileFlow} space-y-6`}>
       {saved && editing && <Button type="button" variant="outline" onClick={() => setEditing(false)}>Cancel editing</Button>}
       <Card>
         <div className="flex items-center justify-between"><h2 className="text-xl">Profile completion</h2><span className="font-serif text-2xl">{percent}%</span></div>
@@ -213,7 +214,7 @@ export function ProfileForm({ user, profile, setupComplete, completion }: { user
         <LinkButton href="/candidate/documents" className="w-full">Manage my documents</LinkButton>
       </div>
 
-      <form onSubmit={save} noValidate className="profile-wizard space-y-4 sm:space-y-6">
+      <form onSubmit={save} noValidate className={`${styles.profileWizard} space-y-4 sm:space-y-6`}>
         <Card className="sm:hidden">
           <div className="flex items-center justify-between gap-3">
             <p className="text-sm font-semibold text-forest-900">Step {step + 1} of {steps.length}</p>

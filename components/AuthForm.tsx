@@ -4,10 +4,11 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { api } from "@/lib/client";
 import { Button, Field, Input, Loader } from "./ui";
+import styles from "./AuthForm.module.css";
 
 function AuthInput({ icon, ...props }: React.ComponentProps<typeof Input> & { icon: "person" | "phone" | "email" | "lock" | "code" }) {
   return (
-    <span className="auth-input-shell">
+    <span className={`auth-input-shell ${styles.inputShell}`}>
       <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
         {icon === "person" && <><circle cx="12" cy="8" r="3.5" /><path d="M5 20a7 7 0 0 1 14 0" /></>}
         {icon === "phone" && <path d="M7 3.5h10a1.5 1.5 0 0 1 1.5 1.5v14a1.5 1.5 0 0 1-1.5 1.5H7A1.5 1.5 0 0 1 5.5 19V5A1.5 1.5 0 0 1 7 3.5ZM10 17.5h4" />}
@@ -77,14 +78,14 @@ export function AuthForm({ mode, next }: { mode: "login" | "register" | "admin";
   }
 
   return (
-    <form key={mode === "register" && verificationEmail ? "registration-otp" : "auth-credentials"} onSubmit={onSubmit} className={`${mode === "admin" ? "admin-auth-form auth-form card" : "auth-form"} ${mode === "register" && verificationEmail ? "auth-verify-form" : ""} space-y-4`} noValidate>
+    <form key={mode === "register" && verificationEmail ? "registration-otp" : "auth-credentials"} onSubmit={onSubmit} className={`${mode === "admin" ? "admin-auth-form auth-form card" : "auth-form"} ${mode === "register" && verificationEmail ? "auth-verify-form" : ""} ${styles.form} ${mode === "register" ? styles.register : styles.login} ${mode === "admin" ? styles.adminForm : ""} ${mode === "register" && verificationEmail ? styles.verifyForm : ""} space-y-4`} noValidate>
       {mode === "register" && verificationEmail ? (
         <>
-          <div className="auth-verify-intro">
+          <div className={styles.verifyIntro}>
             <h2>Verify Your Email</h2>
             <p>Enter the 6-digit verification code we sent to<br /><strong>{verificationEmail}</strong></p>
           </div>
-          <div className="auth-otp-cells" role="group" aria-label="Email verification code">
+          <div className={styles.otpCells} role="group" aria-label="Email verification code">
             {Array.from({ length: 6 }, (_, index) => (
               <input
                 key={index}
@@ -121,13 +122,13 @@ export function AuthForm({ mode, next }: { mode: "login" | "register" | "admin";
                   otpRefs.current[Math.min(digits.length, 5)]?.focus();
                 }}
                 required
-                className="auth-otp-input"
+                className={styles.otpInput}
               />
             ))}
             <input type="hidden" name="otp" value={otp} />
           </div>
           {errors.otp && <p role="alert" className="text-center text-sm text-rose-700">{errors.otp}</p>}
-          <div className="auth-resend-block">
+          <div className={styles.resendBlock}>
             <span>Didn’t receive the code?</span>
             <button type="button" onClick={resendCode} disabled={resending || resendWait > 0}>{resending ? "Sending…" : "Resend code"}</button>
             {resendWait > 0 && <span>in 00:{String(resendWait).padStart(2, "0")}</span>}
@@ -150,8 +151,8 @@ export function AuthForm({ mode, next }: { mode: "login" | "register" | "admin";
       )}
       {notice && !verificationEmail && <p role="status" className="rounded-md bg-forest-50 px-3 py-2 text-sm text-forest-700">{notice}</p>}
       {error && <p role="alert" className="rounded-md bg-rose-50 px-3 py-2 text-sm text-rose-800">{error}</p>}
-      <Button type="submit" disabled={busy || (mode === "register" && !!verificationEmail && !/^\d{6}$/.test(otp))} className="w-full auth-submit">{busy && <Loader />}<span>{mode === "register" ? verificationEmail ? "Verify & Continue" : "Continue to email verification" : "Log in"}</span><span className="auth-submit-arrow" aria-hidden="true">→</span></Button>
-      {mode === "register" && verificationEmail && <p className="auth-security-note"><svg aria-hidden="true" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"><path d="M10 2.5 16 5v4.2c0 4-2.6 6.7-6 8.3-3.4-1.6-6-4.3-6-8.3V5l6-2.5Z"/><path d="m7.5 9.7 1.6 1.6 3.5-3.6"/></svg>Your account security matters to us.</p>}
+      <Button type="submit" disabled={busy || (mode === "register" && !!verificationEmail && !/^\d{6}$/.test(otp))} className={`w-full auth-submit ${styles.submit}`}>{busy && <Loader />}<span>{mode === "register" ? verificationEmail ? "Verify & Continue" : "Continue to email verification" : "Log in"}</span><span className={`auth-submit-arrow ${styles.submitArrow}`} aria-hidden="true">→</span></Button>
+      {mode === "register" && verificationEmail && <p className={styles.securityNote}><svg aria-hidden="true" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"><path d="M10 2.5 16 5v4.2c0 4-2.6 6.7-6 8.3-3.4-1.6-6-4.3-6-8.3V5l6-2.5Z"/><path d="m7.5 9.7 1.6 1.6 3.5-3.6"/></svg>Your account security matters to us.</p>}
       {mode !== "admin" && !(mode === "register" && verificationEmail) && (
         <p className="text-center text-sm text-stone-600">
           {mode === "login" ? <>New here? <Link className="font-medium text-forest-700 underline" href={`/register${next ? `?next=${encodeURIComponent(next)}` : ""}`}>Create an account</Link></>

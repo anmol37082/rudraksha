@@ -1,0 +1,384 @@
+.heading {
+  position: relative;
+  margin-bottom: 18px;
+  padding-bottom: 10px;
+}
+
+.heading h1 {
+  margin: 0;
+  color: #12372a;
+  font-family: var(--font-serif, Georgia, serif);
+  font-size: 30px;
+  font-weight: 600;
+  line-height: 1.12;
+}
+
+.heading p {
+  margin: 4px 0 0;
+  color: #718075;
+  font-size: 13px;
+}
+
+.heading > span {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  width: 68px;
+  align-items: center;
+  gap: 5px;
+  color: #bd9144;
+  font-size: 12px;
+}
+
+.heading > span i {
+  width: 30px;
+  height: 1px;
+  background: #d8b36b;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.stat {
+  display: flex;
+  min-width: 0;
+  min-height: 72px;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid #ecdfca;
+  border-radius: 12px;
+  background: rgba(255, 252, 246, .9);
+  padding: 10px;
+  box-shadow: 0 2px 6px rgba(75, 55, 29, .05);
+  text-decoration: none;
+}
+
+.statIcon {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  flex: 0 0 40px;
+  place-items: center;
+  border-radius: 50%;
+  background: #f3e6cf;
+  color: #946a2e;
+}
+
+.statIcon svg {
+  width: 21px;
+  height: 21px;
+}
+
+.statCopy {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+}
+
+.statCopy strong {
+  color: #263b30;
+  font-family: var(--font-serif, Georgia, serif);
+  font-size: 24px;
+  line-height: 1;
+}
+
+.statCopy small {
+  overflow: hidden;
+  margin-top: 3px;
+  color: #566256;
+  font-size: 11px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.statArrow {
+  display: grid;
+  width: 20px;
+  height: 20px;
+  flex: 0 0 20px;
+  place-items: center;
+  border: 1px solid #e0c794;
+  border-radius: 50%;
+  color: #b38540;
+  font-size: 18px;
+  line-height: 1;
+}
+
+.sections {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 24px;
+}
+
+.section > header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.section > header h2 {
+  margin: 0;
+  color: #17372d;
+  font-family: var(--font-serif, Georgia, serif);
+  font-size: 21px;
+  font-weight: 600;
+}
+
+.section > header a {
+  display: inline-flex;
+  min-height: 29px;
+  align-items: center;
+  gap: 4px;
+  border: 1px solid #dfbd79;
+  border-radius: 999px;
+  padding: 0 10px;
+  color: #805c22;
+  font-size: 10px;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.list {
+  display: grid;
+  min-width: 0;
+  gap: 8px;
+}
+
+.listCard {
+  min-width: 0;
+  border: 1px solid #ecdfca;
+  border-radius: 11px;
+  background: rgba(255, 252, 246, .88);
+  padding: 10px;
+  box-shadow: 0 2px 6px rgba(75, 55, 29, .04);
+}
+
+.section { min-width: 0; }
+
+.rowTop {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 8px;
+}
+
+.initial {
+  display: grid;
+  width: 30px;
+  height: 30px;
+  flex: 0 0 30px;
+  place-items: center;
+  border-radius: 50%;
+  background: #eadcc2;
+  color: #7e5d28;
+  font-family: var(--font-serif, Georgia, serif);
+  font-size: 15px;
+}
+
+.rowTop > strong {
+  overflow: hidden;
+  min-width: 0;
+  flex: 1;
+  color: #304137;
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rowMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin: 6px 0 0 38px;
+  color: #6e7469;
+  font-size: 10px;
+  line-height: 1.3;
+}
+
+.rowMeta > span { min-width: 0; overflow-wrap: anywhere; }
+
+.rowMeta > span:first-child {
+  color: #35493d;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.rowMeta i {
+  color: #b38540;
+  font-style: normal;
+}
+
+.rowMode {
+  margin: 4px 0 0 38px;
+  color: #6e7469;
+  font-size: 10px;
+}
+
+.rowAction {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin: 7px 0 0 38px;
+  color: #755522;
+  font-size: 10px;
+  text-decoration: none;
+}
+
+@media (max-width: 639px) {
+  .heading {
+    margin: 0 4px 10px;
+    padding-bottom: 8px;
+  }
+
+  .heading h1 {
+    font-size: 25px;
+  }
+
+  .heading p {
+    font-size: 12px;
+    line-height: 1.35;
+  }
+
+  .heading > span {
+    width: 59px;
+    font-size: 11px;
+  }
+
+  .heading > span i {
+    width: 25px;
+  }
+
+  .stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .stat {
+    min-height: 68px;
+    gap: 7px;
+    padding: 9px;
+  }
+
+  .statIcon {
+    width: 38px;
+    height: 38px;
+    flex-basis: 38px;
+  }
+
+  .statIcon svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .statCopy strong {
+    font-size: 22px;
+    overflow-wrap: anywhere;
+  }
+
+  .statCopy small {
+    font-size: 11px;
+    line-height: 1.2;
+    overflow-wrap: anywhere;
+    white-space: normal;
+  }
+
+  .statArrow {
+    font-size: 17px;
+  }
+
+  .sections {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+    margin-top: 16px;
+  }
+
+  .section > header h2 {
+    min-width: 0;
+    font-size: 20px;
+    line-height: 1.25;
+  }
+
+  .section > header a {
+    min-height: 44px;
+    flex: 0 0 auto;
+    gap: 5px;
+    padding: 0 10px;
+    font-size: 14px;
+  }
+
+  .listCard {
+    border-radius: 12px;
+    padding: 11px;
+  }
+
+  .rowTop {
+    display: grid;
+    grid-template-columns: 32px minmax(0, 1fr);
+    align-items: start;
+    gap: 8px 10px;
+  }
+
+  .initial {
+    width: 32px;
+    height: 32px;
+    flex-basis: 32px;
+    font-size: 16px;
+  }
+
+  .rowTop > strong {
+    min-width: 0;
+    font-size: 14px;
+    line-height: 1.4;
+    overflow: visible;
+    text-overflow: clip;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .rowTop > :global(.status-badge) {
+    grid-column: 2;
+    justify-self: start;
+    max-width: 100%;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .rowMeta {
+    min-width: 0;
+    margin: 9px 0 0 42px;
+    gap: 5px 7px;
+    font-size: 14px;
+    line-height: 1.45;
+    overflow-wrap: anywhere;
+  }
+
+  .rowMode {
+    min-width: 0;
+    margin: 7px 0 0 42px;
+    font-size: 14px;
+    line-height: 1.45;
+    overflow-wrap: anywhere;
+  }
+
+  .rowAction {
+    min-height: 44px;
+    margin: 9px 0 0 42px;
+    font-size: 14px;
+    overflow-wrap: anywhere;
+  }
+}
+
+@media (max-width: 639px) {
+  .heading > span { font-size: 12px !important; }
+  .rowMeta, .rowMode, .rowAction { font-size: 14px !important; }
+  .statCopy small { font-size: 12px !important; }
+}

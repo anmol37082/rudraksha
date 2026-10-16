@@ -1,0 +1,107 @@
+.candidateOverlay {
+  position: fixed;
+  z-index: 50;
+  inset: 0;
+}
+
+.candidateBackdrop {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: rgb(9 37 27 / 52%);
+}
+
+.candidateDrawer {
+  position: absolute;
+  inset-block: 0;
+  right: 0;
+  display: flex;
+  width: min(20rem, 85vw);
+  flex-direction: column;
+  overflow-y: auto;
+  background: #09251b;
+  padding: max(1.25rem, env(safe-area-inset-top)) 1rem max(1.5rem, env(safe-area-inset-bottom));
+  color: #f7f2e8;
+  box-shadow: -12px 0 32px rgb(9 37 27 / 24%);
+  animation: candidateDrawerIn 220ms ease-out both;
+}
+
+.candidateDrawerHeader {
+  display: flex;
+  min-height: 3.25rem;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgb(198 161 91 / 30%);
+  padding-bottom: 0.75rem;
+  font-family: var(--font-serif, Georgia, serif);
+  font-size: 1.25rem;
+}
+
+.candidateDrawerClose {
+  display: grid;
+  width: 2.75rem;
+  height: 2.75rem;
+  flex: 0 0 2.75rem;
+  place-items: center;
+  border: 0;
+  border-radius: 0.5rem;
+  background: transparent;
+  color: inherit;
+  font-size: 1.75rem;
+  line-height: 1;
+}
+
+.candidateCloseIcon {
+  width: 1.75rem;
+  height: 1.75rem;
+}
+
+.candidateDrawerClose:focus-visible,
+.candidateDrawerLogout:focus-visible {
+  outline: 2px solid #c6a15b;
+  outline-offset: 2px;
+}
+
+.candidateDrawerLinks {
+  display: flex;
+  min-height: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.25rem;
+  overflow-y: auto;
+  padding-block: 0.75rem;
+}
+
+.candidateDrawerLogout {
+  min-height: 2.75rem;
+  flex: 0 0 auto;
+  border: 1px solid rgb(198 161 91 / 30%);
+  border-radius: 0.75rem;
+  background: transparent;
+  padding: 0.75rem;
+  color: inherit;
+  text-align: left;
+  font-size: 0.875rem;
+}
+
+.candidateDrawerLogout:hover {
+  background: #164332;
+}
+
+@keyframes candidateDrawerIn {
+  from {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .candidateDrawer {
+    animation: none;
+  }
+}

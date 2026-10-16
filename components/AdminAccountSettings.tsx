@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { api } from "@/lib/client";
 import { Button, Card, Field, Input, Loader } from "@/components/ui";
+import styles from "./AdminAccountSettings.module.css";
 
 export function AdminAccountSettings({ email }: { email: string }) {
   const [busy, setBusy] = useState<"email" | "password" | "">("");
@@ -26,31 +27,31 @@ export function AdminAccountSettings({ email }: { email: string }) {
   }
 
   return (
-    <div className="grid max-w-3xl gap-6">
-      <Card>
-        <h2 className="text-xl">Admin email</h2>
-        <p className="mt-1 text-sm text-stone-600">Current email: <span className="font-medium text-forest-900">{currentEmail}</span></p>
-        <form onSubmit={(e) => submit(e, "email")} className="mt-5 space-y-4" noValidate>
+    <div className={styles.settings}>
+      <Card className={styles.section}>
+        <h2 className={styles.sectionTitle}>Admin email</h2>
+        <p className={styles.description}>Current email: <span className={styles.currentEmail}>{currentEmail}</span></p>
+        <form onSubmit={(e) => submit(e, "email")} className={styles.form} noValidate>
           <Field label="New email address"><Input name="email" type="email" autoComplete="email" required /></Field>
           <Field label="Current password"><Input name="currentPassword" type="password" autoComplete="current-password" required /></Field>
-          {error && busy === "email" && <p role="alert" className="text-sm text-rose-700">{error}</p>}
+          {error && busy === "email" && <p role="alert" className={styles.inlineError}>{error}</p>}
           <Button type="submit" disabled={!!busy}>{busy === "email" && <Loader />}Update email</Button>
         </form>
       </Card>
 
-      <Card>
-        <h2 className="text-xl">Change password</h2>
-        <p className="mt-1 text-sm text-stone-600">Use at least 8 characters, including a letter and a number.</p>
-        <form onSubmit={(e) => submit(e, "password")} className="mt-5 space-y-4" noValidate>
+      <Card className={styles.section}>
+        <h2 className={styles.sectionTitle}>Change password</h2>
+        <p className={styles.description}>Use at least 8 characters, including a letter and a number.</p>
+        <form onSubmit={(e) => submit(e, "password")} className={styles.form} noValidate>
           <Field label="Current password"><Input name="currentPassword" type="password" autoComplete="current-password" required /></Field>
           <Field label="New password"><Input name="newPassword" type="password" autoComplete="new-password" required /></Field>
           <Field label="Confirm new password"><Input name="confirmPassword" type="password" autoComplete="new-password" required /></Field>
-          {error && busy === "password" && <p role="alert" className="text-sm text-rose-700">{error}</p>}
+          {error && busy === "password" && <p role="alert" className={styles.inlineError}>{error}</p>}
           <Button type="submit" disabled={!!busy}>{busy === "password" && <Loader />}Change password</Button>
         </form>
       </Card>
-      {notice && <p role="status" className="rounded-md bg-emerald-50 px-3 py-2 text-sm text-emerald-800">{notice}</p>}
-      {error && !busy && <p role="alert" className="rounded-md bg-rose-50 px-3 py-2 text-sm text-rose-800">{error}</p>}
+      {notice && <p role="status" className={styles.notice}>{notice}</p>}
+      {error && !busy && <p role="alert" className={styles.errorNotice}>{error}</p>}
     </div>
   );
 }

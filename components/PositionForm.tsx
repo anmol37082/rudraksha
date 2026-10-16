@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { api, lines, csv } from "@/lib/client";
 import { DOCUMENT_LABEL, DOCUMENT_TYPES, EMPLOYMENT_LABEL, EMPLOYMENT_TYPES, MANDATORY_POSITION_DOCUMENTS, POSITION_STATUSES, STATUS_LABEL } from "@/lib/constants";
 import { Button, Card, Field, Input, Loader, Select, Textarea } from "./ui";
+import styles from "./PositionForm.module.css";
 
 export function PositionForm({ position }: { position?: any }) {
   const router = useRouter();
@@ -28,7 +29,7 @@ export function PositionForm({ position }: { position?: any }) {
   }
 
   return (
-    <form onSubmit={onSubmit} className="max-w-3xl space-y-6">
+    <form onSubmit={onSubmit} className={`${styles.form} max-w-3xl space-y-6`}>
       <Card className="space-y-4">
         <Field label="Title" error={errors.title}><Input name="title" defaultValue={p.title} required /></Field>
         <Field label="Description" error={errors.description}><Textarea name="description" defaultValue={p.description} rows={5} required /></Field>
@@ -46,7 +47,7 @@ export function PositionForm({ position }: { position?: any }) {
         <Field label="Status"><Select name="status" defaultValue={p.status ?? "ACTIVE"}>{POSITION_STATUSES.map((s) => <option key={s} value={s}>{STATUS_LABEL[s]}</option>)}</Select></Field>
         <fieldset className="sm:col-span-2">
           <legend className="label">Documents required to apply</legend>
-          <div className="flex flex-wrap gap-4 text-sm">
+          <div className={`${styles.documentOptions} flex flex-wrap gap-4 text-sm`}>
             {DOCUMENT_TYPES.map((d) => MANDATORY_POSITION_DOCUMENTS.includes(d) ? (
               <label key={d} className="flex items-center gap-2">
                 <input type="checkbox" defaultChecked disabled />
@@ -60,7 +61,7 @@ export function PositionForm({ position }: { position?: any }) {
         </fieldset>
       </Card>
       {error && <p role="alert" className="rounded-md bg-rose-50 px-3 py-2 text-sm text-rose-800">{error}</p>}
-      <div className="flex gap-3"><Button type="submit" disabled={busy}>{busy && <Loader />}{position ? "Save changes" : "Create position"}</Button><Button type="button" variant="outline" onClick={() => router.back()}>Cancel</Button></div>
+      <div className={`${styles.actions} flex gap-3`}><Button type="submit" disabled={busy}>{busy && <Loader />}{position ? "Save changes" : "Create position"}</Button><Button type="button" variant="outline" onClick={() => router.back()}>Cancel</Button></div>
     </form>
   );
 }

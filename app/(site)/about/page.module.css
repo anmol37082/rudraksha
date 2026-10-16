@@ -1,0 +1,41 @@
+.page {
+  max-width: 48rem;
+  margin-inline: auto;
+  padding: 1.5rem 1rem;
+}
+
+.title {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+}
+
+.content {
+  margin-top: 1.25rem;
+  color: #44403c;
+  font-size: 1rem;
+  line-height: 1.625;
+}
+
+.content > p + p {
+  margin-top: 1rem;
+}
+
+.actions {
+  margin-top: 2rem;
+}
+
+@media (min-width: 640px) {
+  .page {
+    padding-block: 3rem;
+  }
+
+  .title {
+    font-size: 2.25rem;
+    line-height: 2.5rem;
+  }
+
+  .content {
+    margin-top: 1.5rem;
+    font-size: 1.125rem;
+  }
+}

@@ -9,6 +9,7 @@ import { STATUS_LABEL } from "@/lib/constants";
 import { Badge, Card, PageTitle } from "@/components/ui";
 import { AdminActions } from "@/components/AdminActions";
 import { FileLink, fileUrl } from "@/components/FileLink";
+import styles from "./page.module.css";
 
 export default async function AdminApplication({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -24,9 +25,9 @@ export default async function AdminApplication({ params }: { params: Promise<{ i
   const ivs = plain(interviews) as any[];
 
   return (
-    <section className="admin-application-detail">
-      <PageTitle title={app.candidateId.name}><div className="admin-detail-title-tools"><Link className="admin-detail-back" href="/admin/applications"><span aria-hidden="true">←</span>Applications</Link><Badge status={app.status} /></div></PageTitle>
-      <div className="admin-application-grid grid gap-6 xl:grid-cols-[1.2fr_1fr]">
+    <section className={styles.applicationDetail}>
+      <PageTitle title={app.candidateId.name}><div className={styles.titleTools}><Link className={styles.backLink} href="/admin/applications"><span aria-hidden="true">←</span>Applications</Link><Badge status={app.status} /></div></PageTitle>
+      <div className={`${styles.applicationGrid} grid gap-6 xl:grid-cols-[1.2fr_1fr]`}>
         <div className="space-y-6">
           <Card>
             <div className="flex gap-4">
@@ -63,8 +64,8 @@ export default async function AdminApplication({ params }: { params: Promise<{ i
           <Card>
             <h2 className="text-xl">Interviews</h2>
             {ivs.length ? ivs.map((i) => (
-              <div key={i._id} className="mt-3 rounded-md bg-forest-50 p-3 text-sm">
-                <div className="flex justify-between"><p className="font-medium">{fmtDate(i.date)} at {i.time} · {i.type.replace("_", " ").toLowerCase()}</p><Badge status={i.status} /></div>
+              <div key={i._id} className={`${styles.interview} mt-3 rounded-md bg-forest-50 p-3 text-sm`}>
+                <div className={styles.interviewHeading}><p className="font-medium">{fmtDate(i.date)} at {i.time} · {i.type.replace("_", " ").toLowerCase()}</p><Badge status={i.status} /></div>
                 <p>{i.location || i.meetingLink || "-"}{i.interviewer && ` · ${i.interviewer}`}</p>
               </div>
             )) : <p className="mt-2 text-sm text-stone-600">None scheduled.</p>}

@@ -1,0 +1,121 @@
+.layout {
+  display: grid;
+  gap: 1.5rem;
+  min-width: 0;
+}
+
+.pageHeader { min-width: 0; }
+
+.columnStack {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  min-width: 0;
+}
+
+.sectionTitle {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+}
+
+.progressTitle {
+  margin: 0 0 1rem;
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+}
+
+.meta {
+  margin-top: .5rem;
+  color: #34483d;
+  font-size: .875rem;
+  line-height: 1.25rem;
+}
+
+.coverNote {
+  margin-top: .75rem;
+  color: #34483d;
+  font-size: .875rem;
+  line-height: 1.25rem;
+  white-space: pre-line;
+}
+
+.documents {
+  margin-top: .75rem;
+  color: #526258;
+  font-size: .875rem;
+  line-height: 1.25rem;
+}
+
+.agreement {
+  margin-top: .5rem;
+  color: #68766d;
+  font-size: .75rem;
+  line-height: 1rem;
+}
+
+.interview {
+  margin-top: .75rem;
+  border-radius: .375rem;
+  background: #f7f2e8;
+  padding: .75rem;
+  font-size: .875rem;
+  line-height: 1.25rem;
+}
+
+.interviewHeading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.interviewDate {
+  font-weight: 500;
+}
+
+.interviewLocation {
+  margin-top: .25rem;
+}
+
+.meetingLink {
+  color: #164332;
+  text-decoration: underline;
+}
+
+.noInterview {
+  margin-top: .5rem;
+  color: #526258;
+  font-size: .875rem;
+  line-height: 1.25rem;
+}
+
+@media (max-width: 639px) {
+  .pageHeader :global(.mb-5) { align-items: flex-start; gap: .5rem .75rem; }
+  .pageHeader :global(h1) { min-width: 0; max-width: 100%; overflow-wrap: anywhere; line-height: 1.2; }
+  .pageHeader :global(.status-badge) { max-width: 100%; white-space: normal; overflow-wrap: anywhere; }
+
+  .layout { grid-template-columns: minmax(0, 1fr); gap: .875rem; }
+  .columnStack { gap: .875rem; }
+  .progressTitle, .sectionTitle { overflow-wrap: anywhere; }
+
+  .meta, .coverNote, .documents, .agreement, .interview, .interviewLocation, .noInterview {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+  .meta, .coverNote, .documents, .agreement { font-size: .875rem; line-height: 1.45; }
+  .coverNote { white-space: pre-line; }
+  .agreement { color: #526258; }
+
+  .interview { margin-top: .75rem; padding: .875rem; font-size: .875rem; line-height: 1.45; }
+  .interviewHeading { display: grid; min-width: 0; justify-items: start; gap: .5rem; }
+  .interviewDate { min-width: 0; overflow-wrap: anywhere; }
+  .interviewHeading :global(.status-badge) { max-width: 100%; white-space: normal; overflow-wrap: anywhere; }
+  .interviewLocation { margin-top: .5rem; }
+  .meetingLink { display: inline-flex; min-height: 44px; align-items: center; overflow-wrap: anywhere; }
+  .noInterview { font-size: .875rem; line-height: 1.45; }
+}
+
+@media (min-width: 1024px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr);
+  }
+}

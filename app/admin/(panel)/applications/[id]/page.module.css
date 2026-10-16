@@ -1,0 +1,43 @@
+.applicationDetail { min-width: 0; }
+.titleTools { display: flex; min-width: 0; align-items: center; gap: 7px; }
+.backLink { display: inline-flex; align-items: center; gap: 3px; border: 1px solid #dfbd79; border-radius: 999px; padding: 0 8px; color: #805c22; text-decoration: none; }
+.backLink span { font-size: 13px; }
+.applicationGrid { min-width: 0; }
+.interview, .interviewHeading { min-width: 0; }
+
+@media (max-width: 639px) {
+  .applicationDetail > :global(.mb-5) { align-items: flex-start; gap: 8px; }
+  .applicationDetail > :global(.mb-5) > :global(h1) { min-width: 0; flex: 1 1 100%; overflow-wrap: anywhere; line-height: 1.2; }
+  .titleTools { flex-wrap: wrap; gap: 8px; }
+  .backLink { min-height: 44px; gap: 6px; padding: 0 12px; font-size: 14px; }
+  .titleTools > :global(span) { max-width: 100%; padding: 5px 10px; font-size: 14px !important; white-space: normal; overflow-wrap: anywhere; }
+
+  .applicationGrid { grid-template-columns: minmax(0, 1fr); gap: 12px !important; }
+  .applicationGrid > :global(.space-y-6) { display: grid; min-width: 0; gap: 12px; }
+  .applicationGrid > :global(.space-y-6) > :global(.card) { min-width: 0; margin-top: 0 !important; }
+  .applicationDetail h2 { color: #17372d; font-family: var(--font-serif, Georgia, serif); font-size: 19px; line-height: 1.25; overflow-wrap: anywhere; }
+  .applicationDetail h3 { font-size: 16px; line-height: 1.35; }
+  .applicationDetail :global(.text-sm) { font-size: 14px !important; line-height: 1.5; }
+  .applicationDetail :global(.text-xs) { font-size: 12px !important; line-height: 1.4; }
+  .applicationDetail p,
+  .applicationDetail li,
+  .applicationDetail dd,
+  .applicationDetail dt { min-width: 0; overflow-wrap: anywhere; }
+  .applicationDetail dl { grid-template-columns: minmax(0, 1fr); }
+  .applicationDetail dl > div { min-width: 0; }
+  .applicationDetail :global(img) { flex: 0 0 5rem; }
+  .applicationDetail :global(li > a) { display: inline-flex; min-height: 44px; align-items: center; overflow-wrap: anywhere; }
+
+  .interview { padding: 12px; overflow-wrap: anywhere; }
+  .interviewHeading { display: grid; grid-template-columns: minmax(0, 1fr); justify-items: start; gap: 8px; }
+  .interviewHeading > p { min-width: 0; overflow-wrap: anywhere; }
+  .interviewHeading > :global(span) { max-width: 100%; white-space: normal; overflow-wrap: anywhere; }
+
+  .applicationDetail :global(textarea),
+  .applicationDetail :global(input),
+  .applicationDetail :global(select) { min-width: 0; }
+  .applicationDetail :global(.btn-primary),
+  .applicationDetail :global(.btn-gold),
+  .applicationDetail :global(.btn-danger),
+  .applicationDetail :global(.btn-outline) { min-height: 44px !important; max-width: 100%; padding-top: 8px; padding-bottom: 8px; font-size: 14px !important; line-height: 1.35; white-space: normal; }
+}

@@ -85,7 +85,7 @@ export function Pagination({ page, total, limit, path, params }: { page: number;
 
 export const PageTitle = ({ title, children }: { title: string; children?: ReactNode }) => (
   <div className="mb-5 flex flex-wrap items-center justify-between gap-3 sm:mb-6">
-    <h1 className="text-2xl sm:text-3xl">{title}</h1>
+    <h1 className="min-w-0 [overflow-wrap:anywhere] text-2xl sm:text-3xl">{title}</h1>
     {children}
   </div>
 );

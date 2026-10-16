@@ -1,0 +1,131 @@
+.pageHeading,
+.detailGrid,
+.detailGrid > *,
+.detailGrid :global(.card) {
+  min-width: 0;
+}
+
+.detailGrid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.documentList,
+.applicationList,
+.interviewList {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.applicationRow,
+.interviewRow {
+  min-width: 0;
+}
+
+@media (min-width: 1024px) {
+  .detailGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 639px) {
+  .pageHeading :global(.mb-5) {
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .pageHeading :global(.mb-5) > :global(h1) {
+    flex: 1 1 100%;
+    min-width: 0;
+    color: #12372a;
+    font-size: 25px;
+    overflow-wrap: anywhere;
+    line-height: 1.2;
+  }
+
+  .pageHeading :global(.btn-primary),
+  .pageHeading :global(.btn-danger) {
+    min-height: 44px;
+  }
+
+  .detailGrid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.75rem;
+  }
+
+  .detailGrid > :global(.space-y-6) {
+    display: grid;
+    min-width: 0;
+    gap: 0.75rem;
+  }
+
+  .detailGrid > :global(.space-y-6) > :global(.card) {
+    margin-top: 0;
+  }
+
+  .detailGrid > :global(.card) > :global(.flex) {
+    min-width: 0;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .detailGrid > :global(.card) > :global(.flex) > :global(div:last-child) {
+    flex: 1 1 10rem;
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .detailGrid :global(p),
+  .detailGrid :global(li),
+  .detailGrid :global(dt),
+  .detailGrid :global(dd) {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .documentList :global(a) {
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
+    overflow-wrap: anywhere;
+  }
+
+  .applicationRow.applicationRow,
+  .interviewRow.interviewRow {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+    gap: 0.375rem;
+  }
+
+  .applicationRow :global(a) {
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
+    overflow-wrap: anywhere;
+  }
+
+  .applicationRow > :global(span),
+  .interviewRow > :global(span:last-child) {
+    justify-self: start;
+    max-width: 100%;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .interviewRow > :global(span:first-child) {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .detailGrid :global(h2) {
+    line-height: 1.25;
+    overflow-wrap: anywhere;
+  }
+
+  .detailGrid :global(dt),
+  .detailGrid :global(dd) {
+    font-size: 14px !important;
+    line-height: 1.45;
+  }
+}

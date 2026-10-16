@@ -1,0 +1,76 @@
+.form,
+.documentOptions,
+.actions {
+  min-width: 0;
+}
+
+.form :global(.card) {
+  min-width: 0;
+}
+
+.form.form :global(.input) {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.form.form :global(textarea.input) {
+  overflow-wrap: anywhere;
+}
+
+.form :global(label),
+.form :global(fieldset) {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.form :global([role="alert"]) {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  line-height: 1.45;
+}
+
+.documentOptions.documentOptions {
+  align-items: stretch;
+  gap: 0.5rem 1rem;
+}
+
+.documentOptions > label {
+  display: flex;
+  min-width: 0;
+  min-height: 44px;
+  max-width: 100%;
+  align-items: center;
+  gap: 0.5rem;
+  overflow-wrap: anywhere;
+  line-height: 1.4;
+}
+
+.documentOptions > label > input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+  margin: 0;
+  accent-color: var(--brand-primary);
+}
+
+.actions.actions {
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.actions.actions :global(button) {
+  min-height: 44px;
+  max-width: 100%;
+}
+
+@media (max-width: 639px) {
+  .form.form :global(.input) {
+    min-height: 44px;
+  }
+
+  .actions.actions :global(button) {
+    flex: 0 1 auto;
+  }
+}

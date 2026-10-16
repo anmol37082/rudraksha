@@ -9,6 +9,7 @@ import { profileCompletion } from "@/lib/profile";
 import { Badge, Card, PageTitle } from "@/components/ui";
 import { CandidateToggle } from "@/components/SmallActions";
 import { FileLink, fileUrl } from "@/components/FileLink";
+import styles from "./page.module.css";
 
 export default async function AdminCandidate({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -27,8 +28,8 @@ export default async function AdminCandidate({ params }: { params: Promise<{ id:
   const { percent } = profileCompletion(user, profile);
   return (
     <>
-      <PageTitle title={user.name}><CandidateToggle id={id} isActive={user.isActive} /></PageTitle>
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className={styles.pageHeading}><PageTitle title={user.name}><CandidateToggle id={id} isActive={user.isActive} /></PageTitle></div>
+      <div className={styles.detailGrid}>
         <Card>
           <div className="flex gap-4">
             {p?.profilePhoto ? <img src={fileUrl(p.profilePhoto)} alt="" className="h-20 w-20 rounded-full object-cover" /> : <div className="h-20 w-20 rounded-full bg-forest-100" />}
@@ -43,9 +44,9 @@ export default async function AdminCandidate({ params }: { params: Promise<{ id:
           </dl>
         </Card>
         <div className="space-y-6">
-          <Card><h2 className="text-xl">Documents</h2><ul className="mt-2 space-y-1 text-sm">{p?.documents?.length ? p.documents.map((d: any) => <li key={d.publicId}><FileLink f={d} /></li>) : <li className="text-stone-500">None uploaded</li>}</ul></Card>
-          <Card><h2 className="text-xl">Applications</h2><ul className="mt-2 space-y-2 text-sm">{applications.map((a) => <li key={a._id} className="flex items-center justify-between"><Link className="underline" href={`/admin/applications/${a._id}`}>{a.positionId?.title}</Link><Badge status={a.status} /></li>)}{!applications.length && <li className="text-stone-500">None</li>}</ul></Card>
-          <Card><h2 className="text-xl">Interview history</h2><ul className="mt-2 space-y-2 text-sm">{interviews.map((i) => <li key={i._id} className="flex items-center justify-between"><span>{i.positionId?.title} · {fmtDate(i.date)} {i.time}</span><Badge status={i.status} /></li>)}{!interviews.length && <li className="text-stone-500">None</li>}</ul></Card>
+          <Card><h2 className="text-xl">Documents</h2><ul className={`${styles.documentList} mt-2 space-y-1 text-sm`}>{p?.documents?.length ? p.documents.map((d: any) => <li key={d.publicId}><FileLink f={d} /></li>) : <li className="text-stone-500">None uploaded</li>}</ul></Card>
+          <Card><h2 className="text-xl">Applications</h2><ul className={`${styles.applicationList} mt-2 space-y-2 text-sm`}>{applications.map((a) => <li key={a._id} className={`${styles.applicationRow} flex items-center justify-between`}><Link className="underline" href={`/admin/applications/${a._id}`}>{a.positionId?.title}</Link><Badge status={a.status} /></li>)}{!applications.length && <li className="text-stone-500">None</li>}</ul></Card>
+          <Card><h2 className="text-xl">Interview history</h2><ul className={`${styles.interviewList} mt-2 space-y-2 text-sm`}>{interviews.map((i) => <li key={i._id} className={`${styles.interviewRow} flex items-center justify-between`}><span>{i.positionId?.title} · {fmtDate(i.date)} {i.time}</span><Badge status={i.status} /></li>)}{!interviews.length && <li className="text-stone-500">None</li>}</ul></Card>
         </div>
       </div>
     </>

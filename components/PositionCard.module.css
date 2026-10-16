@@ -1,0 +1,19 @@
+.card { display: flex; flex-direction: column; }
+
+@media (max-width: 640px) {
+  .card:global(.card) { border: 0; border-bottom: 1px solid var(--border-neutral); border-radius: 0; background: transparent; box-shadow: none; padding: 0 0 1rem; }
+  .card > div:last-child { flex-direction: column; }
+  .card > div:last-child > a { width: 100%; }
+}
+
+@media (max-width: 639px) {
+  .card:global(.card) { gap: 0; border: 1px solid #e9ddc9; border-radius: 13px; background: rgba(255, 252, 246, .84); padding: 9px 9px 8px; box-shadow: 0 2px 7px rgba(75, 55, 29, .07); }
+  .heading { display: flex; min-width: 0; align-items: flex-start; gap: 7px; }
+  .icon { display: grid; width: 32px; height: 32px; flex: 0 0 32px; place-items: center; border-radius: 50%; background: #f1e5cd; color: #aa7527; }
+  .icon svg { width: 18px; height: 18px; }
+  .title { min-width: 0; flex: 1; }
+  .title h2 { margin: 0; color: #162d25; font-family: var(--font-serif, Georgia, serif); font-size: 16px; font-weight: 600; line-height: 1.2; }
+  .title p { display: -webkit-box; overflow: hidden; margin: 2px 0 0; color: #766f63; font-size: 12px !important; line-height: 1.35; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+  .card .actions.actions { display: flex; flex-direction: row; gap: 7px; }
+  .card .actions.actions > a { display: inline-flex; width: auto; min-width: 0; min-height: 30px; flex: 1; align-items: center; justify-content: center; border-radius: 8px; padding: 5px 7px; font-size: 10px; line-height: 1.1; }
+}

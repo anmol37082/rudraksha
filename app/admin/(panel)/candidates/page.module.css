@@ -1,0 +1,44 @@
+.filterForm {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: .75rem;
+  margin-bottom: 1.25rem;
+}
+
+.tableWrap, .pagination { min-width: 0; }
+.tableWrap { width: 100%; }
+
+@media (min-width: 640px) {
+  .filterForm {
+    flex-direction: row;
+  }
+}
+
+@media (max-width: 639px) {
+  .filterForm :global(.input) { min-width: 0; min-height: 44px !important; }
+  .filterForm :global(.btn-outline) { min-height: 44px !important; font-size: 14px !important; }
+
+  .tableWrap { max-width: 100%; }
+  .tableWrap.tableWrap :global(.responsive-table) { max-width: 100%; }
+  .tableWrap.tableWrap :global(.responsive-table tr) { padding: .75rem; }
+  .tableWrap.tableWrap :global(.responsive-table td) { min-width: 0; gap: .5rem; font-size: 14px !important; line-height: 1.45; }
+  .tableWrap.tableWrap :global(.responsive-table td::before) { flex-basis: 5.25rem; font-size: 12px; }
+
+  .tableWrap :global(.responsive-table td[data-label="Contact"]) {
+    display: grid;
+    grid-template-columns: 5.25rem minmax(0, 1fr);
+    align-items: start;
+    justify-content: stretch;
+    gap: .25rem .5rem;
+    text-align: left;
+  }
+  .tableWrap :global(.responsive-table td[data-label="Contact"]::before) { grid-column: 1; grid-row: 1 / span 2; }
+  .tableWrap :global(.responsive-table td[data-label="Contact"] > p) { grid-column: 2; min-width: 0; margin: 0; overflow-wrap: anywhere; text-align: left; }
+  .tableWrap :global(.responsive-table td[data-label="Contact"] > p.text-xs) { font-size: 12px !important; }
+  .tableWrap :global(.responsive-table td[data-label="Name"]) { overflow-wrap: anywhere; }
+  .tableWrap :global(.responsive-table td[data-label="Account"] > span) { max-width: 100%; white-space: normal; overflow-wrap: anywhere; }
+  .tableWrap :global(.responsive-table td[data-label=""] a) { display: inline-flex; min-height: 44px; align-items: center; overflow-wrap: anywhere; }
+
+  .pagination :global(.btn-outline) { min-height: 44px !important; font-size: 14px !important; }
+}

@@ -3,6 +3,7 @@ import { requirePage } from "@/lib/guard";
 import { Application, CandidateProfile, Interview, Notification, Position } from "@/models";
 import { isProfileSetupComplete } from "@/lib/profile";
 import { redirect } from "next/navigation";
+import styles from "./page.module.css";
 
 const actions = [
   { href: "/jobs", label: "Positions", description: "Browse and apply for new roles", icon: "briefcase", color: "text-[#164332]" },
@@ -76,18 +77,18 @@ export default async function Dashboard() {
   ];
   const documentCount = profile?.documents?.length ?? 0;
 
-  return <div className="candidate-dashboard">
-    <section className="candidate-welcome" aria-label="Welcome">
+  return <div className={styles.dashboard}>
+    <section className={styles.welcome} aria-label="Welcome">
       <div>
-        <span className="candidate-welcome-kicker">WELCOME BACK</span>
+        <span className={styles.welcomeKicker}>WELCOME BACK</span>
         <h1>Hello,<br /><strong>{firstName} 👋</strong></h1>
         <p>Manage your profile, applications<br className="hidden sm:block" /> and more from here.</p>
       </div>
-      <Link href="/candidate/profile" className="candidate-avatar" aria-label="Edit profile">{profilePhotoUrl ? <img src={profilePhotoUrl} alt="" /> : <span>{firstName.slice(0, 1).toUpperCase()}</span>}<small>✎ Edit Profile</small></Link>
+      <Link href="/candidate/profile" className={styles.avatar} aria-label="Edit profile">{profilePhotoUrl ? <img src={profilePhotoUrl} alt="" /> : <span>{firstName.slice(0, 1).toUpperCase()}</span>}<small>✎ Edit Profile</small></Link>
     </section>
 
-    <section className="candidate-promo" aria-label="Explore opportunities">
-      <div className="candidate-promo-copy">
+    <section className={styles.promo} aria-label="Explore opportunities">
+      <div className={styles.promoCopy}>
         <span>BE A PART OF</span>
         <h2>Memorable<br />Celebrations</h2>
         <p>Get hired for premium weddings<br />and special events.</p>
@@ -95,38 +96,38 @@ export default async function Dashboard() {
       </div>
     </section>
 
-    <section aria-label="Candidate services" className="candidate-service-grid">
-      {actions.map((action) => <Link key={action.href} href={action.href} aria-label={`${action.label}: ${action.description}`} className="candidate-service-card">
-        <span className={`candidate-service-icon ${action.color}`}><AppIcon name={action.icon} /></span>
+    <section aria-label="Candidate services" className={styles.serviceGrid}>
+      {actions.map((action) => <Link key={action.href} href={action.href} aria-label={`${action.label}: ${action.description}`} className={styles.serviceCard}>
+        <span className={`${styles.serviceIcon} ${action.color}`}><AppIcon name={action.icon} /></span>
         <strong>{action.label}</strong>
-        <span className="candidate-service-description">{action.description}</span>
+        <span className={styles.serviceDescription}>{action.description}</span>
         {action.href === "/jobs" && <small>{activePositions} open roles</small>}
         {action.href === "/candidate/documents" && <small>{documentCount} uploaded</small>}
-        <span className="candidate-card-arrow" aria-hidden="true">›</span>
+        <span className={styles.cardArrow} aria-hidden="true">›</span>
       </Link>)}
     </section>
 
-    <section className="candidate-stats-section" aria-label="Quick stats">
-      <div className="candidate-section-heading"><h2>Quick Stats</h2><Link href="/candidate/applications">View all <span aria-hidden="true">→</span></Link></div>
-      <div className="candidate-stats-grid">
-        {stats.map((stat) => <div key={stat.label} className="candidate-stat-card"><span className="candidate-stat-icon"><AppIcon name={stat.icon} /></span><strong>{stat.value}</strong><span>{stat.label}</span></div>)}
+    <section aria-label="Quick stats">
+      <div className={styles.sectionHeading}><h2>Quick Stats</h2><Link href="/candidate/applications">View all <span aria-hidden="true">→</span></Link></div>
+      <div className={styles.statsGrid}>
+        {stats.map((stat) => <div key={stat.label} className={styles.statCard}><span className={styles.statIcon}><AppIcon name={stat.icon} /></span><strong>{stat.value}</strong><span>{stat.label}</span></div>)}
       </div>
     </section>
 
-    <section className="candidate-activity-section" aria-label="Recent activity">
-      <div className="candidate-section-heading"><h2>Recent Activity</h2><Link href="/candidate/notifications">View all <span aria-hidden="true">→</span></Link></div>
-      <div className="candidate-activity-list">
-        {recentActivity.length ? recentActivity.map((item, index) => <Link key={`${item.href}-${index}`} href={item.href} className="candidate-activity-item">
-          <span className="candidate-activity-icon"><AppIcon name={item.icon} /></span>
-          <span className="candidate-activity-copy"><strong>{item.title}</strong><small>{item.detail}</small></span>
-          <span className="candidate-activity-date">{item.date ? new Date(item.date).toLocaleDateString("en-IN", { day: "numeric", month: "short" }) : ""}</span>
-          <span className="candidate-activity-arrow" aria-hidden="true">›</span>
-        </Link>) : <p className="candidate-activity-empty">Your recent applications and updates will appear here.</p>}
+    <section aria-label="Recent activity">
+      <div className={styles.sectionHeading}><h2>Recent Activity</h2><Link href="/candidate/notifications">View all <span aria-hidden="true">→</span></Link></div>
+      <div className={styles.activityList}>
+        {recentActivity.length ? recentActivity.map((item, index) => <Link key={`${item.href}-${index}`} href={item.href} className={styles.activityItem}>
+          <span className={styles.activityIcon}><AppIcon name={item.icon} /></span>
+          <span className={styles.activityCopy}><strong>{item.title}</strong><small>{item.detail}</small></span>
+          <span className={styles.activityDate}>{item.date ? new Date(item.date).toLocaleDateString("en-IN", { day: "numeric", month: "short" }) : ""}</span>
+          <span className={styles.activityArrow} aria-hidden="true">›</span>
+        </Link>) : <p className={styles.activityEmpty}>Your recent applications and updates will appear here.</p>}
       </div>
     </section>
 
-    <section className="candidate-help-card" aria-label="Support">
-      <span className="candidate-help-icon"><AppIcon name="support" /></span>
+    <section className={styles.helpCard} aria-label="Support">
+      <span className={styles.helpIcon}><AppIcon name="support" /></span>
       <span><strong>Need Help?</strong><small>Our team is here to support you.</small></span>
       <Link href="/contact">Contact Support <span aria-hidden="true">→</span></Link>
     </section>

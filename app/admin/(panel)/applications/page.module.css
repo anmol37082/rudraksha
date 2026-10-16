@@ -1,0 +1,40 @@
+.filterForm, .tableWrap, .pagination { min-width: 0; }
+.tableWrap { width: 100%; }
+
+@media (max-width: 640px) {
+  .filterForm { gap: .75rem; }
+  .filterForm.filterForm :global(.input) { min-width: 0; min-height: 44px; }
+  .filterForm :global(label) { min-width: 0; font-size: 14px; }
+  .filterForm input[type="date"] { width: 100%; min-width: 0; }
+  .filterForm > :global(div.grid-cols-2) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .filterForm > :global(div.flex) { min-width: 0; gap: .75rem; }
+  .filterForm :global(.btn-outline) { min-height: 44px !important; font-size: 14px !important; }
+  .filterForm > :global(div.flex) > :global(a) { min-height: 44px; padding: 0 .5rem; font-size: 14px !important; }
+
+  .tableWrap { max-width: 100%; }
+  .tableWrap.tableWrap :global(.responsive-table) { max-width: 100%; }
+  .tableWrap.tableWrap :global(.responsive-table tr) { padding: .75rem; }
+  .tableWrap.tableWrap :global(.responsive-table td) { min-width: 0; gap: .5rem; font-size: 14px !important; }
+  .tableWrap.tableWrap :global(.responsive-table td::before) { flex-basis: 5.25rem; font-size: 12px; }
+  .tableWrap :global(.responsive-table td p) { min-width: 0; overflow-wrap: anywhere; }
+  .tableWrap :global(.responsive-table td[data-label="Status"] > span) { max-width: 100%; white-space: normal; overflow-wrap: anywhere; }
+  .tableWrap :global(.responsive-table td[data-label=""] a) { display: inline-flex; min-height: 44px; align-items: center; overflow-wrap: anywhere; }
+
+  .pagination :global(.btn-outline) { min-height: 44px !important; font-size: 14px !important; }
+
+  .emptyState > :global(div) {
+    border: 0;
+    border-bottom: 1px solid var(--border-neutral);
+    border-radius: 0;
+    padding: 1rem 0;
+    text-align: left;
+  }
+
+  .emptyState + :global(.mt-4) {
+    margin-top: .75rem;
+  }
+}
+
+@media (max-width: 359px) {
+  .filterForm > :global(div.grid-cols-2) { grid-template-columns: minmax(0, 1fr); }
+}

@@ -1,0 +1,99 @@
+.settings {
+  display: grid;
+  width: 100%;
+  min-width: 0;
+  max-width: 48rem;
+  gap: 1.5rem;
+}
+
+.settings > * {
+  min-width: 0;
+}
+
+.section > :not(:last-child) {
+  margin-bottom: 1rem;
+}
+
+.sectionTitle {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+}
+
+.description {
+  margin-top: .25rem;
+  color: #526258;
+  font-size: .875rem;
+  line-height: 1.25rem;
+  overflow-wrap: anywhere;
+}
+
+.currentEmail {
+  color: #09251b;
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+
+.form {
+  min-width: 0;
+  margin-top: 1.25rem;
+}
+
+.form :global(.input) {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.form :global(label),
+.form :global(label > span) {
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  line-height: 1.45;
+}
+
+.form > :not(:last-child) {
+  margin-bottom: 1rem;
+}
+
+.inlineError {
+  color: var(--color-rose-700);
+  font-size: .875rem;
+  line-height: 1.25rem;
+  overflow-wrap: anywhere;
+}
+
+.notice,
+.errorNotice {
+  border-radius: .375rem;
+  padding: .5rem .75rem;
+  font-size: .875rem;
+  line-height: 1.25rem;
+  overflow-wrap: anywhere;
+}
+
+.notice {
+  background-color: var(--color-emerald-50);
+  color: var(--color-emerald-800);
+}
+
+.errorNotice {
+  background-color: var(--color-rose-50);
+  color: var(--color-rose-800);
+}
+
+@media (max-width: 639px) {
+  .settings {
+    gap: 1rem;
+  }
+
+  .form.form :global(.input) {
+    min-height: 44px;
+  }
+
+  .form.form.form :global(button) {
+    min-height: 44px;
+    font-size: 14px !important;
+  }
+}
