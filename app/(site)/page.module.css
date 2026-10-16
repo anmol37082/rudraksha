@@ -12,7 +12,7 @@
   flex-direction: column;
   justify-content: space-between;
   overflow: hidden;
-  padding: 18px clamp(20px, 6vw, 84px) 54px;
+  padding: 18px clamp(20px, 6vw, 84px) 36px;
   background: url("/landingbg2.webp") center / cover no-repeat;
 }
 
@@ -103,7 +103,7 @@
   .hero {
     min-height: 100svh;
     flex: 1;
-    padding: max(14px, env(safe-area-inset-top)) 16px max(58px, env(safe-area-inset-bottom));
+    padding: max(14px, env(safe-area-inset-top)) 16px max(36px, env(safe-area-inset-bottom));
     background-size: 100% 100%;
   }
 
