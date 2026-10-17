@@ -9,7 +9,7 @@ export function AuthPageLayout({ title, subtitle, children, variant }: { title: 
       <header className={`auth-page-header ${styles.header}`}>
         <AuthBackButton />
         <Link href="/jobs" className={`auth-brand ${styles.brand}`} aria-label="Rudraksha Events — open positions">
-          <Image src="/RUDRAKSHA-CROPPED.png" alt="Rudraksha Events" width={220} height={182} priority />
+          <Image src="/rudrakshanobg.png" alt="Rudraksha Events" width={220} height={182} priority />
         </Link>
       </header>
       <div className={`auth-intro ${styles.intro}`}>

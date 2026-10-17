@@ -45,7 +45,7 @@
 .emptyFilter a { color: #805c22; }
 
 @media (max-width: 639px) {
-  :global(main.candidate-content):has(.page) { max-width: none; min-height: calc(100svh - 48px); padding: 13px 15px 22px; background-image: url('/myaplicationbg.webp'); background-position: center top; background-repeat: no-repeat; background-size: 100% 100%; }
+  :global(main.candidate-content):has(.page) { max-width: none; min-height: calc(100svh - 48px); padding: 13px 15px 22px; background-image: url('/myaplicationbg.webp'); background-position: center; background-repeat: no-repeat; background-size: cover; background-attachment: fixed; }
   :global(main.candidate-content):has(.page) > .mb-5 { display: none; }
   .heading { margin: 0 0 15px; padding-bottom: 10px; }
   .heading h1 { font-size: 26px; line-height: 1.2; }

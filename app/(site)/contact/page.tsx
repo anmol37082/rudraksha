@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
-import Image from "next/image";
-import Link from "next/link";
 import { getSession } from "@/lib/auth";
 import { SITE } from "@/lib/site";
 import { ContactCopyButton } from "@/components/ContactCopyButton";
-import { LogoutButton } from "@/components/LogoutButton";
+import { Shell, type NavItem } from "@/components/Shell";
 import styles from "./page.module.css";
 
 export const metadata: Metadata = { title: "Contact us" };
@@ -18,10 +16,29 @@ function ContactIcon({ kind }: { kind: "email" | "phone" | "address" | "help" })
 
 export default async function Contact() {
   const session = await getSession();
+  const items: NavItem[] = session?.role === "ADMIN" ? [
+    { href: "/admin/dashboard", label: "Dashboard" },
+    { href: "/admin/applications", label: "Applications" },
+    { href: "/admin/candidates", label: "Candidates" },
+    { href: "/admin/positions", label: "Positions" },
+    { href: "/admin/interviews", label: "Interviews" },
+    { href: "/admin/staff", label: "Staff" },
+    { href: "/admin/notifications", label: "Notifications" },
+    { href: "/admin/settings", label: "Account settings" },
+  ] : [
+    { href: "/candidate/dashboard", label: "Home" },
+    { href: "/jobs", label: "Positions" },
+    { href: "/candidate/applications", label: "Applications" },
+    { href: "/candidate/profile", label: "Profile" },
+    { href: "/candidate/documents", label: "Documents" },
+    { href: "/candidate/interviews", label: "Interviews" },
+    { href: "/contact", label: "Help & support" },
+    { href: "/candidate/notifications", label: "Notifications" },
+    { href: "/candidate/staff", label: "My joining letter" },
+  ];
   const phoneHref = `tel:${SITE.phone.replace(/\s/g, "")}`;
   const mapHref = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(SITE.address)}`;
-  return <main className={styles.page}>
-    <header className={styles.appHeader}><Link href={session?.role === "ADMIN" ? "/admin/dashboard" : session ? "/candidate/dashboard" : "/"} aria-label="Rudraksha Events"><Image src="/RUDRAKSHA.png" alt="" width={54} height={48} priority /><span>Rudraksha<small>EVENTS</small></span></Link>{session ? <LogoutButton to={session.role === "ADMIN" ? "/admin/login" : "/login"} className={styles.headerAction} /> : <Link className={styles.headerAction} href="/login">Log in</Link>}</header>
+  const content = <div className={styles.page}>
     <header className={styles.heading}><h1>Contact Us</h1><p>Questions about a position or your application? Reach our hiring team directly.</p><span aria-hidden="true"><i />✦</span></header>
     <div className={styles.methods}>
       <section className={styles.methodCard}><span className={styles.icon}><ContactIcon kind="email" /></span><div className={styles.methodCopy}><h2>Email</h2><p>Drop us an email anytime</p><a href={`mailto:${SITE.email}`}>{SITE.email}</a></div><ContactCopyButton value={SITE.email} label="Copy email" className={styles.action} /></section>
@@ -29,5 +46,7 @@ export default async function Contact() {
       <section className={styles.methodCard}><span className={styles.icon}><ContactIcon kind="address" /></span><div className={styles.methodCopy}><h2>Address</h2><p>Visit our office</p><span>{SITE.address}</span></div><a className={styles.action} href={mapHref} target="_blank" rel="noreferrer"><ContactIcon kind="address" />View on Map</a></section>
     </div>
     <aside className={styles.more}><span className={styles.moreIcon}><ContactIcon kind="help" /></span><div><h2>Need more help?</h2><p>Our hiring team is here to assist you with any questions about job openings, applications or interview process.</p></div><span className={styles.moreOrnament} aria-hidden="true">✧</span></aside>
-  </main>;
+  </div>;
+  if (!session) return content;
+  return <Shell area={session.role === "ADMIN" ? "Admin" : "Candidate"} who={session.name.split(" ")[0]} items={items}>{content}</Shell>;
 }

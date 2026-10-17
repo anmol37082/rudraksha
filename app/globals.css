@@ -200,7 +200,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-serif); font-weight: 600; lette
   .app-mobile-header > a img { width: 48px !important; height: 40px !important; }
   .app-mobile-brand-name { display: none; }
   .admin-mobile-menu-button { width: 44px !important; height: 44px !important; }
-  main.candidate-content, main.admin-content { max-width: none; min-height: calc(100svh - 48px); padding: 13px 12px 24px; background-color: #f8f2e6; background-image: url('/myaplicationbg.webp'); background-position: center top; background-repeat: no-repeat; background-size: 100% 100%; }
+  main.candidate-content, main.admin-content { max-width: none; min-height: calc(100svh - 48px); padding: 13px 12px 24px; background-color: #f8f2e6; background-image: url('/myaplicationbg.webp'); background-position: center; background-repeat: no-repeat; background-size: cover; background-attachment: fixed; }
   main.candidate-content > .mb-5, main.admin-content > .mb-5 { margin-bottom: 12px; }
   main.candidate-content > .mb-5 h1, main.admin-content > .mb-5 h1 { color: #12372a; font-size: 25px; line-height: 1.12; }
   main.candidate-content .card:not(.documents-photo-card):not(.documents-item-card), main.admin-content .card { border: 1px solid #ecdfca; border-radius: 13px; background: rgba(255,252,246,.88); padding: 11px; box-shadow: 0 3px 9px rgba(75,55,29,.055); }
@@ -214,6 +214,21 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-serif); font-weight: 600; lette
 }
 
 @media (max-width: 639px) {
+  body {
+    isolation: isolate;
+    background: transparent;
+  }
+  body::before {
+    position: fixed;
+    z-index: -1;
+    inset: 0;
+    background: url("/myaplicationbg.webp") center / cover no-repeat;
+    content: "";
+    pointer-events: none;
+  }
+  body:has(.auth-page)::before {
+    background-image: url("/loginbg.webp");
+  }
   body { font-size: 16px; }
   p, li { font-size: 14px !important; }
   small, .text-xs, .status-badge { font-size: 12px !important; }

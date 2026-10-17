@@ -61,7 +61,7 @@ export function AppInstallPrompt() {
       <section role="dialog" aria-modal="true" aria-labelledby="install-title" className="w-full max-w-md rounded-2xl border border-forest-200 bg-pearl p-5 shadow-2xl sm:p-6">
         <button type="button" onClick={close} aria-label="Close install prompt" className="float-right grid h-10 w-10 place-items-center rounded-full text-xl text-forest-700 hover:bg-forest-100">×</button>
         <div className="flex items-center gap-4">
-          <Image src="/RUDRAKSHALOGO.jpeg" alt="Rudraksha Events" width={72} height={72} className="h-[72px] w-[72px] rounded-xl object-cover" />
+          <Image src="/rudrakshanobg.png" alt="Rudraksha Events" width={72} height={72} className="h-[72px] w-[72px] rounded-xl object-cover" />
           <div><p className="text-xs font-semibold uppercase tracking-[.18em] text-gold-700">Rudraksha Events</p><h2 id="install-title" className="mt-1 text-2xl">Install our app</h2></div>
         </div>
         <p className="mt-4 text-sm leading-6 text-stone-700">Add the recruitment portal to your home screen for quick access to positions, applications and your profile.</p>

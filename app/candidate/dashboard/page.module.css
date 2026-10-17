@@ -8,7 +8,7 @@
 .avatar > span { display: grid; width: 54px; height: 54px; place-items: center; border: 3px solid white; border-radius: 50%; background: #e9dfca; color: #164332; font-family: var(--font-serif); font-size: 1.5rem; font-weight: 600; box-shadow: 0 2px 8px rgba(9,37,27,.12); }
 .avatar > img { display: block; width: 54px; height: 54px; border: 3px solid white; border-radius: 50%; object-fit: cover; box-shadow: 0 2px 8px rgba(9,37,27,.12); }
 .avatar small { border: 1px solid rgba(198,161,91,.45); border-radius: 999px; padding: 3px 7px; font-size: .55rem; }
-.promo { position: relative; min-height: 116px; overflow: hidden; border-radius: 14px; background: linear-gradient(90deg,rgba(3,32,23,.94) 0%,rgba(3,32,23,.7) 42%,rgba(3,32,23,.05) 100%),url("/landingbg.webp") center 42% / cover no-repeat; box-shadow: 0 4px 12px rgba(9,37,27,.12); }
+.promo { position: relative; min-height: 116px; overflow: hidden; border-radius: 14px; background: linear-gradient(90deg,rgba(3,32,23,.94) 0%,rgba(3,32,23,.7) 42%,rgba(3,32,23,.05) 100%),url("/landingbg4.webp") center 42% / cover no-repeat; box-shadow: 0 4px 12px rgba(9,37,27,.12); }
 .promoCopy { position: relative; z-index: 1; padding: 11px 13px; color: #fff; }
 .promoCopy > span { color: #dabb77; font-size: .48rem; font-weight: 700; letter-spacing: .18em; }
 .promoCopy h2 { margin-top: 2px; color: #fff; font-size: 1.13rem; line-height: .98; }

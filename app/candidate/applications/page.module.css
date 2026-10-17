@@ -39,7 +39,7 @@
 .emptyFilter a { display: inline-block; margin-top: 6px; color: #805c22; font-size: 11px; }
 
 @media (max-width: 639px) {
-  :global(main.candidate-content):has(.page) { max-width: none; min-height: calc(100svh - 48px); padding: 13px 15px 22px; background-image: url('/myaplicationbg.webp'); background-position: center top; background-repeat: no-repeat; background-size: 100% 100%; }
+  :global(main.candidate-content):has(.page) { max-width: none; min-height: calc(100svh - 48px); padding: 13px 15px 22px; background-image: url('/myaplicationbg.webp'); background-position: center; background-repeat: no-repeat; background-size: cover; background-attachment: fixed; }
   .page { min-width: 0; }
   .heading { margin-bottom: 16px; padding-bottom: 11px; }
   .heading h1 { font-size: 25px; line-height: 1.2; }

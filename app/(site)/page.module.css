@@ -19,6 +19,17 @@
   background-repeat: no-repeat;
 }
 
+@media (max-width: 639px) {
+  .landing {
+    background: transparent;
+  }
+
+  .hero {
+    background-image: url("/myaplicationbg.webp");
+    background-attachment: fixed;
+  }
+}
+
 .heroActions {
   position: relative;
   z-index: 1;

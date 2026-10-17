@@ -102,14 +102,14 @@ export function Shell({ items, who, area, children }: { items: NavItem[]; who: s
   };
   return <div className="min-h-screen lg:flex">
     <aside className="hidden border-r border-forest-100 bg-forest-900 text-pearl print:hidden lg:sticky lg:top-0 lg:flex lg:h-screen lg:w-60 lg:shrink-0 lg:flex-col">
-      <div className="px-5 py-6"><Link href={candidate ? "/candidate/dashboard" : "/admin/dashboard"} aria-label={SITE.name} className="inline-flex items-center gap-2"><Image src="/RUDRAKSHA.png" alt="" width={72} height={72} className="h-14 w-14 object-contain" /><span className="text-base font-semibold">{SITE.name}</span></Link><p className="mt-2 text-xs text-pearl/65">{area} · {who}</p></div>
+      <div className="px-5 py-6"><Link href={candidate ? "/candidate/dashboard" : "/admin/dashboard"} aria-label={SITE.name} className="inline-flex items-center gap-2"><Image src="/rudrakshanobg.png" alt="" width={72} height={72} className="h-14 w-14 object-contain" /><span className="text-base font-semibold">{SITE.name}</span></Link><p className="mt-2 text-xs text-pearl/65">{area} · {who}</p></div>
       <nav aria-label={`${area} navigation`} className="flex-1 space-y-1 overflow-y-auto px-3">{items.map((i) => navLink(i))}</nav>
       <div className="p-3"><LogoutButton to={candidate ? "/login" : "/admin/login"} className="w-full rounded-xl px-3 py-2.5 text-left text-sm text-pearl/85 hover:bg-forest-700" /></div>
     </aside>
     <div className="min-w-0 flex-1">
       <header className={`app-mobile-header flex items-center justify-between border-b border-gold-500/35 bg-forest-900 px-4 py-1 text-pearl lg:hidden ${candidateCompactHeader ? "candidate-dashboard-header" : ""}`}>
         <Link href={candidate ? "/candidate/dashboard" : "/admin/dashboard"} aria-label={SITE.name} className="inline-flex items-center gap-2">
-          <Image src="/RUDRAKSHA.png" alt="" width={64} height={64} className={candidateCompactHeader ? "h-10 w-12 object-contain" : "h-12 w-12 object-contain"} />
+          <Image src="/rudrakshanobg.png" alt="" width={64} height={64} className={candidateCompactHeader ? "h-10 w-12 object-contain" : "h-12 w-12 object-contain"} />
           {!candidateCompactHeader && <span className="app-mobile-brand-name font-serif text-2xl font-semibold text-pearl">{SITE.name}</span>}
         </Link>
         <div className="flex items-center gap-3">

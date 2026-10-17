@@ -16,7 +16,7 @@ export default async function Jobs({ searchParams }: { searchParams: Promise<{ q
   return (
     <main className={`${styles.page} mx-auto max-w-6xl px-4 py-6 sm:py-10`}>
       <header className={styles.mobileHeader}>
-        <Link href="/" aria-label="Rudraksha Events"><Image src="/RUDRAKSHA.png" alt="Rudraksha Events" width={90} height={70} priority /></Link>
+        <Link href="/" aria-label="Rudraksha Events"><Image src="/rudrakshanobg.png" alt="Rudraksha Events" width={90} height={70} priority /></Link>
         <nav aria-label="Account"><Link href="/candidate/notifications" aria-label="Notifications"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4" /></svg><i /></Link><Link href="/candidate/profile" aria-label="My profile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0"/></svg></Link></nav>
       </header>
       <header className={styles.heading}><h1>Open Positions</h1><p>Find your next opportunity</p><span aria-hidden="true"><i />✦</span></header>

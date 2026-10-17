@@ -37,7 +37,7 @@
 .error { background: #fae8e4; color: #a2372b; }
 
 @media (max-width: 639px) {
-  :global(main.candidate-content):has(.flow) { max-width: none; min-height: calc(100svh - 48px); padding: 12px 12px 18px; background-image: url('/myaplicationbg.webp'); background-position: center top; background-repeat: no-repeat; background-size: 100% 100%; }
+  :global(main.candidate-content):has(.flow) { max-width: none; min-height: calc(100svh - 48px); padding: 12px 12px 18px; background-image: url('/myaplicationbg.webp'); background-position: center; background-repeat: no-repeat; background-size: cover; background-attachment: fixed; }
   :global(main.candidate-content):has(.flow) > .mb-5 { display: none; }
   .flow { gap: 12px; }
   .flow :global(.card) { border: 0; border-bottom: 1px solid var(--border-neutral); border-radius: 0; padding: 0 0 1rem; }
