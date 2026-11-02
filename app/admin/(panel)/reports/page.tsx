@@ -2,10 +2,12 @@ import Link from "next/link";
 import { Application, AuditLog, Event, EventChangeRequest, EventStaffAssignment, Expense, Interview, Invoice, Position, Quotation, ShiftRecord, Staff, User } from "@/models";
 import { Card, PageTitle } from "@/components/ui";
 import { plain } from "@/lib/api";
+import { connectDB } from "@/lib/mongodb";
 
 export const dynamic = "force-dynamic";
 
 export default async function ReportsPage() {
+  await connectDB();
   const now = new Date();
   const [candidateCount, positionCount, applicationCount, interviewCount, totalStaff, activeStaff, inactiveStaff, events, clients, quotes, invoices, expenses, recentAudit, assignments, staffByRole, recentAssignments, shiftStats, changeStats] = await Promise.all([
     User.countDocuments({ role: "CANDIDATE" }), Position.countDocuments(), Application.countDocuments(), Interview.countDocuments(),

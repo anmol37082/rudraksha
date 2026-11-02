@@ -4,8 +4,10 @@ import { pageParams, plain } from "@/lib/api";
 import { Badge, EmptyState, Input, LinkButton, PageTitle, Pagination, Table } from "@/components/ui";
 import { fmtDate } from "@/lib/client";
 import { EVENT_STATUSES } from "@/lib/event-constants";
+import { connectDB } from "@/lib/mongodb";
 
 export default async function EventsPage({ searchParams }: { searchParams: Promise<Record<string, string | undefined>> }) {
+  await connectDB();
   const sp = await searchParams;
   const { page, limit, skip } = pageParams(sp, 20);
   const filter: Record<string, unknown> = {};

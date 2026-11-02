@@ -4,10 +4,12 @@ import { Agreement, Event, Expense, Invoice, Payment, Quotation } from "@/models
 import { plain } from "@/lib/api";
 import { Card, PageTitle } from "@/components/ui";
 import { EventFinanceManager } from "@/components/EventFinanceManager";
+import { connectDB } from "@/lib/mongodb";
 
 export default async function EventFinancePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   if (!mongoose.isValidObjectId(id)) notFound();
+  await connectDB();
   const [event, expenses, invoices, payments, quotes, agreements] = await Promise.all([
     Event.findById(id).select("eventName status").lean(),
     Expense.find({ eventId: id }).sort({ date: -1, createdAt: -1 }).lean(),

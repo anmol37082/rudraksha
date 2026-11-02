@@ -5,10 +5,12 @@ import { Agreement, Client, Event, Invoice, Payment, Quotation } from "@/models"
 import { plain } from "@/lib/api";
 import { fmtDate } from "@/lib/client";
 import { Badge, Card, EmptyState, LinkButton, PageTitle, Table } from "@/components/ui";
+import { connectDB } from "@/lib/mongodb";
 
 export default async function ClientDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   if (!mongoose.isValidObjectId(id)) notFound();
+  await connectDB();
   const client = await Client.findById(id).lean();
   if (!client) notFound();
   const [eventRows, quoteRows, agreementRows, invoiceRows, paymentRows] = await Promise.all([

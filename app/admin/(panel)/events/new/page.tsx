@@ -4,8 +4,10 @@ import mongoose from "mongoose";
 import { plain } from "@/lib/api";
 import { PageTitle } from "@/components/ui";
 import { EventForm } from "@/components/EventForm";
+import { connectDB } from "@/lib/mongodb";
 
 export default async function NewEventPage({ searchParams }: { searchParams: Promise<{ clientId?: string; duplicate?: string }> }) {
+  await connectDB();
   const query = await searchParams;
   const filter: Record<string, unknown> = { status: { $ne: "ARCHIVED" } };
   if (query.clientId) {

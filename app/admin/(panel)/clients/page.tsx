@@ -2,8 +2,10 @@ import Link from "next/link";
 import { Client, Event } from "@/models";
 import { pageParams, plain } from "@/lib/api";
 import { Badge, EmptyState, Input, LinkButton, PageTitle, Pagination, Table } from "@/components/ui";
+import { connectDB } from "@/lib/mongodb";
 
 export default async function ClientsPage({ searchParams }: { searchParams: Promise<Record<string, string | undefined>> }) {
+  await connectDB();
   const sp = await searchParams;
   const { page, limit, skip } = pageParams(sp, 20);
   const filter: Record<string, unknown> = {};

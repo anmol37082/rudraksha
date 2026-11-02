@@ -5,10 +5,12 @@ import { plain } from "@/lib/api";
 import { Badge, Card, PageTitle } from "@/components/ui";
 import { EventStatusForm } from "@/components/EventStatusForm";
 import { EventDocumentManager } from "@/components/EventDocumentManager";
+import { connectDB } from "@/lib/mongodb";
 
 export default async function EventClosurePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   if (!mongoose.isValidObjectId(id)) notFound();
+  await connectDB();
   const [event, guests, assignments, shifts, tasks, expenses, invoices, payments, changes, transport, documents, agreements] = await Promise.all([
     Event.findById(id).lean(), Guest.countDocuments({ eventId: id }), EventStaffAssignment.find({ eventId: id }).lean(), ShiftRecord.find({ eventId: id }).lean(),
     EventTask.find({ eventId: id }).lean(), Expense.find({ eventId: id }).lean(), Invoice.find({ eventId: id }).lean(), Payment.find({ eventId: id }).lean(),

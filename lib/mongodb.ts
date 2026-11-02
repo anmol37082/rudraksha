@@ -11,13 +11,18 @@ export function mongoConnectionOptions(nodeEnv = process.env.NODE_ENV) {
 export async function connectDB() {
   const uri = process.env.MONGODB_URI;
   if (!uri) throw new Error("MONGODB_URI is not set");
-  if (cached.conn) return cached.conn;
-  cached.promise ??= mongoose.connect(uri, mongoConnectionOptions());
+  if (mongoose.connection.readyState === 1) {
+    cached.conn = mongoose;
+    return cached.conn;
+  }
+  const promise = cached.promise ??= mongoose.connect(uri, mongoConnectionOptions());
   try {
-    cached.conn = await cached.promise;
+    cached.conn = await promise;
+    if (cached.promise === promise) cached.promise = null;
+    return cached.conn;
   } catch (e) {
-    cached.promise = null;
+    if (cached.promise === promise) cached.promise = null;
+    cached.conn = null;
     throw e;
   }
-  return cached.conn;
 }

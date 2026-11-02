@@ -8,10 +8,12 @@ import { Badge, Card, EmptyState, LinkButton, PageTitle } from "@/components/ui"
 import { EventStatusForm } from "@/components/EventStatusForm";
 import { ManpowerManager } from "@/components/ManpowerManager";
 import { AssignmentManager } from "@/components/AssignmentManager";
+import { connectDB } from "@/lib/mongodb";
 
 export default async function EventDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   if (!mongoose.isValidObjectId(id)) notFound();
+  await connectDB();
   const [doc, requirementsRaw, servicesRaw, quotesRaw, agreementsRaw, assignmentsRaw, staffRaw] = await Promise.all([
     Event.findById(id).populate("clientId", "name businessName contactPerson email phone").lean(),
     ManpowerRequirement.find({ eventId: id }).sort({ eventDate: 1 }).populate("serviceId", "name isRegulated").lean(),
