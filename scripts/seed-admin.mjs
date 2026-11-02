@@ -1,15 +1,14 @@
-// Usage: npm run seed:admin -- admin@example.com [password | --generate] [Admin Name]
-// Creates (or resets) the admin account. Omit the password or pass --generate to create one.
+// Usage: ADMIN_SEED_PASSWORD=<secret> npm run seed:admin -- admin@example.com [Admin Name]
+// Creates or resets the admin account; the password is never printed.
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
-import { randomBytes } from "node:crypto";
+import { requireAdminSeedPassword } from "../lib/admin-seed-password.mjs";
 
-const [email, passwordArg, name = "Administrator"] = process.argv.slice(2);
-const generatedPassword = !passwordArg || passwordArg === "--generate";
-const password = generatedPassword ? randomBytes(24).toString("base64url") : passwordArg;
+const [email, name = "Administrator"] = process.argv.slice(2);
+const password = requireAdminSeedPassword(process.env.ADMIN_SEED_PASSWORD);
 if (!process.env.MONGODB_URI) throw new Error("MONGODB_URI is missing (put it in .env or .env.local)");
-if (!email || (!generatedPassword && password.length < 10)) {
-  console.error("Usage: npm run seed:admin -- <email> [password (10+ chars) | --generate] [name]");
+if (!email) {
+  console.error("Usage: npm run seed:admin -- <email> [Admin Name]");
   process.exit(1);
 }
 const normalizedEmail = email.trim().toLowerCase();
@@ -25,5 +24,4 @@ await users.updateOne(
   { upsert: true }
 );
 console.log(`Admin ready: ${normalizedEmail}`);
-if (generatedPassword) console.log(`Generated password: ${password}`);
 await mongoose.disconnect();

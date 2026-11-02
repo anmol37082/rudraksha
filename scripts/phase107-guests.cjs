@@ -1,0 +1,51 @@
+const { chromium } = require("playwright");
+const base = "http://127.0.0.1:3106";
+const results = [];
+async function main() {
+  const browser = await chromium.launch({ headless: true });
+  const context = await browser.newContext({ acceptDownloads: true });
+  const page = await context.newPage();
+  page.setDefaultTimeout(8000);
+  const prompts = [];
+  let phase = "launch";
+  page.on("dialog", async (d) => d.accept(prompts.shift() ?? ""));
+  try {
+    phase = "login page";
+    await page.goto(`${base}/admin/login`, { waitUntil: "domcontentloaded" });
+    await page.getByLabel("Email").fill(process.env.PHASE107_ADMIN_EMAIL);
+    await page.locator('input[name="password"]').fill(process.env.PHASE107_ADMIN_PASSWORD);
+    const [login] = await Promise.all([page.waitForResponse((r) => new URL(r.url()).pathname === "/api/auth/login" && r.request().method() === "POST"), page.getByRole("button", { name: /log in/i }).click()]);
+    if (login.status() !== 200) throw new Error("login status not successful");
+    phase = "events API";
+    const events = await page.evaluate(async () => { const r = await fetch("/api/events"); const j = await r.json(); const rows = Array.isArray(j.data) ? j.data : j.data?.items ?? []; return rows.map((e) => e._id); });
+    const eventId = events[0];
+    await page.goto(`${base}/admin/events/${eventId}/guests`, { waitUntil: "domcontentloaded" });
+    await page.waitForTimeout(1000);
+    await page.locator("form").first().waitFor({ state: "visible" });
+    const name = `Phase107 guest ${Date.now()}`;
+    phase = "guest create UI";
+    const [create] = await Promise.all([page.waitForResponse((r) => new URL(r.url()).pathname === "/api/guests" && r.request().method() === "POST"), (async () => { await page.getByLabel("Guest name", { exact: true }).fill(name); await page.getByLabel("Phone", { exact: true }).fill(`+919900${String(Date.now()).slice(-6)}`); await page.getByLabel("Email", { exact: true }).fill(`phase107-${Date.now()}@example.invalid`); await page.getByRole("button", { name: "Add guest", exact: true }).click(); })()]);
+    results.push({ test: "guest_create", status: create.status() === 201 ? "PASS" : "FAIL", http: create.status() });
+    const guestCard = page.locator("article").filter({ hasText: name }).first();
+    await guestCard.waitFor({ state: "visible" });
+    prompts.push(`${name} edited`, "+919911223344", "phase107-edited@example.invalid", "Synthetic VIP", "Phase107 Group");
+    const [edit] = await Promise.all([page.waitForResponse((r) => /\/api\/guests\/[a-f0-9]+$/.test(new URL(r.url()).pathname) && r.request().method() === "PUT"), guestCard.getByRole("button", { name: "Edit guest", exact: true }).click()]);
+    results.push({ test: "guest_edit", status: edit.status() === 200 ? "PASS" : "FAIL", http: edit.status() });
+    await page.reload({ waitUntil: "domcontentloaded" });
+    results.push({ test: "guest_persistence", status: await page.locator("article").filter({ hasText: `${name} edited` }).first().isVisible() ? "PASS" : "FAIL" });
+    const [download] = await Promise.all([page.waitForEvent("download"), page.getByRole("link", { name: "Export CSV", exact: true }).click()]);
+    results.push({ test: "guest_csv_export", status: download.suggestedFilename().endsWith(".csv") ? "PASS" : "FAIL" });
+    await page.getByLabel(/Import guest CSV/).setInputFiles({ name: "synthetic-guests.csv", mimeType: "text/csv", buffer: Buffer.from(`name,contactNumber,email,category,groupName\nPhase107 CSV ${Date.now()},+919911000001,phase107-csv-${Date.now()}@example.invalid,Guest,Test Group\n`) });
+    const [importResponse] = await Promise.all([page.waitForResponse((r) => new URL(r.url()).pathname === "/api/guests/import" && r.request().method() === "POST"), page.getByRole("button", { name: "Import CSV", exact: true }).click()]);
+    results.push({ test: "guest_csv_import", status: importResponse.status() === 200 ? "PASS" : "FAIL", http: importResponse.status() });
+    await page.screenshot({ path: `phase10_6_artifacts/phase107-guests-${eventId}-390.png`, fullPage: true });
+    await page.setViewportSize({ width: 1440, height: 950 });
+    await page.screenshot({ path: `phase10_6_artifacts/phase107-guests-${eventId}-1440.png`, fullPage: true });
+    await page.reload({ waitUntil: "domcontentloaded" });
+    const csvText = await page.getByText(/Import finished:/).textContent().catch(() => null);
+    results.push({ test: "csv_import_feedback_after_reload", status: csvText ? "PASS" : "INFO", feedbackPresent: Boolean(csvText) });
+  } catch (e) { const current = new URL(page.url()); results.push({ test: "harness", phase, status: "INCOMPLETE", error: String(e.message).split("\n")[0], path: current.pathname, queryKeys: [...current.searchParams.keys()] }); }
+  console.log(JSON.stringify({ results }));
+  await browser.close();
+}
+main().catch((e) => { console.log(JSON.stringify({ error: e.name })); process.exitCode = 1; });

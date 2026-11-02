@@ -1,0 +1,4 @@
+﻿const {chromium}=require('playwright');(async()=>{const b=await chromium.launch({headless:true});const p=await b.newPage();await p.goto('http://127.0.0.1:3106/admin/login');await p.getByLabel('Email').fill(process.env.PHASE108_ADMIN_EMAIL);await p.locator('input[name=password]').fill(process.env.PHASE108_ADMIN_PASSWORD);await Promise.all([p.waitForResponse(r=>new URL(r.url()).pathname==='/api/auth/login'),p.getByRole('button',{name:/log in/i}).click()]);await p.goto('http://127.0.0.1:3106/admin/events/6ae5c60becdf0660a08333b0');const d=await p.evaluate(()=>({url:location.pathname,articles:[...document.querySelectorAll('article')].map(a=>({text:a.innerText.slice(0,180),forms:a.querySelectorAll('form').length,selects:[...a.querySelectorAll('select')].map(s=>({name:s.name,options:[...s.options].map(o=>o.text)}))}))}));console.log(JSON.stringify(d));await b.close()})().catch(e=>{console.log(JSON.stringify({error:e.name}));process.exitCode=1});
+
+
+

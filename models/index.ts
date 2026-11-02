@@ -330,3 +330,27 @@ const pendingRegistrationSchema = new Schema(
 );
 pendingRegistrationSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 export const PendingRegistration = model<any>("PendingRegistration", pendingRegistrationSchema);
+
+// Event operations use separate collections and never alter the recruitment models above.
+export {
+  Agreement,
+  Client,
+  Event,
+  EventChangeRequest,
+  EventDocument,
+  EventStaffAssignment,
+  EventTask,
+  Expense,
+  Guest,
+  Invitation,
+  Invoice,
+  ManpowerRequirement,
+  Payment,
+  Quotation,
+  RateCard,
+  RoomAllocation,
+  RSVP,
+  Service,
+  ShiftRecord,
+  TransportSchedule,
+} from "./event-management";

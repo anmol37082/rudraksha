@@ -31,7 +31,7 @@ export function AdminAccountSettings({ email }: { email: string }) {
       <Card className={styles.section}>
         <h2 className={styles.sectionTitle}>Admin email</h2>
         <p className={styles.description}>Current email: <span className={styles.currentEmail}>{currentEmail}</span></p>
-        <form onSubmit={(e) => submit(e, "email")} className={styles.form} noValidate>
+        <form method="post" onSubmit={(e) => submit(e, "email")} className={styles.form} noValidate>
           <Field label="New email address"><Input name="email" type="email" autoComplete="email" required /></Field>
           <Field label="Current password"><Input name="currentPassword" type="password" autoComplete="current-password" required /></Field>
           {error && busy === "email" && <p role="alert" className={styles.inlineError}>{error}</p>}
@@ -42,7 +42,7 @@ export function AdminAccountSettings({ email }: { email: string }) {
       <Card className={styles.section}>
         <h2 className={styles.sectionTitle}>Change password</h2>
         <p className={styles.description}>Use at least 8 characters, including a letter and a number.</p>
-        <form onSubmit={(e) => submit(e, "password")} className={styles.form} noValidate>
+        <form method="post" onSubmit={(e) => submit(e, "password")} className={styles.form} noValidate>
           <Field label="Current password"><Input name="currentPassword" type="password" autoComplete="current-password" required /></Field>
           <Field label="New password"><Input name="newPassword" type="password" autoComplete="new-password" required /></Field>
           <Field label="Confirm new password"><Input name="confirmPassword" type="password" autoComplete="new-password" required /></Field>

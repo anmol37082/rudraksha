@@ -24,6 +24,19 @@ export const STATUS_LABEL: Record<string, string> = {
   COMPLETED: "Completed",
   CANCELLED: "Cancelled",
   RESCHEDULED: "Rescheduled",
+  DRAFT: "Draft",
+  REQUIREMENTS_PENDING: "Requirements pending",
+  QUOTATION_PENDING: "Quotation pending",
+  QUOTATION_SENT: "Quotation sent",
+  QUOTATION_APPROVED: "Quotation approved",
+  AGREEMENT_PENDING: "Agreement pending",
+  AGREEMENT_SIGNED: "Agreement signed",
+  ADVANCE_PENDING: "Advance pending",
+  CONFIRMED: "Confirmed",
+  STAFF_PLANNING: "Staff planning",
+  STAFF_DEPLOYMENT: "Staff deployment",
+  READY_FOR_EVENT: "Ready for event",
+  IN_PROGRESS: "In progress",
 };
 
 export const STATUS_TONE: Record<string, string> = {
@@ -44,6 +57,19 @@ export const STATUS_TONE: Record<string, string> = {
   COMPLETED: "status-badge bg-[#164332] text-[#F7F2E8]",
   CANCELLED: "status-badge bg-[#F7F2E8] text-[#90713B]",
   RESCHEDULED: "status-badge bg-[#E8DDC9] text-[#90713B]",
+  DRAFT: "status-badge bg-[#F7F2E8] text-[#164332]",
+  REQUIREMENTS_PENDING: "status-badge bg-[#E8DDC9] text-[#90713B]",
+  QUOTATION_PENDING: "status-badge bg-[#E8DDC9] text-[#90713B]",
+  QUOTATION_SENT: "status-badge bg-[#D5C4A4]/60 text-[#164332]",
+  QUOTATION_APPROVED: "status-badge bg-[#164332] text-[#F7F2E8]",
+  AGREEMENT_PENDING: "status-badge bg-[#E8DDC9] text-[#90713B]",
+  AGREEMENT_SIGNED: "status-badge bg-[#164332] text-[#F7F2E8]",
+  ADVANCE_PENDING: "status-badge bg-[#E8DDC9] text-[#90713B]",
+  CONFIRMED: "status-badge bg-[#164332] text-[#F7F2E8]",
+  STAFF_PLANNING: "status-badge bg-[#D5C4A4]/60 text-[#164332]",
+  STAFF_DEPLOYMENT: "status-badge bg-[#D5C4A4]/60 text-[#164332]",
+  READY_FOR_EVENT: "status-badge bg-[#164332] text-[#F7F2E8]",
+  IN_PROGRESS: "status-badge bg-[#164332] text-[#F7F2E8]",
 };
 
 export const POSITION_STATUSES = ["ACTIVE", "PAUSED", "CLOSED"] as const;

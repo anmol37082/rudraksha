@@ -1,5 +1,6 @@
 import { Types } from "mongoose";
 import { AuditLog, Notification, User } from "@/models";
+import { logSafeError } from "./safe-logging";
 
 export async function notify(userId: unknown, title: string, message: string, type = "INFO") {
   await Notification.create({ userId, title, message, type });
@@ -15,7 +16,7 @@ export async function bestEffort(label: string, fn: () => Promise<unknown>) {
   try {
     await fn();
   } catch (e) {
-    console.error(`[notify] ${label} failed`, e);
+    logSafeError(`[notify] ${label} failed`, e);
   }
 }
 

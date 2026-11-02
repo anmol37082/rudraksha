@@ -10,6 +10,7 @@ cloudinary.config({
 });
 
 export const folderFor = (candidateId: string, kind: "profile" | "documents") => `wedding-staff/candidates/${candidateId}/${kind}`;
+export const PRIVATE_DOWNLOAD_TTL_SECONDS = 5 * 60;
 
 type Detected = { ext: "jpg" | "png" | "webp" | "pdf"; mime: string };
 
@@ -48,6 +49,21 @@ export function deletePrivate(publicId: string, resourceType: "image" | "raw") {
   return cloudinary.uploader.destroy(publicId, { resource_type: resourceType, type: "authenticated", invalidate: true }).catch(() => null);
 }
 
-export function signedUrl(publicId: string, resourceType: "image" | "raw") {
-  return cloudinary.url(publicId, { resource_type: resourceType, type: "authenticated", sign_url: true, secure: true });
+export function privateDownloadOptions(resourceType: "image" | "raw", nowSeconds = Math.floor(Date.now() / 1000)) {
+  return {
+    resource_type: resourceType,
+    type: "authenticated" as const,
+    expires_at: nowSeconds + PRIVATE_DOWNLOAD_TTL_SECONDS,
+    attachment: true,
+  };
+}
+
+export function signedUrl(
+  publicId: string,
+  resourceType: "image" | "raw",
+  format: string,
+  nowSeconds = Math.floor(Date.now() / 1000),
+  buildUrl = cloudinary.utils.private_download_url,
+) {
+  return buildUrl(publicId, format, privateDownloadOptions(resourceType, nowSeconds));
 }

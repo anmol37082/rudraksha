@@ -4,6 +4,7 @@ import { ZodError, ZodType } from "zod";
 import { connectDB } from "./mongodb";
 import { getSession, Role } from "./auth";
 import { User } from "@/models";
+import { logSafeError } from "./safe-logging";
 
 export class ApiError extends Error {
   constructor(public status: number, message: string) {
@@ -32,7 +33,7 @@ export function handle(fn: Handler): Handler {
         return fail(422, e.issues[0]?.message ?? "Invalid input", errors);
       }
       if ((e as { code?: number })?.code === 11000) return fail(409, "This record already exists");
-      console.error(`[api] ${req.method} ${req.nextUrl.pathname}`, e);
+      logSafeError(`[api] ${req.method}`, e);
       return fail(500, "Something went wrong. Please try again.");
     }
   };

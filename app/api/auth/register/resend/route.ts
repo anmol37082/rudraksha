@@ -4,6 +4,7 @@ import { PendingRegistration, User } from "@/models";
 import { resendRegistrationOtpSchema } from "@/lib/validators";
 import { createRegistrationOtp, hashRegistrationOtp, REGISTRATION_OTP_RESEND_MS, REGISTRATION_OTP_TTL_MS } from "@/lib/verification";
 import { sendRegistrationOtp } from "@/lib/email";
+import { logSafeError } from "@/lib/safe-logging";
 
 export const POST = handle(async (req) => {
   const { email } = await parseBody(req, resendRegistrationOtpSchema);
@@ -34,7 +35,8 @@ export const POST = handle(async (req) => {
 
   try {
     await sendRegistrationOtp(email, pending.name, otp);
-  } catch {
+  } catch (error) {
+    logSafeError("[smtp] registration OTP resend failed", error);
     await PendingRegistration.updateOne({ _id: pending._id }, { $set: { resendAvailableAt: new Date() } });
     throw new ApiError(503, "We could not send the verification email. Please try again shortly.");
   }

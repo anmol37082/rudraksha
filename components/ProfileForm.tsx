@@ -214,7 +214,7 @@ export function ProfileForm({ user, profile, setupComplete, completion }: { user
         <LinkButton href="/candidate/documents" className="w-full">Manage my documents</LinkButton>
       </div>
 
-      <form onSubmit={save} noValidate className={`${styles.profileWizard} space-y-4 sm:space-y-6`}>
+      <form method="post" onSubmit={save} noValidate className={`${styles.profileWizard} space-y-4 sm:space-y-6`}>
         <Card className="sm:hidden">
           <div className="flex items-center justify-between gap-3">
             <p className="text-sm font-semibold text-forest-900">Step {step + 1} of {steps.length}</p>
@@ -258,7 +258,7 @@ export function ProfileForm({ user, profile, setupComplete, completion }: { user
           <h2 className="text-xl">Emergency contact</h2>
           <div className="grid gap-4 sm:grid-cols-3">
             <Field label="Name"><Input name="ecName" defaultValue={p.emergencyContact?.name} required /></Field>
-            <Field label="Phone"><Input name="ecPhone" type="tel" defaultValue={p.emergencyContact?.phone} required pattern="\\+?[0-9\\s-]{7,18}" /></Field>
+            <Field label="Phone"><Input name="ecPhone" type="tel" defaultValue={p.emergencyContact?.phone} required pattern="[+]?[0-9\s\x2D]{7,18}" /></Field>
             <Field label="Relationship"><Input name="ecRelation" defaultValue={p.emergencyContact?.relation} required /></Field>
           </div>
         </Card>

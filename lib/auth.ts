@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
+import { hasStrongJwtSecret, MIN_JWT_SECRET_LENGTH } from "./security-config";
 
 export const COOKIE = "session";
 export type Role = "CANDIDATE" | "ADMIN";
@@ -7,7 +8,7 @@ export type Session = { id: string; role: Role; name: string };
 
 function secret() {
   const s = process.env.JWT_SECRET;
-  if (!s || s.length < 16) throw new Error("JWT_SECRET is missing or too short (use 32+ random characters)");
+  if (!hasStrongJwtSecret(s)) throw new Error(`JWT_SECRET is missing or too short (use ${MIN_JWT_SECRET_LENGTH}+ random characters)`);
   return s;
 }
 

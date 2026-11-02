@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
+import { hasStrongJwtSecret } from "./lib/security-config";
 
 // Edge-compatible JWT (HS256) check using Web Crypto. This is only the first gate:
 // every API route and server page re-verifies the session and role independently.
 async function verify(token: string): Promise<{ role?: string } | null> {
   const secret = process.env.JWT_SECRET;
   const [h, p, s] = token.split(".");
-  if (!secret || !h || !p || !s) return null;
+  if (!hasStrongJwtSecret(secret) || !h || !p || !s) return null;
   try {
     const b64 = (v: string) => Uint8Array.from(atob(v.replace(/-/g, "+").replace(/_/g, "/").padEnd(Math.ceil(v.length / 4) * 4, "=")), (c) => c.charCodeAt(0));
     const key = await crypto.subtle.importKey("raw", new TextEncoder().encode(secret), { name: "HMAC", hash: "SHA-256" }, false, ["verify"]);

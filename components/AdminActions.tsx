@@ -53,7 +53,7 @@ export function AdminActions({ app }: { app: { _id: string; status: string; admi
       </Modal>
 
       <Modal open={showIv} title="Schedule interview" onClose={() => setShowIv(false)}>
-        <form className="space-y-3" onSubmit={(e) => { e.preventDefault(); const f = Object.fromEntries(new FormData(e.currentTarget)); run(() => api("/api/interviews", "POST", { ...f, applicationId: app._id })); }}>
+        <form method="post" className="space-y-3" onSubmit={(e) => { e.preventDefault(); const f = Object.fromEntries(new FormData(e.currentTarget)); run(() => api("/api/interviews", "POST", { ...f, applicationId: app._id })); }}>
           <div className="grid grid-cols-2 gap-3">
             <Field label="Date"><Input name="date" type="date" required min={new Date().toISOString().slice(0, 10)} /></Field>
             <Field label="Time"><Input name="time" type="time" required /></Field>
@@ -68,7 +68,7 @@ export function AdminActions({ app }: { app: { _id: string; status: string; admi
       </Modal>
 
       <Modal open={showStaff} title="Convert to permanent staff" onClose={() => setShowStaff(false)}>
-        <form className="space-y-3" onSubmit={(e) => { e.preventDefault(); const f = Object.fromEntries(new FormData(e.currentTarget)); run(() => api("/api/admin/staff", "POST", { ...f, applicationId: app._id })); }}>
+        <form method="post" className="space-y-3" onSubmit={(e) => { e.preventDefault(); const f = Object.fromEntries(new FormData(e.currentTarget)); run(() => api("/api/admin/staff", "POST", { ...f, applicationId: app._id })); }}>
           <Field label="Joining date"><Input name="joiningDate" type="date" required /></Field>
           <Field label="Notes"><Textarea name="notes" rows={3} /></Field>
           <div className="flex justify-end gap-2"><Button type="button" variant="outline" onClick={() => setShowStaff(false)}>Cancel</Button><Button type="submit" disabled={busy}>{busy && <Loader />}Create staff record</Button></div>

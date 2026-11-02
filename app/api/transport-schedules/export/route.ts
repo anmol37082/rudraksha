@@ -1,0 +1,6 @@
+import { NextRequest,NextResponse } from "next/server";
+import { ApiError,handle,oid } from "@/lib/api";
+import { TransportSchedule } from "@/models";
+import { requireEventAdmin } from "@/lib/event-workflow";
+const csv=(value:unknown)=>`"${String(value??"").replace(/"/g,'""')}"`;
+export const GET=handle(async(req:NextRequest)=>{await requireEventAdmin();const eventId=req.nextUrl.searchParams.get("eventId");if(!eventId)throw new ApiError(422,"eventId is required");const rows=await TransportSchedule.find({eventId:oid(eventId)}).populate("guestIds","name contactNumber").sort({pickupAt:1}).lean() as any[];const output=["guests,mode,travel reference,pickup at,pickup location,destination,luggage,vehicle,driver,driver phone,planner approval,status,issue",...rows.map(r=>[r.guestIds?.map((g:any)=>g.name).join("; "),r.mode,r.referenceDetails,r.pickupAt,r.pickupLocation,r.destination,r.luggageDetails,r.vehicle,r.driverName,r.driverPhone,r.plannerApprovalReference,r.status,r.issue].map(csv).join(","))].join("\r\n");return new NextResponse(output,{headers:{"Content-Type":"text/csv; charset=utf-8","Content-Disposition":"attachment; filename=transport-sheet.csv","Cache-Control":"private, no-store"}});});

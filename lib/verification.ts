@@ -1,4 +1,5 @@
 import { createHmac, randomInt, timingSafeEqual } from "node:crypto";
+import { hasStrongJwtSecret, MIN_JWT_SECRET_LENGTH } from "./security-config";
 
 export const REGISTRATION_OTP_TTL_MS = 10 * 60 * 1000;
 export const REGISTRATION_OTP_RESEND_MS = 60 * 1000;
@@ -10,7 +11,7 @@ export function createRegistrationOtp() {
 
 export function hashRegistrationOtp(email: string, otp: string) {
   const secret = process.env.JWT_SECRET;
-  if (!secret || secret.length < 32) throw new Error("A strong JWT_SECRET is required to protect verification codes");
+  if (!hasStrongJwtSecret(secret)) throw new Error(`A strong JWT_SECRET (${MIN_JWT_SECRET_LENGTH}+ characters) is required to protect verification codes`);
   return createHmac("sha256", secret).update(`${email}:${otp}`).digest("hex");
 }
 

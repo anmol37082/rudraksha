@@ -29,7 +29,7 @@ export function PositionForm({ position }: { position?: any }) {
   }
 
   return (
-    <form onSubmit={onSubmit} className={`${styles.form} max-w-3xl space-y-6`}>
+    <form method="post" onSubmit={onSubmit} className={`${styles.form} max-w-3xl space-y-6`}>
       <Card className="space-y-4">
         <Field label="Title" error={errors.title}><Input name="title" defaultValue={p.title} required /></Field>
         <Field label="Description" error={errors.description}><Textarea name="description" defaultValue={p.description} rows={5} required /></Field>

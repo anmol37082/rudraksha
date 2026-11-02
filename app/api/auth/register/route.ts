@@ -4,6 +4,7 @@ import { registerSchema } from "@/lib/validators";
 import { connectDB } from "@/lib/mongodb";
 import { CandidateProfile, PendingRegistration, User } from "@/models";
 import { sendRegistrationOtp } from "@/lib/email";
+import { logSafeError } from "@/lib/safe-logging";
 import { createRegistrationOtp, hashRegistrationOtp, REGISTRATION_OTP_RESEND_MS, REGISTRATION_OTP_TTL_MS } from "@/lib/verification";
 
 export const POST = handle(async (req) => {
@@ -34,7 +35,8 @@ export const POST = handle(async (req) => {
 
   try {
     await sendRegistrationOtp(d.email, d.name, otp);
-  } catch {
+  } catch (error) {
+    logSafeError("[smtp] registration OTP delivery failed", error);
     await PendingRegistration.updateOne({ email: d.email }, { $set: { resendAvailableAt: new Date() } });
     throw new ApiError(503, "We could not send the verification email. Please try again shortly.");
   }

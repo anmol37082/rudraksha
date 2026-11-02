@@ -1,0 +1,8 @@
+import { NextRequest } from "next/server";
+import { ApiError, handle, ok, oid, parseBody, plain } from "@/lib/api";
+import { Event, Guest } from "@/models";
+import { guestSchema } from "@/lib/event-validators";
+import { requireEventAdmin } from "@/lib/event-workflow";
+import { audit } from "@/lib/notify";
+export const GET = handle(async (req: NextRequest) => { await requireEventAdmin(); const eventId = req.nextUrl.searchParams.get("eventId"); if (!eventId) throw new ApiError(422,"eventId is required"); const items = await Guest.find({ eventId: oid(eventId) }).sort({ name: 1 }).lean(); return ok({ items: plain(items) }); });
+export const POST = handle(async (req: NextRequest) => { const admin = await requireEventAdmin(); const data = await parseBody(req, guestSchema); const event = await Event.findById(oid(data.eventId)); if (!event) throw new ApiError(404,"Event not found"); if (["CANCELLED","CLOSED"].includes(event.status)) throw new ApiError(409,"Guest records cannot be added to a cancelled or closed event"); if(data.email||data.contactNumber){const duplicate=await Guest.exists({eventId:event._id,$or:[...(data.email?[{email:data.email}]:[]),...(data.contactNumber?[{contactNumber:data.contactNumber}]:[])]});if(duplicate)throw new ApiError(409,"A guest with this email or contact number already exists in this event");} const guest = await Guest.create({ ...data, eventId: event._id, arrivalDate: data.arrivalDate ? new Date(data.arrivalDate) : undefined, departureDate: data.departureDate ? new Date(data.departureDate) : undefined, createdBy: admin._id }); await audit(admin._id,"Event guest created","Guest",guest._id,`${guest.name} · ${event.eventName}`); return ok(plain(guest),"Guest added",201); });

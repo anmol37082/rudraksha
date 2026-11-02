@@ -78,7 +78,7 @@ export function AuthForm({ mode, next }: { mode: "login" | "register" | "admin";
   }
 
   return (
-    <form key={mode === "register" && verificationEmail ? "registration-otp" : "auth-credentials"} onSubmit={onSubmit} className={`${mode === "admin" ? "admin-auth-form auth-form card" : "auth-form"} ${mode === "register" && verificationEmail ? "auth-verify-form" : ""} ${styles.form} ${mode === "register" ? styles.register : styles.login} ${mode === "admin" ? styles.adminForm : ""} ${mode === "register" && verificationEmail ? styles.verifyForm : ""} space-y-4`} noValidate>
+    <form method="post" key={mode === "register" && verificationEmail ? "registration-otp" : "auth-credentials"} onSubmit={onSubmit} className={`${mode === "admin" ? "admin-auth-form auth-form card" : "auth-form"} ${mode === "register" && verificationEmail ? "auth-verify-form" : ""} ${styles.form} ${mode === "register" ? styles.register : styles.login} ${mode === "admin" ? styles.adminForm : ""} ${mode === "register" && verificationEmail ? styles.verifyForm : ""} space-y-4`} noValidate>
       {mode === "register" && verificationEmail ? (
         <>
           <div className={styles.verifyIntro}>
