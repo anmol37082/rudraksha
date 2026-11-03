@@ -20,7 +20,7 @@ export function AppInstallPrompt() {
     setIos(isIos);
     const standalone = window.matchMedia("(display-mode: standalone)").matches || (navigator as Navigator & { standalone?: boolean }).standalone === true;
     const mobile = window.matchMedia("(max-width: 767px)").matches || navigator.maxTouchPoints > 0;
-    const shouldPrompt = mobile && !standalone && !sessionStorage.getItem("rudraksha-install-dismissed");
+    const shouldPrompt = mobile && !standalone && !sessionStorage.getItem("RUUDRAKSHA-install-dismissed");
     if (shouldPrompt && isIos) window.setTimeout(() => setVisible(true), 900);
 
     const capturePrompt = (event: Event) => {
@@ -38,7 +38,7 @@ export function AppInstallPrompt() {
   }, []);
 
   function close() {
-    sessionStorage.setItem("rudraksha-install-dismissed", "1");
+    sessionStorage.setItem("RUUDRAKSHA-install-dismissed", "1");
     setVisible(false);
   }
 
@@ -61,8 +61,8 @@ export function AppInstallPrompt() {
       <section role="dialog" aria-modal="true" aria-labelledby="install-title" className="w-full max-w-md rounded-2xl border border-forest-200 bg-pearl p-5 shadow-2xl sm:p-6">
         <button type="button" onClick={close} aria-label="Close install prompt" className="float-right grid h-10 w-10 place-items-center rounded-full text-xl text-forest-700 hover:bg-forest-100">×</button>
         <div className="flex items-center gap-4">
-          <Image src="/rudrakshanobg.png" alt="Rudraksha Events" width={72} height={72} className="h-[72px] w-[72px] rounded-xl object-cover" />
-          <div><p className="text-xs font-semibold uppercase tracking-[.18em] text-gold-700">Rudraksha Events</p><h2 id="install-title" className="mt-1 text-2xl">Install our app</h2></div>
+          <Image src="/rudrakshanobg.png" alt="RUUDRAKSHA Events" width={72} height={72} className="h-[72px] w-[72px] rounded-xl object-cover" />
+          <div><p className="text-xs font-semibold uppercase tracking-[.18em] text-gold-700">RUUDRAKSHA Events</p><h2 id="install-title" className="mt-1 text-2xl">Install our app</h2></div>
         </div>
         <p className="mt-4 text-sm leading-6 text-stone-700">Add the recruitment portal to your home screen for quick access to positions, applications and your profile.</p>
         {ios && <div className="mt-4 rounded-xl border border-forest-200 bg-white p-3 text-sm text-stone-700"><p>On iPhone, use Safari’s <strong>Share</strong> menu and choose <strong>Add to Home Screen</strong>.</p></div>}

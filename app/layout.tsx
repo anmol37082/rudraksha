@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
   title: { default: `Join our wedding & event team | ${SITE.name}`, template: `%s | ${SITE.name}` },
   description: `${SITE.name} hires permanent staff for weddings and events. See open positions and apply online.`,
-  appleWebApp: { capable: true, statusBarStyle: "black-translucent", title: "Rudraksha Events" },
+  appleWebApp: { capable: true, statusBarStyle: "black-translucent", title: "RUUDRAKSHA Events" },
   openGraph: { type: "website", siteName: SITE.name, title: `Join our wedding & event team | ${SITE.name}`, description: "Browse open positions and apply online." },
 };
 export const viewport: Viewport = { width: "device-width", initialScale: 1, themeColor: "#09251b" };

@@ -4,8 +4,8 @@ import { SITE } from "@/lib/site";
 export default function manifest(): MetadataRoute.Manifest {
   return {
     id: "/",
-    name: "Rudraksha Events — Wedding Staff",
-    short_name: "Rudraksha",
+    name: "RUUDRAKSHA Events — Wedding Staff",
+    short_name: "RUUDRAKSHA",
     description: `${SITE.name} wedding and event staff recruitment portal.`,
     start_url: "/",
     scope: "/",

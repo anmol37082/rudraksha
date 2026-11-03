@@ -31,7 +31,7 @@ export function quotationDocumentLines(snapshot: any) {
   const client = snapshot.client ?? {};
   const event = snapshot.event ?? {};
   const lines: { text: string; size?: number; gap?: number }[] = [
-    { text: "RUDRAKSHA EVENTS - SERVICE QUOTATION", size: 18, gap: 10 },
+    { text: "RUUDRAKSHA EVENTS - SERVICE QUOTATION", size: 18, gap: 10 },
     { text: `${snapshot.quotationNumber ?? "Quotation"}  |  Version ${snapshot.version ?? 1}`, size: 11 },
     { text: `Validity: ${snapshot.validUntil ? new Date(snapshot.validUntil).toLocaleDateString("en-IN") : "Not specified"}`, gap: 8 },
     { text: "CLIENT / EVENT PLANNER", size: 12, gap: 3 },
